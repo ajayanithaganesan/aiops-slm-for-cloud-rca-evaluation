@@ -1,0 +1,28 @@
+__pycache__/
+*.py[cod]
+*.log
+*.tmp
+.env
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local model and machine-specific files
+models/
+ollama/
+*.gguf
+
+# Raw or potentially sensitive experiment artifacts
+raw_logs/
+raw_traces/
+trace_output/
+metrics_output/
+local_agent_runs/
+bridge_runs/
+
+# Keep the reports directory available without committing generated files by default
+reports/*
+!reports/.gitkeep
