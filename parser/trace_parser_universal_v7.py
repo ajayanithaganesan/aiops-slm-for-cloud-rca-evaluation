@@ -1555,6 +1555,40 @@ def build_slm_context(
             f"{len(performance.get('latency_anomalies', []))}"
         )
 
+        # Temporal ordering is evidence only. Preserve first/last observed
+        # error times without treating the earliest event as the RCA.
+        temporal_groups = defaultdict(list)
+        for item in error_evidence or []:
+            if item.get("start_time") is not None:
+                temporal_groups[(item.get("service", "unknown"), item.get("operation", "unknown"))].append(item["start_time"])
+        if temporal_groups:
+            lines.append("- Temporal failure evidence:")
+            for (service, operation), times in sorted(temporal_groups.items(), key=lambda pair: min(pair[1]))[:20]:
+                lines.append(
+                    f"  - service={service} | operation={operation} | "
+                    f"first_error_seen={min(times)} | last_error_seen={max(times)} | "
+                    f"error_observations={len(times)}"
+                )
+        else:
+            lines.append("- Temporal failure evidence unavailable: no usable error timestamps.")
+
+        # Comparative service evidence helps distinguish healthy services,
+        # callers, and directly failing emitters without selecting an RCA.
+        service_failures = defaultdict(list)
+        for item in error_evidence or []:
+            service_failures[item.get("service", "unknown")].append(item)
+        lines.append("- Service failure comparison:")
+        for service in sorted(set(row.get("service_name", "unknown") for row in rows)):
+            failures = service_failures.get(service, [])
+            operations = sorted(set(item.get("operation", "unknown") for item in failures))
+            times = [item.get("start_time") for item in failures if item.get("start_time") is not None]
+            lines.append(
+                f"  - service={service} | explicit_errors={len(failures)} | "
+                f"failed_operations={', '.join(operations) if operations else 'none'} | "
+                f"first_error_seen={min(times) if times else 'unavailable'} | "
+                f"last_error_seen={max(times) if times else 'unavailable'}"
+            )
+
         limitations = universal_evidence.get(
             "telemetry_availability_limitations",
             {}
