@@ -1,28 +1,47 @@
+﻿# Python bytecode & cache
 __pycache__/
 *.py[cod]
-*.log
-*.tmp
-.env
-.venv/
-venv/
-env/
+*.class
+*.so
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 
-# Local model and machine-specific files
+# Environments & dependencies
+.env
+.venv/
+venv/
+env/
+ENV/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Local model weights & runtime files
 models/
 ollama/
 *.gguf
+*.bin
+*.log
+*.tmp
 
-# Raw or potentially sensitive experiment artifacts
+# Raw experiment artifacts & traces (prevent committing heavy outputs)
 raw_logs/
 raw_traces/
 trace_output/
 metrics_output/
 local_agent_runs/
 bridge_runs/
+research/local_agent_runs/
+research/parser_runs/
+research/test_evaluations/
 
-# Keep the reports directory available without committing generated files by default
+# Reports directory (preserve structure via .gitkeep)
 reports/*
 !reports/.gitkeep

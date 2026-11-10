@@ -1,32 +1,29 @@
-# AIOpsLab SLM for Cloud RCA Evaluation
+﻿# AIOpsLab SLM for Cloud RCA Evaluation
 
-Research project for evaluating a locally hosted small language model on cloud incident root-cause localization using the AIOpsLab testbed.
+Research project evaluating local Small Language Models (SLMs) on cloud incident root-cause localization (RCA) using Microsoft's AIOpsLab testbed.
 
-## Project components
+## Architecture & Project Structure
 
-- `agent/` — local Ollama agent and evaluation runner.
-- `parser/` — universal telemetry evidence parser.
-- `docs/` — experiment methodology and reproducibility notes.
-- `reports/` — selected evaluation outputs and result tables.
+- iopslab_local_agent/ — Universal SLM agent package (SLMAgent supporting Nemotron, Qwen, and Phi model families via Ollama), declarative telemetry collector (SystemEvidenceCollector), action normalizer, and single-case evaluation runner (un_case.py).
+- iopslab_bridge/ — Lightweight HTTP REST bridge for orchestrator interaction and environment management.
+- esearch/trace_parser/ — Universal causal graph parser (	race_parser_universal_v7.py) extracting call trees and compacting raw trace spans under token-budget limits.
+- docs/ — Methodological documentation, architectural evolution registers, and batch evaluation procedures (docs/tracker.md).
+- evaluation_results.csv — Primary empirical comparison dataset recording accuracy, TTL, step counts, token usage, and tool actions across evaluated benchmark incidents.
 
-## Evaluation conditions
+## Evaluation Conditions
 
-- **Baseline:** the model uses AIOpsLab's native telemetry actions without parser-generated evidence.
-- **Graph-augmented:** fresh traces are processed into structured, graph-aware evidence before being supplied to the model.
+- **Baseline:** The model receives bounded raw cluster telemetry (orchestrator pod/service states, bounded error logs) and raw CSV trace spans.
+- **Graph (Proposed Method):** Fresh incident traces are transformed into structured, high-density causal dependency graphs and compact RPC failure mappings.
 
-The evidence layer does not select a root cause or use incident ground truth. AIOpsLab performs the final localization evaluation.
+The evidence layer operates strictly without incident ground truth or heuristic labels. The SLM makes the final root-cause localization decision.
 
-## Metrics
+## Metrics & Reproducibility
 
-Experiments record localization accuracy, success status, subset status, steps, TTL, elapsed time, input/output tokens, model calls, tools used, submissions, and run artifact paths.
+Experiments record localization accuracy, exact/subset match success, Time-to-Localize (TTL), step counts, input/output token efficiency, and model invocation latency.
 
-## Reproducibility
+Ollama connection parameters are configured through command-line flags or environment variables:
+`ash
+python3 -m aiopslab_local_agent.run_case --problem-id <incident-id> --condition [baseline|graph] --model <model-tag> --ollama-host <url>
+`
 
-The agent expects AIOpsLab and Ollama to be available in the execution environment. Model endpoint and model name are configured through environment variables:
-
-```text
-OLLAMA_BASE_URL
-OLLAMA_MODEL
-```
-
-See the experiment documentation in `docs/` for the complete procedure.
+For complete empirical findings, failure registers, and benchmark tables, refer to [docs/tracker.md](docs/tracker.md).
