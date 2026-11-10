@@ -1,0 +1,60 @@
+{
+  "kubernetes_signals": [
+    {
+      "id": "discover_services",
+      "command": "kubectl get svc -n {namespace} -o custom-columns=NAME:.metadata.name --no-headers",
+      "description": "Discovers all cluster services universally, including dead or inactive ones"
+    },
+    {
+      "id": "pod_health",
+      "command": "kubectl get pods -n {namespace} -o wide --no-headers",
+      "description": "Captures pod status, restart counts, ready states, and node placements"
+    },
+    {
+      "id": "deployment_replicas",
+      "command": "kubectl get deployments -n {namespace} -o custom-columns=NAME:.metadata.name,DESIRED:.spec.replicas,AVAILABLE:.status.availableReplicas --no-headers",
+      "description": "Detects scale-to-zero or scaled-down deployments"
+    },
+    {
+      "id": "service_endpoints",
+      "command": "kubectl get endpoints -n {namespace} --no-headers",
+      "description": "Detects disconnected services with no active endpoints"
+    },
+    {
+      "id": "services_spec",
+      "command": "kubectl get svc -n {namespace} -o json",
+      "description": "Extracts service port mapping definitions for targetPort validation"
+    },
+    {
+      "id": "pods_spec",
+      "command": "kubectl get pods -n {namespace} -o json",
+      "description": "Extracts pod containerPort declarations and status conditions"
+    },
+    {
+      "id": "cluster_events",
+      "command": "kubectl get events -n {namespace} --sort-by=.metadata.creationTimestamp",
+      "filter_keywords": ["warn", "fail", "error", "killing", "backoff", "unhealthy", "failedmount", "failedscheduling"],
+      "max_events": 10,
+      "description": "Captures recent scheduling, probe, container crash, and storage events"
+    }
+  ],
+  "log_inspection": {
+    "primary_action": "get_logs",
+    "fallback_command": "kubectl logs -l app={service} -n {namespace} --tail=50 --ignore-errors --prefix",
+    "error_keywords": [
+      "error",
+      "exception",
+      "panic",
+      "fatal",
+      "unauthorized",
+      "refused",
+      "timeout",
+      "failed",
+      "mongoerror",
+      "connection reset"
+    ],
+    "max_lines_per_service": 4,
+    "max_line_length": 150
+  }
+}
+
