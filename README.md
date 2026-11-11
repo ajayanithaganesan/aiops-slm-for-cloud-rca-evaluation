@@ -65,39 +65,85 @@ emotron-3-nano:4b:
 - **Partial / Subset Matches (50% Accuracy):** 1 (5.9%)
 - **Failures (0.0% Accuracy):** 8 (47.1%)
 - **Key Baseline Failure Categories Identified:**
-  - *Cascading Caller Blame:* Network loss and database auth drops caused upstream callers (rontend, eservation) to emit 5xx errors; the model penalized accuracy by submitting all callers.
+  - *Cascading Caller Blame:* Network loss and database auth drops caused upstream callers (rontend, 
+eservation) to emit 5xx errors; the model penalized accuracy by submitting all callers.
   - *Schema Key Hallucination:* On unstructured app errors, 4B models copied raw CSV table headers ("verdict", "verdict_reason") or log severity strings ("warning").
   - *Silent Latency Degradation:* Network delay faults left pods in 1/1 Running state with 0 restarts; without graph call trees, the baseline model defaulted to empty submissions ([]).
 
 ---
 
-## 🏗️ Repository Architecture
+## 🏗️ Repository Architecture & Telemetry Pipeline
 
-`	ext
-aiops-slm-for-cloud-rca-evaluation/
-├── aiopslab_local_agent/                # Core autonomous SLM agent package
-│   ├── slm_agent.py                     # Universal SLMAgent (Nemotron/Qwen/Phi) with action normalizer
-│   ├── system_evidence_collector.py     # Declarative cluster & platform evidence collector
-│   ├── telemetry_manifest.json          # Catalog of K8s commands, error filters, and log caps
-│   ├── universal_evidence_processor.py  # Graph evidence budget compactor
-│   ├── run_case.py                      # Level-ground single-case evaluation runner
-│   ├── ollama_client.py                 # Streaming Ollama client with token metrics
-│   └── README.md
-├── aiopslab_bridge/                     # REST HTTP bridge wrapping AIOpsLab orchestrator
-│   ├── bridge.py
-│   └── README.md
-├── research/
-│   └── trace_parser/
-│       └── trace_parser_universal_v7.py # Universal causal graph dependency parser
-├── docs/
-│   └── tracker.md                       # Complete research register, findings, and batch scripts
-├── evaluation_results.csv               # Primary empirical CSV dataset tracking all runs
-├── .gitignore                           # Excludes heavy logs, trace outputs, and virtualenvs
-└── README.md                            # Project research and progress documentation
-`
+```mermaid
+graph TD
+    subgraph Testbed ["AIOpsLab Environment (Kubernetes)"]
+        FaultInject["Fault Injection Engine<br/>(Chaos Mesh / App Mutators)"]
+        Microservices["Microservice Workloads<br/>(Hotel Res / Social Net / Astro Shop)"]
+        TelemetrySources["Telemetry Plane<br/>(Traces / Pod States / K8s Svcs / Logs)"]
+        FaultInject --> Microservices
+        Microservices --> TelemetrySources
+    end
+
+    subgraph DataCollection ["Telemetry Collection & Compaction"]
+        Collector["SystemEvidenceCollector<br/>(telemetry_manifest.json)"]
+        RawSpans["Raw CSV Spans<br/>(Tabular Trace Dump)"]
+        Parser["Universal Causal Graph Parser<br/>(trace_parser_universal_v7.py)"]
+        Processor["Evidence Processor & Compactor<br/>(universal_evidence_processor.py)"]
+        CompactGraph["Compact Graph Context<br/>(Call Trees & RPC Failure Mappings)"]
+
+        TelemetrySources -->|"Cluster Checks & Bounded Logs"| Collector
+        TelemetrySources -->|"Export Spans"| RawSpans
+        RawSpans -->|"Graph Condition"| Parser
+        Parser --> Processor
+        Processor --> CompactGraph
+    end
+
+    subgraph EvaluationHarness ["Evaluation Runner & SLM Agent"]
+        Runner["Level-Ground Evaluation Runner<br/>(run_case.py)"]
+        Agent["SLMAgent Engine<br/>(slm_agent.py)"]
+        OllamaClient["Ollama Client<br/>(ollama_client.py)"]
+        LocalSLM["Local Small Language Model<br/>(Nemotron-3-nano / Qwen / Phi)"]
+        Normalizer["Action Normalizer & Strict Contract<br/>(Vocabulary Bounds & Priority)"]
+
+        Collector --> Runner
+        RawSpans -->|"Baseline Condition"| Runner
+        CompactGraph -->|"Graph Condition"| Runner
+        Runner --> Agent
+        Agent --> OllamaClient
+        OllamaClient --> LocalSLM
+        LocalSLM --> Normalizer
+    end
+
+    subgraph EvaluationMetrics ["Evaluation & Verification"]
+        AIOpsEvaluator["AIOpsLab Evaluator<br/>(Ground Truth Match)"]
+        ResultsDataset["Empirical Results Register<br/>(evaluation_results.csv & docs/tracker.md)"]
+
+        Normalizer -->|"submit([root_cause])"| AIOpsEvaluator
+        AIOpsEvaluator --> ResultsDataset
+    end
+
+    style Testbed fill:#f8f9fa,stroke:#6c757d,stroke-width:1px
+    style DataCollection fill:#e3f2fd,stroke:#1976d2,stroke-width:1px
+    style EvaluationHarness fill:#f3e5f5,stroke:#7b1fa2,stroke-width:1px
+    style EvaluationMetrics fill:#e8f5e9,stroke:#388e3c,stroke-width:1px
+```
+
+### Module Organization
+
+| Directory / File | Responsibility |
+| :--- | :--- |
+| **`aiopslab_local_agent/slm_agent.py`** | Universal `SLMAgent` implementation supporting Nemotron, Qwen, and Phi; handles prompt format contracts, candidate vocabulary extraction, and anomaly-priority normalization. |
+| **`aiopslab_local_agent/system_evidence_collector.py`** | Declarative aggregator querying live Kubernetes cluster signals (pod restarts, port mismatches, scale-to-zero, endpoints) and bounded logs. |
+| **`aiopslab_local_agent/telemetry_manifest.json`** | Declarative configuration catalog of Kubernetes commandlets, parameters, log limits, and error keywords. |
+| **`aiopslab_local_agent/universal_evidence_processor.py`** | Summarizes parsed traces, compacts graph context, and enforces token budget safety ceilings. |
+| **`aiopslab_local_agent/run_case.py`** | Automated single-incident test runner orchestrating baseline and graph evaluation conditions. |
+| **`aiopslab_local_agent/ollama_client.py`** | Local Ollama inference client recording prompt/completion token usage and latency. |
+| **`aiopslab_bridge/`** | REST HTTP API bridge wrapping the AIOpsLab orchestrator for decoupled agents. |
+| **`research/trace_parser/trace_parser_universal_v7.py`** | Universal causal graph parser reconstructing transaction call trees and RPC target attribution tables. |
+| **`docs/tracker.md`** | Comprehensive project tracker, thesis findings register, failure analyses, and WSL batch scripts. |
+| **`evaluation_results.csv`** | Primary empirical benchmark dataset recording accuracy, TTL, step counts, and token metrics. |
 
 ---
-
 ## 🚀 Getting Started & Execution
 
 ### Prerequisites
@@ -136,6 +182,8 @@ etwork_delay,
 etwork_corrupt, 
 etwork_duplicate, cpu_hog (1 & 2), mem_hog (1 & 2).
 - **Social Network (6):** k8s_target_port-misconfig, scale_pod_zero, uth_miss_mongodb, wrong_bin_usage (1, 2, & 3).
-- **Astronomy Shop (11):** payment_service_unreachable, kafka_queue_problems, loadgenerator_flood, raud_detection_failure, ecommendation_cache_failure, productcatalog_failure, shipping_service_slow, email_service_failure, currency_service_failure, d_service_failure, cart_service_failure.
+- **Astronomy Shop (11):** payment_service_unreachable, kafka_queue_problems, loadgenerator_flood, raud_detection_failure, 
+ecommendation_cache_failure, productcatalog_failure, shipping_service_slow, email_service_failure, currency_service_failure, d_service_failure, cart_service_failure.
 
 For batch execution bash scripts and complete experimental details, see [docs/tracker.md](docs/tracker.md).
+
