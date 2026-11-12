@@ -250,7 +250,7 @@ class SLMAgent:
         text = response or ""
 
         # 1. Multi-line or structured submit(...) extraction
-        submit_match = re.search(r"submit\s*\(\s*(\[.*?\])\s*\)", text, re.DOTALL)
+        submit_match = re.search(r"submit\s*\(\s*(\[.*?\]|\{.*?\}|[^\)]*)\s*\)", text, re.DOTALL)
         if submit_match:
             inner = submit_match.group(1).strip()
 
@@ -277,30 +277,49 @@ class SLMAgent:
                             regular_services.append(cleaned_svc)
                         elif t_low in self.candidate_services:
                             regular_services.append(t_low)
+                        else:
+                            # Autocomplete / Prefix Resolution (e.g. user-mention- -> user-mention-service)
+                            prefix_matches = [
+                                c for c in self.candidate_services
+                                if c.startswith(t_low) or c.startswith(cleaned_svc)
+                            ]
+                            if len(prefix_matches) == 1:
+                                regular_services.append(prefix_matches[0])
 
-                # If the model explicitly tagged one or more services as the anomaly, use that!
+                # Prioritize explicit anomaly tokens over general service mentions
                 selected = anomaly_services if anomaly_services else regular_services
                 if selected:
                     unique_hits = list(dict.fromkeys(selected))
-                    # If multiple services were submitted, prioritize the objective anomaly culprit
+                    # 1. If flagged anomalous services exist (restarts/crashes/port mismatches), prioritize them
                     if len(unique_hits) > 1 and self.flagged_anomalous_services:
                         culprits = [s for s in unique_hits if s in self.flagged_anomalous_services]
                         if culprits:
                             unique_hits = culprits
+                    # 2. De-prioritize known upstream frontend/gateway callers when backend/database services are present
+                    if len(unique_hits) > 1:
+                        backend_culprits = [
+                            s for s in unique_hits
+                            if not re.search(r"(frontend|gateway|nginx|ingress|proxy|web|client)", s)
+                        ]
+                        if backend_culprits:
+                            unique_hits = backend_culprits
                     formatted = ", ".join(f'"{s}"' for s in unique_hits)
                     return f"```\nsubmit([{formatted}])\n```"
+                else:
+                    # Non-candidate tokens (e.g. "warning", "verdict") - strictly reject hallucination
+                    return "```\nsubmit([])\n```"
 
             # Fallback if no candidate service list available
             clean_str_list = re.findall(r"[\"']([a-zA-Z0-9_-]+)[\"']", inner)
             filtered = [
                 s.lower() for s in clean_str_list
-                if s.lower() not in ("issue_key", "summary", "description", "details", "service", "status", "fault", "true", "false")
+                if s.lower() not in ("issue_key", "summary", "description", "details", "service", "status", "fault", "true", "false", "warning", "verdict", "verdict_reason", "error", "info")
             ]
             if filtered:
                 unique_services = list(dict.fromkeys(filtered))
                 formatted = ", ".join(f'"{s}"' for s in unique_services)
                 return f"```\nsubmit([{formatted}])\n```"
-            return f"```\nsubmit({inner})\n```"
+            return "```\nsubmit([])\n```"
 
         # 2. Check if model returned JSON format like {"submit": ["service"]} or {"service": "user"}
         json_match = re.search(r"\{\s*[\"'](?:service|services|submit)[\"']\s*:\s*(\[[^\]]*\]|[\"'][^\"']+[\"'])\s*\}", text)
