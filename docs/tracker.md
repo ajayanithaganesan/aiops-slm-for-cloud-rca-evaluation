@@ -767,6 +767,7 @@ set -uo pipefail
 OLLAMA_HOST="${OLLAMA_HOST:-http://172.17.0.1:11434}"
 MODEL="${MODEL:-nemotron-3-nano:4b}"
 MAX_STEPS=1
+RUN_TIMEOUT_SECONDS=360  # 6 minute hard ceiling per incident to prevent teardown deadlocks
 
 INCIDENTS=(
     # Hotel Reservation (11)
@@ -802,6 +803,16 @@ INCIDENTS=(
     "astronomy_shop_cart_service_failure-localization-1"
 )
 
+cleanup_lingering_namespaces() {
+    for ns in "test-hotel-reservation" "test-social-network" "test-astronomy-shop"; do
+        status=$(kubectl get namespace "$ns" -o jsonpath='{.status.phase}' 2>/dev/null || true)
+        if [ "$status" == "Terminating" ]; then
+            echo "[WATCHDOG] Force-releasing finalizers on stuck namespace: $ns"
+            kubectl get namespace "$ns" -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw "/api/v1/namespaces/$ns/finalize" -f - 2>/dev/null || true
+        fi
+    done
+}
+
 echo "=== Starting Baseline Batch Evaluation (${#INCIDENTS[@]} Incidents) ==="
 for i in "${!INCIDENTS[@]}"; do
     inc="${INCIDENTS[$i]}"
@@ -810,16 +821,26 @@ for i in "${!INCIDENTS[@]}"; do
     echo "[$((i+1))/${#INCIDENTS[@]}] Running BASELINE for: $inc"
     echo "======================================================================"
     
-    python3 -m aiopslab_local_agent.run_case \
+    # Pre-clean any leftover terminating namespaces from earlier runs
+    cleanup_lingering_namespaces
+    
+    # Run with timeout to prevent teardown freezes from blocking the whole suite
+    timeout "$RUN_TIMEOUT_SECONDS" python3 -m aiopslab_local_agent.run_case \
         --problem-id "$inc" \
         --condition baseline \
         --model "$MODEL" \
         --ollama-host "$OLLAMA_HOST" \
         --max-steps "$MAX_STEPS" || {
-            echo "[WARN] Incident $inc exited with non-zero status. Continuing to next incident..."
+            exit_code=$?
+            if [ $exit_code -eq 124 ]; then
+                echo "[ERROR] Incident $inc timed out after ${RUN_TIMEOUT_SECONDS}s (likely stuck in namespace teardown). Triggering watchdog..."
+                cleanup_lingering_namespaces
+            else
+                echo "[WARN] Incident $inc exited with status $exit_code. Continuing to next incident..."
+            fi
         }
     
-    echo "[INFO] Completed baseline run for $inc. Sleeping 10s for cluster stability..."
+    echo "[INFO] Completed run for $inc. Sleeping 10s for cluster stability..."
     sleep 10
 done
 
@@ -836,6 +857,7 @@ set -uo pipefail
 OLLAMA_HOST="${OLLAMA_HOST:-http://172.17.0.1:11434}"
 MODEL="${MODEL:-nemotron-3-nano:4b}"
 MAX_STEPS=1
+RUN_TIMEOUT_SECONDS=360
 
 INCIDENTS=(
     # Hotel Reservation (11)
@@ -871,6 +893,16 @@ INCIDENTS=(
     "astronomy_shop_cart_service_failure-localization-1"
 )
 
+cleanup_lingering_namespaces() {
+    for ns in "test-hotel-reservation" "test-social-network" "test-astronomy-shop"; do
+        status=$(kubectl get namespace "$ns" -o jsonpath='{.status.phase}' 2>/dev/null || true)
+        if [ "$status" == "Terminating" ]; then
+            echo "[WATCHDOG] Force-releasing finalizers on stuck namespace: $ns"
+            kubectl get namespace "$ns" -o json 2>/dev/null | jq '.spec.finalizers = []' | kubectl replace --raw "/api/v1/namespaces/$ns/finalize" -f - 2>/dev/null || true
+        fi
+    done
+}
+
 echo "=== Starting Graph Batch Evaluation (${#INCIDENTS[@]} Incidents) ==="
 for i in "${!INCIDENTS[@]}"; do
     inc="${INCIDENTS[$i]}"
@@ -879,13 +911,21 @@ for i in "${!INCIDENTS[@]}"; do
     echo "[$((i+1))/${#INCIDENTS[@]}] Running GRAPH for: $inc"
     echo "======================================================================"
     
-    python3 -m aiopslab_local_agent.run_case \
+    cleanup_lingering_namespaces
+    
+    timeout "$RUN_TIMEOUT_SECONDS" python3 -m aiopslab_local_agent.run_case \
         --problem-id "$inc" \
         --condition graph \
         --model "$MODEL" \
         --ollama-host "$OLLAMA_HOST" \
         --max-steps "$MAX_STEPS" || {
-            echo "[WARN] Incident $inc exited with non-zero status. Continuing to next incident..."
+            exit_code=$?
+            if [ $exit_code -eq 124 ]; then
+                echo "[ERROR] Incident $inc timed out after ${RUN_TIMEOUT_SECONDS}s. Triggering watchdog..."
+                cleanup_lingering_namespaces
+            else
+                echo "[WARN] Incident $inc exited with status $exit_code. Continuing to next incident..."
+            fi
         }
     
     echo "[INFO] Completed graph run for $inc. Sleeping 10s for cluster stability..."
