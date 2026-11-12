@@ -19,7 +19,7 @@ The project investigates whether **domain-specific topological causal graph pars
 
 2. **Graph-Augmented Evidence vs. Raw Context Overflow:**
    - Ingesting raw CSV spans (70,000+ characters) causes extreme attention dilution ("Lost in the Middle") and prompt inflation in local SLMs, leading to inference timeouts or caller-blame hallucinations.
-   - The causal graph parser (	race_parser_universal_v7.py + universal_evidence_processor.py) compacts raw spans by **~80-90%** into call trees and RPC target attribution tables, transforming multi-hop trace reasoning into a direct classification task.
+   - The causal graph parser (trace_graph_parser.py + evidence_compactor.py) compacts raw spans by **~80-90%** into call trees and RPC target attribution tables, transforming multi-hop trace reasoning into a direct classification task.
 
 3. **Level-Ground Scientific Evaluation:**
    - Baseline and Graph conditions share **identical** cluster platform telemetry and bounded logs. The single independent variable is:
@@ -87,8 +87,8 @@ graph TD
     subgraph DataCollection ["Telemetry Collection & Compaction"]
         Collector["SystemEvidenceCollector<br/>(telemetry_manifest.json)"]
         RawSpans["Raw CSV Spans<br/>(Tabular Trace Dump)"]
-        Parser["Universal Causal Graph Parser<br/>(trace_parser_universal_v7.py)"]
-        Processor["Evidence Processor & Compactor<br/>(universal_evidence_processor.py)"]
+        Parser["Universal Causal Graph Parser<br/>(trace_graph_parser.py)"]
+        Processor["Evidence Processor & Compactor<br/>(evidence_compactor.py)"]
         CompactGraph["Compact Graph Context<br/>(Call Trees & RPC Failure Mappings)"]
 
         TelemetrySources -->|"Cluster Checks & Bounded Logs"| Collector
@@ -135,11 +135,11 @@ graph TD
 | **`aiopslab_local_agent/slm_agent.py`** | Universal `SLMAgent` implementation supporting Nemotron, Qwen, and Phi; handles prompt format contracts, candidate vocabulary extraction, and anomaly-priority normalization. |
 | **`aiopslab_local_agent/system_evidence_collector.py`** | Declarative aggregator querying live Kubernetes cluster signals (pod restarts, port mismatches, scale-to-zero, endpoints) and bounded logs. |
 | **`aiopslab_local_agent/telemetry_manifest.json`** | Declarative configuration catalog of Kubernetes commandlets, parameters, log limits, and error keywords. |
-| **`aiopslab_local_agent/universal_evidence_processor.py`** | Summarizes parsed traces, compacts graph context, and enforces token budget safety ceilings. |
+| **`aiopslab_local_agent/evidence_compactor.py`** | Summarizes parsed traces, compacts graph context, and enforces token budget safety ceilings. |
 | **`aiopslab_local_agent/run_case.py`** | Automated single-incident test runner orchestrating baseline and graph evaluation conditions. |
 | **`aiopslab_local_agent/ollama_client.py`** | Local Ollama inference client recording prompt/completion token usage and latency. |
 | **`aiopslab_bridge/`** | REST HTTP API bridge wrapping the AIOpsLab orchestrator for decoupled agents. |
-| **`research/trace_parser/trace_parser_universal_v7.py`** | Universal causal graph parser reconstructing transaction call trees and RPC target attribution tables. |
+| **`research/trace_parser/trace_graph_parser.py`** | Universal causal graph parser reconstructing transaction call trees and RPC target attribution tables. |
 | **`docs/tracker.md`** | Comprehensive project tracker, thesis findings register, failure analyses, and WSL batch scripts. |
 | **`evaluation_results.csv`** | Primary empirical benchmark dataset recording accuracy, TTL, step counts, and token metrics. |
 
@@ -186,4 +186,6 @@ etwork_duplicate, cpu_hog (1 & 2), mem_hog (1 & 2).
 ecommendation_cache_failure, productcatalog_failure, shipping_service_slow, email_service_failure, currency_service_failure, d_service_failure, cart_service_failure.
 
 For batch execution bash scripts and complete experimental details, see [docs/tracker.md](docs/tracker.md).
+
+
 
