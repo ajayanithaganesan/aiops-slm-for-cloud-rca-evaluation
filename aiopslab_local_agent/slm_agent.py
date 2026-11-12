@@ -1,4 +1,4 @@
-"""SLM agent using AIOpsLab's native action protocol across local models."""
+﻿"""SLM agent using AIOpsLab's native action protocol across local models."""
 
 import json
 import csv
@@ -222,7 +222,7 @@ class SLMAgent:
         if trace_path in self.parsed_trace_paths or self.run_directory is None:
             return
         self.parsed_trace_paths.add(trace_path)
-        parser_script = Path("research/trace_parser/trace_parser_universal_v7.py")
+        parser_script = Path("research/trace_parser/trace_graph_parser.py")
         if not parser_script.exists():
             return
         parser_output = self.run_directory / "parser"
@@ -234,7 +234,7 @@ class SLMAgent:
             graph_context = parser_output / "slm_context_graph_augmented.txt"
             if not graph_context.exists():
                 return
-            from .universal_evidence_processor import process
+            from .evidence_compactor import process
             compact_output = self.run_directory / "context"
             process(graph_context, compact_output)
             compact_path = compact_output / "slm_context_compact.txt"
@@ -344,4 +344,5 @@ class SLMAgent:
 
 # Backward-compatibility alias
 NemotronAgent = SLMAgent
+
 
