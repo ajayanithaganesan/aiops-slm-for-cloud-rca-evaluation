@@ -46,13 +46,29 @@ emotron-3-nano:4b on container_kill-localization:
 
 ### 2. Verified Benchmark Evaluation Matrix (Baseline vs. Graph)
 
+The matrix below captures verified head-to-head comparisons and baseline evaluation runs conducted with `nemotron-3-nano:4b`:
+
 | Incident ID | Microservice Benchmark | Fault Injected | Condition | Model Output | Accuracy | TTL | Steps | Result Note |
 | :--- | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
-| container_kill-localization | Hotel Reservation | Container Kill | Baseline | ["frontend"] | **0.0%** | 23.42s | 1 | Upstream caller blame |
-| container_kill-localization | Hotel Reservation | Container Kill | **Graph** | ["geo"] | **100.0%** | **7.56s** | 1 | **Exact match, 3.1x faster** |
-| k8s_target_port-misconfig-localization-1 | Social Network | K8s Port Mismatch | **Graph** | ["user-service"] | **100.0%** | **13.69s** | 1 | **Exact match via declarative manifest** |
-| pod_kill_hotel_res-localization-1 | Hotel Reservation | Pod Kill | **Graph** | ["user"] | **100.0%** | **21.42s** | 1 | Exact match via orchestrator restart signals |
-| misconfig_app_hotel_res-localization-1 | Hotel Reservation | App Misconfig | **Graph** | ["geo"] | **100.0%** | **16.84s** | 1 | Exact match via RPC callee attribution |
+| `container_kill-localization` | Hotel Reservation | Container Kill | Baseline | `["frontend"]` | **0.0%** | 23.42s | 1 | Upstream caller blame from raw CSV spans |
+| `container_kill-localization` | Hotel Reservation | Container Kill | **Graph** | `["geo"]` | **100.0%** | **7.56s** | 1 | **Exact match, 3.1x faster** |
+| `k8s_target_port-misconfig-localization-1` | Social Network | K8s Port Mismatch | **Graph** | `["user-service"]` | **100.0%** | **13.69s** | 1 | **Exact match via declarative manifest** |
+| `pod_kill_hotel_res-localization-1` | Hotel Reservation | Pod Kill | Baseline | `["user"]` | **100.0%** | 34.35s | 1 | Cluster state detected restart count [!] ATTENTION |
+| `pod_kill_hotel_res-localization-1` | Hotel Reservation | Pod Kill | **Graph** | `["user"]` | **100.0%** | **21.42s** | 1 | **Exact match via orchestrator restart signals** |
+| `misconfig_app_hotel_res-localization-1` | Hotel Reservation | App Misconfig | Baseline | `["verdict", "verdict_reason"]` | **0.0%** | 22.39s | 1 | Raw CSV schema header leakage |
+| `misconfig_app_hotel_res-localization-1` | Hotel Reservation | App Misconfig | **Graph** | `["geo"]` | **100.0%** | **16.84s** | 1 | **Exact match via RPC callee attribution** |
+| `pod_failure_hotel_res-localization-1` | Hotel Reservation | Pod Failure | Baseline | `[]` | **0.0%** | 25.36s | 1 | Pods stayed 1/1 Running; fallback to empty submission |
+| `network_delay_hotel_res-localization-1` | Hotel Reservation | Network Delay | Baseline | `[]` | **0.0%** | 25.54s | 1 | Latency-only degradation; no crash signals |
+| `network_loss_hotel_res-localization-1` | Hotel Reservation | Network Loss | Baseline | `["frontend", "profile", "rate", "reservation"]` | **0.0%** | 38.10s | 1 | Multi-service error cascade; caller penalty |
+| `auth_miss_mongodb-localization-1` | Social Network | Auth Miss | Baseline | `["url-shorten-mongodb"]` | **100.0%** | **19.43s** | 1 | Explicit auth keyword match in Mongo logs |
+| `revoke_auth_mongodb-localization-1` | Hotel Reservation | Revoke Auth | Baseline | `["geo", "search"]` | **50.0%** | 20.63s | 1 | Listed caller + callee; subset penalty |
+| `revoke_auth_mongodb-localization-2` | Hotel Reservation | Revoke Auth | Baseline | `["rate"]` | **100.0%** | **18.77s** | 1 | Exact match localized to rate DB |
+| `user_unregistered_mongodb-localization-1` | Hotel Reservation | Unregistered User | Baseline | `{}` -> `[]` | **0.0%** | 175.43s | 1 | Model formatted response as empty JSON dict |
+| `user_unregistered_mongodb-localization-2` | Hotel Reservation | Unregistered User | Baseline | `["rate"]` | **100.0%** | **113.29s** | 1 | Accurately extracted root error service |
+| `k8s_target_port-misconfig-localization-2` | Social Network | Port Misconfig | Baseline | `[]` | **0.0%** | 13.13s | 1 | TargetPort mismatch missed in raw prompt |
+| `k8s_target_port-misconfig-localization-3` | Social Network | Port Misconfig | Baseline | `["post-storage-service"]` | **100.0%** | **7.72s** | 1 | Exact match via targetPort mismatch signal |
+| `scale_pod_zero_social_net-localization-1` | Social Network | Scale to Zero | Baseline | `["user-service"]` | **100.0%** | **9.13s** | 1 | Deployment replicas 0/1 signal [!] ATTENTION |
+| `assign_to_non_existent_node_social_net-localization-1` | Social Network | Bad Node Assign | Baseline | `["user-service"]` | **100.0%** | **12.53s** | 1 | Pod stuck Pending (0/1 ready) [!] ATTENTION |
 
 ---
 

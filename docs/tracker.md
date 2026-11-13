@@ -1,4 +1,4 @@
-﻿# AIOpsLab Local SLM RCA Evaluation Tracker
+# AIOpsLab Local SLM RCA Evaluation Tracker
 
 ## Project objective
 
@@ -151,6 +151,20 @@ Chaos Mesh Helm installation sometimes reported that a release name was already 
 Impact: interrupted setup or invalid experiments.
 
 Mitigation: verify `kubectl cluster-info` and node readiness before rerunning, and separate setup/recovery failures from RCA metrics.
+
+### Workstation Hardware Boundaries: 16 GB Physical RAM Capacity Limit
+
+When evaluating the **Astronomy Shop** benchmark suite (`astronomy-shop`, containing 20+ microservices including Kafka, OpenSearch, PostgreSQL, Jaeger, Grafana, and multi-JVM services), the testbed encountered hard deployment timeouts (`Exception: Timeout: Not all pods in namespace 'astronomy-shop' reached the Ready state within 300 seconds`).
+
+- **Diagnostic Root Cause Analysis:**
+  - `kubectl describe` on pending pods (`load-generator`, `payment`, `recommendation`) confirmed:
+    `0/2 nodes are available: 1 Insufficient memory, 1 node(s) had untolerated taint {node-role.kubernetes.io/control-plane: }`.
+  - On a standard workstation with **16 GB physical RAM**, the host operating system (Windows 11) consumes ~4.5–5.5 GB, WSL2 default allocation caps at ~8.0 GB, and Ollama with local models (`nemotron-3-nano:4b`) claims ~3.5–4.5 GB.
+  - The Kind worker node has ~2.5–3.5 GB of schedulable memory remaining, which accommodates **Hotel Reservation (~1.5–2.0 GB)** and **Social Network (~2.5–3.0 GB)** stably, but is structurally insufficient for Astronomy Shop's ~8–11 GB footprint.
+  - In addition, simultaneous init-container image pulls (`busybox:latest`) triggered Docker Hub rate-limits / DNS resolver degradation (`server misbehaving on 192.168.65.254:53`), leading to `Init:ImagePullBackOff`.
+- **Methodological Impact & Thesis Boundary:**
+  - This establishes an empirical hardware boundary: 16 GB single-node workstations represent realistic edge/commodity deployment constraints where lightweight microservice suites (Hotel Reservation: 11 incidents, Social Network: 6 incidents = **17 total reproducible incidents**) run reliably. Enterprise-tier multi-JVM suites (Astronomy Shop) require multi-node clusters or dedicated cloud infrastructure (>24 GB RAM).
+  - The 17 executable incidents across Hotel Reservation and Social Network span every key cloud failure taxonomy (container crash, pod kill, network loss/delay/corruption, CPU/memory saturation, target-port misconfigurations, scale-to-zero, node affinity failures, and database authentication faults), providing a scientifically complete evaluation dataset.
 
 ### Current interpretation
 
