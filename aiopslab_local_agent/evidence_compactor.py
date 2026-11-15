@@ -145,7 +145,7 @@ def build_compact_context(full_context: str, char_budget: int = DEFAULT_CONTEXT_
         "- service_name identifies the component that emitted a span.",
         "- operation_name identifies observed behaviour and may represent a downstream RPC.",
         "- Separate callers from downstream dependencies before localizing a fault.",
-        "- Telemetry collectors and infrastructure daemons (e.g. otel-collector, jaeger, flagd) transport observation signals and are not root-cause business services.",
+        "- Passive telemetry collectors transport observation signals and are not root-cause application services.",
         "- Use explicit status/error evidence before latency-only evidence.",
         "- Consider the deepest supported failing component, not merely its caller.",
         "- Submit only identifiers present in the telemetry evidence.",
