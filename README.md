@@ -1,4 +1,4 @@
-﻿# AIOpsLab: Local SLM for Cloud Incident Root-Cause Analysis (RCA)
+# AIOpsLab: Local SLM for Cloud Incident Root-Cause Analysis (RCA)
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Platform: Kubernetes](https://img.shields.io/badge/platform-Kubernetes-326CE5.svg)](https://kubernetes.io/)
@@ -69,22 +69,37 @@ The matrix below captures verified head-to-head comparisons and baseline evaluat
 | `k8s_target_port-misconfig-localization-3` | Social Network | Port Misconfig | Baseline | `["post-storage-service"]` | **100.0%** | **7.72s** | 1 | Exact match via targetPort mismatch signal |
 | `scale_pod_zero_social_net-localization-1` | Social Network | Scale to Zero | Baseline | `["user-service"]` | **100.0%** | **9.13s** | 1 | Deployment replicas 0/1 signal [!] ATTENTION |
 | `assign_to_non_existent_node_social_net-localization-1` | Social Network | Bad Node Assign | Baseline | `["user-service"]` | **100.0%** | **12.53s** | 1 | Pod stuck Pending (0/1 ready) [!] ATTENTION |
+| `wrong_bin_usage-localization-1` | Social Network | Binary Misuse | Baseline | `["warning"]` | **0.0%** | 8.17s | 1 | Log severity header extracted instead of service |
+| `astronomy_shop_ad_service_failure-localization-1` | Astronomy Shop | Feature Flag Fault | Baseline | `["jaeger", "otel-collector"]` | **0.0%** | 22.86s | 1 | Monitoring infra blame from 30-svc span noise |
+| `astronomy_shop_cart_service_failure-localization-1` | Astronomy Shop | Feature Flag Fault | Baseline | `[]` | **0.0%** | 18.89s | 1 | Noisy telemetry swamped 8k context window |
+| `astronomy_shop_kafka_queue_problems-localization-1` | Astronomy Shop | Kafka Queue Issue | Baseline | `[]` | **0.0%** | 15.32s | 1 | Swamped by raw queue metrics; empty fallback |
+| `astronomy_shop_loadgenerator_flood_homepage-localization-1` | Astronomy Shop | Load Flood | Baseline | `[]` | **0.0%** | 14.04s | 1 | High volume traffic saturated span context |
+| `astronomy_shop_payment_service_unreachable-localization-1` | Astronomy Shop | Net Unreachable | Baseline | `[]` | **0.0%** | 15.82s | 1 | Connection dropped; prompt budget exceeded |
+| `astronomy_shop_product_catalog_service_failure-localization-1` | Astronomy Shop | Catalog Failure | Baseline | `["jaeger", "currency"]` | **0.0%** | 122.08s | 1 | Caller / infra blame from raw CSV spans |
+| `astronomy_shop_recommendation_service_cache_failure-localization-1` | Astronomy Shop | Cache Failure | Baseline | `[]` | **0.0%** | 21.39s | 1 | Latency degradation without crash indicators |
+| `astronomy_shop_payment_service_failure-localization-1` | Astronomy Shop | Payment Failure | Baseline | `["recommendation"]` | **0.0%** | 19.50s | 1 | Upstream client blamed for downstream failure |
+| `astronomy_shop_ad_service_high_cpu-localization-1` | Astronomy Shop | High CPU Stress | Baseline | `[]` | **0.0%** | 14.79s | 1 | Resource contention without explicit crash |
+| `astronomy_shop_ad_service_manual_gc-localization-1` | Astronomy Shop | Memory GC Pause | Baseline | `[]` | **0.0%** | 13.94s | 1 | Pause latency swamped by raw traces |
+| `astronomy_shop_image_slow_load-localization-1` | Astronomy Shop | Slow Load | Baseline | `[]` | **0.0%** | 16.86s | 1 | Latency degradation; empty submission |
 
 ---
 
-### 3. Empirical 17-Incident Sequential Baseline Batch Evaluation Summary
+### 3. Empirical 28-Incident Sequential Baseline Batch Evaluation Summary
 
-Across a 17-incident sequential baseline evaluation batch run with 
-emotron-3-nano:4b:
-- **Total Evaluated Incidents:** 17
-- **Exact Matches (100% Accuracy):** 8 (47.1%)
-- **Partial / Subset Matches (50% Accuracy):** 1 (5.9%)
-- **Failures (0.0% Accuracy):** 8 (47.1%)
-- **Key Baseline Failure Categories Identified:**
-  - *Cascading Caller Blame:* Network loss and database auth drops caused upstream callers (rontend, 
-eservation) to emit 5xx errors; the model penalized accuracy by submitting all callers.
-  - *Schema Key Hallucination:* On unstructured app errors, 4B models copied raw CSV table headers ("verdict", "verdict_reason") or log severity strings ("warning").
-  - *Silent Latency Degradation:* Network delay faults left pods in 1/1 Running state with 0 restarts; without graph call trees, the baseline model defaulted to empty submissions ([]).
+Across all 28 registered localization incidents evaluated sequentially in Baseline mode with `nemotron-3-nano:4b`:
+- **Total Evaluated Incidents:** 28 (11 Hotel Reservation, 6 Social Network, 11 Astronomy Shop)
+- **Exact Matches (100% Accuracy):** 8 (28.6%)
+- **Partial / Subset Matches (50% Accuracy):** 1 (3.6%)
+- **Failures (0.0% Accuracy):** 19 (67.9%)
+- **Microservice Suite Breakdown:**
+  - **Hotel Reservation:** 5/11 (45.5% accuracy)
+  - **Social Network:** 3/6 (50.0% accuracy)
+  - **Astronomy Shop:** **0/11 (0.0% accuracy)**
+- **Key Empirical Baseline Failure Modes Identified:**
+  - *Large-Scale Graph Complexity (Astronomy Shop):* In microservice topologies exceeding 25+ services, raw telemetry overwhelms the SLM's 8,194 context window, resulting in 100% baseline failure.
+  - *Cascading Caller Blame:* Network loss, latency drops, and service failures cause upstream callers (`frontend`, `currency`, `recommendation`) or telemetry collectors (`jaeger`, `otel-collector`) to emit warnings, which the SLM penalizes by blaming callers.
+  - *Schema Key Hallucination:* On unstructured telemetry, small 4B models copy CSV table headers (`verdict`, `verdict_reason`) or log severity words (`warning`).
+  - *Silent Latency Degradation:* Network delay and CPU faults keep pods in `Running` state with 0 restarts; without graph call trees, the baseline SLM defaults to empty submissions (`[]`).
 
 ---
 
