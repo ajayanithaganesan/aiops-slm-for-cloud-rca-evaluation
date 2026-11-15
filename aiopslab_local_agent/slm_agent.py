@@ -1,4 +1,4 @@
-﻿"""SLM agent using AIOpsLab's native action protocol across local models."""
+"""SLM agent using AIOpsLab's native action protocol across local models."""
 
 import json
 import csv
@@ -88,8 +88,17 @@ class SLMAgent:
         # Extract known candidate service identifiers for robust action normalization
         cand_match = re.search(r"CANDIDATE SERVICE IDENTIFIERS:\s*\[(.*?)\]", evidence, re.DOTALL)
         if cand_match:
-            self.candidate_services = {
+            raw_candidates = {
                 s.strip().lower() for s in re.findall(r"[\"']([a-zA-Z0-9_-]+)[\"']", cand_match.group(1))
+            }
+            # Exclude passive telemetry infrastructure proxies from candidate root causes
+            self.candidate_services = {
+                s for s in raw_candidates
+                if s not in {
+                    "otel-collector", "otel-collector-agent", "jaeger", "jaeger-collector",
+                    "jaeger-query", "jaeger-out", "flagd", "opamp-server", "prometheus",
+                    "grafana", "opensearch"
+                } and not s.startswith("jaeger")
             }
 
         # Track any services with objective anomaly flags (restarts, crashes, port mismatches)
@@ -106,6 +115,7 @@ class SLMAgent:
             "2. If an endpoint is missing for a service, that service is unreachable and the root cause.\n"
             "3. If callers fail when invoking a downstream RPC target (e.g. frontend fails calling target 'user'), the target service is the root cause.\n"
             "4. Do not blame caller services (e.g. frontend) for connection refused errors caused by downstream service failures.\n"
+            "5. Telemetry proxies and collectors (e.g. otel-collector, jaeger, flagd) transport observation telemetry and are not root-cause business services.\n"
             "FORMAT & ACCURACY CONTRACT:\n"
             "- Submit ONLY the single root-cause service that triggered the incident, NOT the callers or collateral services.\n"
             "- Do NOT submit multiple services when one specific service crashed or failed. Accuracy is penalized for every non-faulty service included.\n"
@@ -313,7 +323,11 @@ class SLMAgent:
             clean_str_list = re.findall(r"[\"']([a-zA-Z0-9_-]+)[\"']", inner)
             filtered = [
                 s.lower() for s in clean_str_list
-                if s.lower() not in ("issue_key", "summary", "description", "details", "service", "status", "fault", "true", "false", "warning", "verdict", "verdict_reason", "error", "info")
+                if s.lower() not in (
+                    "issue_key", "summary", "description", "details", "service", "status",
+                    "fault", "true", "false", "warning", "verdict", "verdict_reason", "error",
+                    "info", "otel-collector", "jaeger", "flagd", "prometheus", "grafana"
+                )
             ]
             if filtered:
                 unique_services = list(dict.fromkeys(filtered))

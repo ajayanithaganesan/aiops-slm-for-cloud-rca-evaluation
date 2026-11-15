@@ -71,16 +71,27 @@ The matrix below captures verified head-to-head comparisons and baseline evaluat
 | `assign_to_non_existent_node_social_net-localization-1` | Social Network | Bad Node Assign | Baseline | `["user-service"]` | **100.0%** | **12.53s** | 1 | Pod stuck Pending (0/1 ready) [!] ATTENTION |
 | `wrong_bin_usage-localization-1` | Social Network | Binary Misuse | Baseline | `["warning"]` | **0.0%** | 8.17s | 1 | Log severity header extracted instead of service |
 | `astronomy_shop_ad_service_failure-localization-1` | Astronomy Shop | Feature Flag Fault | Baseline | `["jaeger", "otel-collector"]` | **0.0%** | 22.86s | 1 | Monitoring infra blame from 30-svc span noise |
+| `astronomy_shop_ad_service_failure-localization-1` | Astronomy Shop | Feature Flag Fault | **Graph** | `["otel-collector"]` | **0.0%** | 17.34s | 1 | Observability proxy blame (infrastructure noise trap) |
 | `astronomy_shop_cart_service_failure-localization-1` | Astronomy Shop | Feature Flag Fault | Baseline | `[]` | **0.0%** | 18.89s | 1 | Noisy telemetry swamped 8k context window |
+| `astronomy_shop_cart_service_failure-localization-1` | Astronomy Shop | Feature Flag Fault | **Graph** | `[]` | **0.0%** | 16.07s | 1 | Callee missing explicit 5xx in traces -> fallback [] |
 | `astronomy_shop_kafka_queue_problems-localization-1` | Astronomy Shop | Kafka Queue Issue | Baseline | `[]` | **0.0%** | 15.32s | 1 | Swamped by raw queue metrics; empty fallback |
+| `astronomy_shop_kafka_queue_problems-localization-1` | Astronomy Shop | Kafka Queue Issue | **Graph** | `["flagd"]` | **0.0%** | 11.91s | 1 | Feature flag daemon blamed due to cluster-wide sync |
 | `astronomy_shop_loadgenerator_flood_homepage-localization-1` | Astronomy Shop | Load Flood | Baseline | `[]` | **0.0%** | 14.04s | 1 | High volume traffic saturated span context |
+| `astronomy_shop_loadgenerator_flood_homepage-localization-1` | Astronomy Shop | Load Flood | **Graph** | `["flagd"]` | **0.0%** | 13.25s | 1 | Blamed flag daemon instead of traffic generator |
 | `astronomy_shop_payment_service_unreachable-localization-1` | Astronomy Shop | Net Unreachable | Baseline | `[]` | **0.0%** | 15.82s | 1 | Connection dropped; prompt budget exceeded |
+| `astronomy_shop_payment_service_unreachable-localization-1` | Astronomy Shop | Net Unreachable | **Graph** | `["currency"]` | **0.0%** | 21.08s | 1 | Upstream client (`currency`) blamed for unreachable target |
 | `astronomy_shop_product_catalog_service_failure-localization-1` | Astronomy Shop | Catalog Failure | Baseline | `["jaeger", "currency"]` | **0.0%** | 122.08s | 1 | Caller / infra blame from raw CSV spans |
+| `astronomy_shop_product_catalog_service_failure-localization-1` | Astronomy Shop | Catalog Failure | **Graph** | `[]` | **0.0%** | 35.89s | 1 | High token budget without explicit error code |
 | `astronomy_shop_recommendation_service_cache_failure-localization-1` | Astronomy Shop | Cache Failure | Baseline | `[]` | **0.0%** | 21.39s | 1 | Latency degradation without crash indicators |
+| `astronomy_shop_recommendation_service_cache_failure-localization-1` | Astronomy Shop | Cache Failure | **Graph** | `["otel-collector"]` | **0.0%** | 13.43s | 1 | Telemetry proxy blame; cache miss treated as collector fault |
 | `astronomy_shop_payment_service_failure-localization-1` | Astronomy Shop | Payment Failure | Baseline | `["recommendation"]` | **0.0%** | 19.50s | 1 | Upstream client blamed for downstream failure |
+| `astronomy_shop_payment_service_failure-localization-1` | Astronomy Shop | Payment Failure | **Graph** | `["otel-collector"]` | **0.0%** | 13.14s | 1 | Observability intermediary blame over failed payment pod |
 | `astronomy_shop_ad_service_high_cpu-localization-1` | Astronomy Shop | High CPU Stress | Baseline | `[]` | **0.0%** | 14.79s | 1 | Resource contention without explicit crash |
+| `astronomy_shop_ad_service_high_cpu-localization-1` | Astronomy Shop | High CPU Stress | **Graph** | `["product-catalog"]` | **0.0%** | 18.61s | 1 | Upstream caller blamed for slow downstream response |
 | `astronomy_shop_ad_service_manual_gc-localization-1` | Astronomy Shop | Memory GC Pause | Baseline | `[]` | **0.0%** | 13.94s | 1 | Pause latency swamped by raw traces |
+| `astronomy_shop_ad_service_manual_gc-localization-1` | Astronomy Shop | Memory GC Pause | **Graph** | `[]` | **0.0%** | 16.27s | 1 | GC pause latency omitted from structural error table |
 | `astronomy_shop_image_slow_load-localization-1` | Astronomy Shop | Slow Load | Baseline | `[]` | **0.0%** | 16.86s | 1 | Latency degradation; empty submission |
+| `astronomy_shop_image_slow_load-localization-1` | Astronomy Shop | Slow Load | **Graph** | `["otel-collector"]` | **0.0%** | 19.97s | 1 | Telemetry collector blamed for image loading delay |
 
 ---
 
