@@ -66,14 +66,28 @@ class SystemEvidenceCollector:
             return ""
         return str(self.run_safe_action("exec_shell", cmd))
 
+    OBSERVABILITY_INFRASTRUCTURE = {
+        "otel-collector",
+        "otel-collector-agent",
+        "jaeger",
+        "jaeger-collector",
+        "jaeger-query",
+        "jaeger-out",
+        "flagd",
+        "opamp-server",
+        "prometheus",
+        "grafana",
+        "opensearch",
+    }
+
     def discover_cluster_services(self) -> list[str]:
-        """Discovers all defined services directly from the cluster, including dead or inactive ones."""
+        """Discovers all defined services directly from the cluster, excluding passive observability infrastructure."""
         services: set[str] = set()
         svc_out = self.run_manifest_command("discover_services")
         if "ERROR" not in svc_out and svc_out.strip():
             for line in svc_out.strip().splitlines():
-                name = line.strip()
-                if name and not name.startswith("jaeger-out"):
+                name = line.strip().lower()
+                if name and name not in self.OBSERVABILITY_INFRASTRUCTURE and not name.startswith("jaeger"):
                     services.add(name)
         return sorted(services)
 
@@ -236,11 +250,17 @@ class SystemEvidenceCollector:
                     resp = str(row.get("response", "")).strip()
 
                     target = None
-                    rpc_match = re.match(r"^/([a-zA-Z0-9_-]+)\.[a-zA-Z0-9_-]+/", op)
-                    if rpc_match:
-                        target = rpc_match.group(1).lower()
-                    elif op.startswith("HTTP POST /") or op.startswith("HTTP GET /"):
-                        route_match = re.match(r"^HTTP (?:POST|GET) /([a-zA-Z0-9_-]+)", op)
+                    # 1. Standard gRPC Service convention: e.g. "oteldemo.PaymentService/Charge" -> "payment"
+                    grpc_match = re.search(r"/?(?:[a-zA-Z0-9_]+\.)*([a-zA-Z0-9]+)Service/", op)
+                    if grpc_match:
+                        name = grpc_match.group(1)
+                        target = re.sub(r"(?<!^)(?=[A-Z])", "-", name).lower()
+                    # 2. Legacy / package gRPC match fallback
+                    elif re.match(r"^/([a-zA-Z0-9_-]+)\.[a-zA-Z0-9_-]+/", op):
+                        target = re.match(r"^/([a-zA-Z0-9_-]+)\.[a-zA-Z0-9_-]+/", op).group(1).lower()
+                    # 3. Standard HTTP/REST route convention
+                    elif op.startswith("HTTP POST /") or op.startswith("HTTP GET /") or op.startswith("/"):
+                        route_match = re.search(r"/(?:api(?:/v\d+)?)?/([a-zA-Z0-9_-]+)", op)
                         if route_match:
                             target = route_match.group(1).lower()
 

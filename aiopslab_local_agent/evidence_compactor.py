@@ -121,9 +121,17 @@ def build_compact_context(full_context: str, char_budget: int = DEFAULT_CONTEXT_
         selected.extend(["", "OPERATION FAILURE SUMMARY"])
         for (emitter, operation, response), count in operation_failures.most_common(20):
             target = "unknown"
-            rpc_match = re.match(r"/?([^./]+)\.[^/]+/", operation)
-            if rpc_match:
-                target = rpc_match.group(1)
+            # Universal multi-protocol target extraction:
+            # 1. Standard gRPC convention: optional package prefix + ServiceName/Method
+            grpc_match = re.search(r"/?(?:[a-zA-Z0-9_]+\.)*([a-zA-Z0-9]+)Service/", operation)
+            if grpc_match:
+                name = grpc_match.group(1)
+                target = re.sub(r"(?<!^)(?=[A-Z])", "-", name).lower()
+            else:
+                # 2. Standard HTTP/REST route convention: e.g. /api/v1/service or /service/...
+                route_match = re.search(r"/(?:api(?:/v\d+)?)?/([a-zA-Z0-9_-]+)", operation)
+                if route_match:
+                    target = route_match.group(1).lower()
             selected.append(
                 f"- emitter={emitter} | operation={operation} | observations={count} "
                 f"| response={response} | operation_target_label={target}"
@@ -137,6 +145,7 @@ def build_compact_context(full_context: str, char_budget: int = DEFAULT_CONTEXT_
         "- service_name identifies the component that emitted a span.",
         "- operation_name identifies observed behaviour and may represent a downstream RPC.",
         "- Separate callers from downstream dependencies before localizing a fault.",
+        "- Telemetry collectors and infrastructure daemons (e.g. otel-collector, jaeger, flagd) transport observation signals and are not root-cause business services.",
         "- Use explicit status/error evidence before latency-only evidence.",
         "- Consider the deepest supported failing component, not merely its caller.",
         "- Submit only identifiers present in the telemetry evidence.",
