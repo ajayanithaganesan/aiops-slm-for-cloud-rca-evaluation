@@ -66,28 +66,14 @@ class SystemEvidenceCollector:
             return ""
         return str(self.run_safe_action("exec_shell", cmd))
 
-    OBSERVABILITY_INFRASTRUCTURE = {
-        "otel-collector",
-        "otel-collector-agent",
-        "jaeger",
-        "jaeger-collector",
-        "jaeger-query",
-        "jaeger-out",
-        "flagd",
-        "opamp-server",
-        "prometheus",
-        "grafana",
-        "opensearch",
-    }
-
     def discover_cluster_services(self) -> list[str]:
-        """Discovers all defined services directly from the cluster, excluding passive observability infrastructure."""
+        """Discovers all defined services directly from the cluster, including dead or inactive ones."""
         services: set[str] = set()
         svc_out = self.run_manifest_command("discover_services")
         if "ERROR" not in svc_out and svc_out.strip():
             for line in svc_out.strip().splitlines():
                 name = line.strip().lower()
-                if name and name not in self.OBSERVABILITY_INFRASTRUCTURE and not name.startswith("jaeger"):
+                if name:
                     services.add(name)
         return sorted(services)
 
