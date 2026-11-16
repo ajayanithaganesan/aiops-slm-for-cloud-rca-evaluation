@@ -1,0 +1,62 @@
+DISTRIBUTED SYSTEM TELEMETRY RCA CONTEXT
+Telemetry source: traces_1794705006.csv
+Total spans: 0
+Unique services: 0
+
+UNIVERSAL EVIDENCE PROFILE
+- Incident scope: spans=0, traces=0, services=0, operations=0
+- Error/status evidence: explicit_span_errors=0, status_or_error_records=0
+- Performance evidence: latency_anomalies=0
+- Temporal failure evidence unavailable: no usable error timestamps.
+- Service failure comparison:
+- Evidence limitations / interpretation safeguards:
+  - No dedicated status-code field was present; response values are available as status-related evidence.
+  - No dedicated error/exception text field was present in the supplied telemetry.
+  - A response field was present in the schema but contained no populated values.
+  - No cross-service dependency edges could be constructed from the supplied parent-child relationships.
+  - Absence of observed errors is not evidence that the incident contained no failure.
+  - Latency anomalies identify unusual performance behaviour; they do not establish root cause.
+  - The parser does not use incident ground truth when constructing evidence.
+
+STATUS AND ERROR EVIDENCE
+- No non-empty status/error/message evidence was detected in the supplied telemetry fields.
+
+SERVICE DEPENDENCY GRAPH
+- No cross-service relationships were identified from the available parent-child span relationships.
+
+SERVICE TELEMETRY SUMMARY
+
+TOP OPERATIONS BY TRACE VOLUME
+
+CAUSAL EVIDENCE PATTERNS
+
+EXPLICIT ERROR EVIDENCE
+- No spans explicitly marked as errors.
+
+UNUSUAL LATENCY EVIDENCE
+- No statistically unusual latency was detected using the current threshold.
+
+HIGH-VALUE TELEMETRY EVIDENCE
+
+IMPORTANT: Evidence ranking identifies potentially useful telemetry only. It does not identify the root cause.
+IMPORTANT: 'Unknown' response values are not treated as errors.
+
+GRAPH-AUGMENTED DISTRIBUTED SYSTEM RCA CONTEXT
+
+This file augments the baseline telemetry context with observed
+service dependencies and service-level evidence.
+Observed dependencies do not, by themselves, prove root cause.
+
+OBSERVED SERVICE DEPENDENCY GRAPH
+
+SERVICE-LEVEL DIAGNOSTIC EVIDENCE
+
+LATENCY ANOMALIES
+
+STATUS AND ERROR EVIDENCE
+
+INTERPRETATION SAFEGUARDS
+- A dependency edge indicates observed communication, not causality.
+- Latency anomalies are clues, not proof of root cause.
+- Missing explicit error flags do not prove that no failure occurred.
+- Diagnose using the evidence provided; do not assume a root cause.

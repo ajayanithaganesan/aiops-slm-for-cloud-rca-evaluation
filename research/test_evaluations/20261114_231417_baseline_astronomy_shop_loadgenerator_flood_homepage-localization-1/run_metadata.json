@@ -1,0 +1,8 @@
+{
+  "problem_id": "astronomy_shop_loadgenerator_flood_homepage-localization-1",
+  "condition": "baseline",
+  "elapsed_seconds": 92.36558294296265,
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1794698066.csv"
+  ]
+}

@@ -1,0 +1,47 @@
+AIOpsLab LOCAL SLM EVALUATION
+timestamp: 2026-11-14T23:21:30
+problem_id: astronomy_shop_payment_service_unreachable-localization-1
+condition: baseline
+model: nemotron-3-nano:4b
+elapsed_seconds: 86.335
+max_steps: 1
+steps: 1
+input_tokens: 8194
+output_tokens: 306
+model_calls: 1
+tools_observed: submit
+context_files: /home/codespace/AIOpsLab/trace_output/traces_1794698414.csv
+
+RESULTS
+{
+  "history": [
+    "role='assistant' content='```\\nsubmit([])\\n```'",
+    "role='env' content='1'"
+  ],
+  "final_state": "SubmissionStatus.VALID_SUBMISSION",
+  "results": {
+    "Localization Accuracy": 0.0,
+    "TTL": 15.81943130493164,
+    "steps": 1,
+    "in_tokens": 1,
+    "out_tokens": 5,
+    "success": false,
+    "is_subset": false
+  },
+  "framework_overhead": 306.1452307701111
+}
+
+MODEL_CALL_METRICS
+[
+  {
+    "model": "nemotron-3-nano:4b",
+    "prompt_tokens": 8194,
+    "completion_tokens": 306,
+    "total_duration_ns": 15652382500,
+    "load_duration_ns": 3738371000,
+    "prompt_eval_duration_ns": 4216638000,
+    "eval_duration_ns": 5381532000,
+    "prompt_chars": 867726,
+    "prompt_messages": 2
+  }
+]

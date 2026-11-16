@@ -1,0 +1,154 @@
+DISTRIBUTED SYSTEM TELEMETRY RCA CONTEXT
+Telemetry source: traces_1794788373.csv
+Total spans: 2629
+Unique services: 17
+
+UNIVERSAL EVIDENCE PROFILE
+- Incident scope: spans=2629, traces=437, services=17, operations=98
+- Behavioural evidence: highest-volume operations
+  - frontend-proxy | GET | count=310
+  - frontend-proxy | router frontend egress | count=226
+  - flagd | resolveBoolean | count=180
+  - product-catalog | astronomy-db | count=168
+  - product-catalog | oteldemo.ProductCatalogService/GetProduct | count=133
+  - frontend-web | GET | count=130
+  - frontend | oteldemo.ProductCatalogService/GetProduct | count=115
+  - frontend-web | resourceFetch | count=112
+  - image-provider | GET | count=98
+  - frontend-proxy | router image-provider egress | count=98
+- Dependency evidence:
+  - frontend-proxy -> frontend | observations=175
+  - frontend-web -> frontend-proxy | observations=135
+  - frontend -> product-catalog | observations=125
+  - frontend-proxy -> image-provider | observations=98
+  - frontend -> cart | observations=40
+  - frontend -> currency | observations=24
+  - recommendation -> product-catalog | observations=23
+  - frontend -> recommendation | observations=23
+  - frontend-proxy -> flagd | observations=9
+  - frontend -> ad | observations=7
+  - agent -> frontend | observations=4
+  - frontend -> shipping | observations=4
+  - shipping -> quote | observations=4
+  - ad -> flagd | observations=3
+  - cart -> flagd | observations=2
+  - recommendation -> flagd | observations=1
+- Error/status evidence: explicit_span_errors=1, status_or_error_records=1
+  - Response distribution:
+    - Unknown: 1632
+    - 200: 991
+    - 308: 6
+- Performance evidence: latency_anomalies=100
+- Temporal failure evidence:
+  - service=accounting | operation=receive orders | first_error_seen=1794788367464558 | last_error_seen=1794788367464558 | error_observations=1
+- Service failure comparison:
+  - service=accounting | explicit_errors=1 | failed_operations=receive orders | first_error_seen=1794788367464558 | last_error_seen=1794788367464558
+  - service=ad | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=agent | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=cart | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=chatbot | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=currency | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=flagd | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=frontend | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=frontend-proxy | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=frontend-web | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=image-provider | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=mcp | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=payment | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=product-catalog | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=quote | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=recommendation | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=shipping | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+- Evidence limitations / interpretation safeguards:
+  - No dedicated status-code field was present; response values are available as status-related evidence.
+  - No dedicated error/exception text field was present in the supplied telemetry.
+  - Absence of observed errors is not evidence that the incident contained no failure.
+  - Latency anomalies identify unusual performance behaviour; they do not establish root cause.
+  - The parser does not use incident ground truth when constructing evidence.
+
+STATUS AND ERROR EVIDENCE
+- Extracted status/error/message records: 1
+- Records by service:
+    accounting: 1
+- Records by service and operation:
+    accounting | receive orders: 1
+- Response values in extracted records:
+    Unknown: 1
+- Explicit error flag values:
+    True: 1
+- Repeated status/error details:
+    has_error=True: 1
+- Representative trace references (up to 5):
+    trace=4a5738c621b75a915d9b00e6e7fab578 | observed_services=accounting | evidence=has_error=True
+- This section aggregates extracted records. Consult retained raw telemetry for individual spans and complete field values.
+
+SERVICE DEPENDENCY GRAPH
+- frontend-proxy -> frontend (observed relationships: 175)
+- frontend-web -> frontend-proxy (observed relationships: 135)
+- frontend -> product-catalog (observed relationships: 125)
+- frontend-proxy -> image-provider (observed relationships: 98)
+- frontend -> cart (observed relationships: 40)
+- frontend -> currency (observed relationships: 24)
+- recommendation -> product-catalog (observed relationships: 23)
+- frontend -> recommendation (observed relationships: 23)
+- frontend-proxy -> flagd (observed relationships: 9)
+- frontend -> ad (observed relationships: 7)
+- agent -> frontend (observed relationships: 4)
+- frontend -> shipping (observed relationships: 4)
+- shipping -> quote (observed relationships: 4)
+- ad -> flagd (observed relationships: 3)
+- cart -> flagd (observed relationships: 2)
+- recommendation -> flagd (observed relationships: 1)
+- frontend-proxy: spans=667, mean_duration=90044.89955022489, p95=157547.89999999944, max=4487548.0, explicit_errors=0
+- frontend: spans=632, mean_duration=40961.04430379747, p95=131890.74999999983, max=622402.0, explicit_errors=0
+- product-catalog: spans=336, mean_duration=11705.705357142857, p95=47763.5, max=104327.0, explicit_errors=0
+- flagd: spans=301, mean_duration=66643.31561461794, p95=1876.0, max=4486783.0, explicit_errors=0
+- frontend-web: spans=262, mean_duration=184343.5114503817, p95=519179.99999999977, max=1524400.0, explicit_errors=0
+- image-provider: spans=101, mean_duration=39.603960396039604, p95=0.0, max=2000.0, explicit_errors=0
+- cart: spans=96, mean_duration=15690.416666666666, p95=41155.75, max=543938.0, explicit_errors=0
+- agent: spans=82, mean_duration=189652.3780487805, p95=668740.2000000001, max=803930.0, explicit_errors=0
+- recommendation: spans=70, mean_duration=17413.385714285716, p95=72736.65, max=82407.0, explicit_errors=0
+- ad: spans=26, mean_duration=47526.11538461538, p95=177724.75, max=536870.0, explicit_errors=0
+- currency: spans=24, mean_duration=41.5, p95=81.64999999999995, max=92.0, explicit_errors=0
+- quote: spans=18, mean_duration=5259.666666666667, p95=35358.24999999996, max=58661.0, explicit_errors=0
+- shipping: spans=8, mean_duration=41190.25, p95=152526.2, max=152984.0, explicit_errors=0
+- accounting: spans=2, mean_duration=584838.0, p95=965366.0999999999, max=1007647.0, explicit_errors=1
+- chatbot: spans=2, mean_duration=123200.0, p95=156297.5, max=159975.0, explicit_errors=0
+- payment: spans=1, mean_duration=784.0, p95=784.0, max=784.0, explicit_errors=0
+- mcp: spans=1, mean_duration=75694.0, p95=75694.0, max=75694.0, explicit_errors=0
+  Path 1: frontend-web -> frontend-proxy
+  Path 2: frontend-proxy -> frontend
+  Path 3: frontend-web -> frontend-proxy -> image-provider
+  Path 4: frontend-web -> frontend-proxy -> frontend
+  Path 5: frontend-web -> frontend-proxy -> frontend -> product-catalog
+  Path 6: frontend-proxy -> image-provider
+  Path 7: frontend-proxy -> frontend -> product-catalog
+  Path 8: frontend-web -> frontend-proxy -> frontend -> cart
+  Path 9: frontend-web -> frontend-proxy -> frontend -> recommendation
+  Path 10: frontend-web -> frontend-proxy -> frontend -> recommendation -> product-catalog
+  Path 11: frontend-proxy -> frontend -> cart
+  Path 12: frontend-web -> frontend-proxy -> frontend -> currency
+  Path 13: frontend-proxy -> flagd
+  Path 14: frontend-proxy -> frontend -> recommendation
+  Path 15: frontend-proxy -> frontend -> recommendation -> product-catalog
+  Path 16: frontend-proxy -> frontend -> currency
+  Path 17: agent -> frontend
+  Path 18: frontend-web -> frontend-proxy -> frontend -> ad
+  Path 19: frontend-web -> frontend-proxy -> frontend -> shipping -> quote
+  Path 20: frontend-web -> frontend-proxy -> frontend -> shipping
+  Path 21: cart -> flagd
+  Path 22: frontend-proxy -> frontend -> ad
+  Path 23: agent -> frontend -> product-catalog
+  Path 24: frontend-web -> frontend-proxy -> frontend -> ad -> flagd
+  Path 25: frontend-web -> frontend-proxy -> flagd
+  Path 26: frontend-proxy -> frontend -> recommendation -> flagd
+  Path 27: agent -> frontend -> ad
+  Path 28: agent -> frontend -> currency
+- score=14.0 | service=frontend-proxy | operation=router frontend egress | duration=287588.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=executing api route (pages) /api/data | duration=618226.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- service_name identifies the service that emitted the span.
+OPERATION FAILURE SUMMARY
+- emitter=accounting | operation=receive orders | observations=2 | response=Unknown | operation_target_label=unknown
+
+CONTEXT BUDGET: 413 lower-priority parser lines omitted from the SLM prompt.
+Complete parser evidence remains available in the preserved graph artifact.

@@ -1,0 +1,2415 @@
+{
+  "services": [
+    "accounting",
+    "ad",
+    "agent",
+    "cart",
+    "chatbot",
+    "currency",
+    "flagd",
+    "frontend",
+    "frontend-proxy",
+    "frontend-web",
+    "image-provider",
+    "mcp",
+    "payment",
+    "product-catalog",
+    "quote",
+    "recommendation",
+    "shipping"
+  ],
+  "edges": [
+    {
+      "source": "frontend-proxy",
+      "target": "frontend",
+      "span_relationship_count": 177,
+      "examples": [
+        {
+          "trace_id": "560fdd62040fefbbbfcfb0fc49ce5ee7",
+          "parent_span": "740064308a755289",
+          "child_span": "24caca2364c1560a",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/shipping",
+          "duration": 27597.0
+        },
+        {
+          "trace_id": "3fb5b52aaaafa98517f29cd866360624",
+          "parent_span": "a3eb12db6cf64432",
+          "child_span": "b2ee00a621a3f3e4",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/currency",
+          "duration": 10550.0
+        },
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "b4d6a49522e14572",
+          "child_span": "88b57d742c151ead",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/recommendations",
+          "duration": 100410.0
+        },
+        {
+          "trace_id": "758961391d9c92946a886c31fe1cadfb",
+          "parent_span": "1fa83403b14b9676",
+          "child_span": "0672280354701f62",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/currency",
+          "duration": 8482.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "ce64b7306cee9003",
+          "child_span": "2474e66e2d3c1048",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/recommendations",
+          "duration": 67663.0
+        },
+        {
+          "trace_id": "ce908df943dd5095f183e3d65fd2ce1c",
+          "parent_span": "ddbb0a7d3ebf888e",
+          "child_span": "55c7f64a2dc54e3b",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/currency",
+          "duration": 7081.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "98ff8397b3236793",
+          "child_span": "dd9f2a70f961a898",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/recommendations",
+          "duration": 110826.0
+        },
+        {
+          "trace_id": "c4198c16e132ed5bd30839b6ec379eba",
+          "parent_span": "72806a0093d5e940",
+          "child_span": "b3c09fd1e08ab64d",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/currency",
+          "duration": 16113.0
+        },
+        {
+          "trace_id": "00a5d2631197ee7d597600a4b6883d9d",
+          "parent_span": "97bc456513c0825d",
+          "child_span": "1068f32aaa0a717e",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/shipping",
+          "duration": 28184.0
+        },
+        {
+          "trace_id": "0f9db885796f5ecf294b9d17386c911c",
+          "parent_span": "14371dff4db6de68",
+          "child_span": "f27605bcc231c48d",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/currency",
+          "duration": 10781.0
+        },
+        {
+          "trace_id": "a2ad71752bc1d40c99771966e9b67dd6",
+          "parent_span": "4f22d4f3fe335e0b",
+          "child_span": "9fb946bc4135a896",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/shipping",
+          "duration": 259204.0
+        },
+        {
+          "trace_id": "d2a3d0e82ad7394d0fbc542547b89056",
+          "parent_span": "a77bab78f4799284",
+          "child_span": "8edce98523fd73bd",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/currency",
+          "duration": 16576.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "ed7b33d89eb88a34",
+          "child_span": "b0418857a6ed38a7",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/recommendations",
+          "duration": 236356.0
+        },
+        {
+          "trace_id": "01f2f1c32cc57b02be3c09580ba4ec55",
+          "parent_span": "b4b5fbbc7d99054b",
+          "child_span": "c03b7c76ad1a62b5",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/currency",
+          "duration": 87351.0
+        },
+        {
+          "trace_id": "4dfcb72e65c65bf9f946495335a8d38b",
+          "parent_span": "4c204fb22af1ebbd",
+          "child_span": "bc8a1593c134fde1",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET",
+          "duration": 150997.0
+        },
+        {
+          "trace_id": "de63f6e0dc4becb6272812369fc7dde4",
+          "parent_span": "e78abc23caabceb0",
+          "child_span": "ff73bdb61685c56e",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /",
+          "duration": 18196.0
+        },
+        {
+          "trace_id": "170209cd0b8109cf9202ff23fa6483d7",
+          "parent_span": "d6d80984b7673924",
+          "child_span": "3d2f87202ddd2393",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/recommendations",
+          "duration": 62432.0
+        },
+        {
+          "trace_id": "4239a5290172959c790fa3b6b6110f2f",
+          "parent_span": "57e8148a265d39dd",
+          "child_span": "349c18ce0902c528",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/data",
+          "duration": 51982.0
+        },
+        {
+          "trace_id": "3b29ffccc1d9bc821a42a4efac5736c3",
+          "parent_span": "5a1a56fd3bf43865",
+          "child_span": "702ea4cf4568de50",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET",
+          "duration": 5801.0
+        },
+        {
+          "trace_id": "7a7db941ce57ecd5b2849e4cba1ec75f",
+          "parent_span": "d70ea4329b8a1de0",
+          "child_span": "934bb6041a9b8996",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET",
+          "duration": 4682.0
+        },
+        {
+          "trace_id": "47c4fb5f06626de06ca6f4353fac9e8c",
+          "parent_span": "d2e3a267870cef20",
+          "child_span": "0a9b19b61d242712",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET",
+          "duration": 5758.0
+        },
+        {
+          "trace_id": "fe6b950d7794a498eb83a2905decf9de",
+          "parent_span": "d2e0b8c853b5e374",
+          "child_span": "7150e72f8a5c3966",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET /api/recommendations",
+          "duration": 70539.0
+        },
+        {
+          "trace_id": "d41adc6a8e27f7724f5fd4d72eed15d6",
+          "parent_span": "429b9a1f9b7b8658",
+          "child_span": "4f6a4f8d9eae8b96",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET",
+          "duration": 3487.0
+        },
+        {
+          "trace_id": "bc6e3c3ba2926d24ca5182aed3f104f9",
+          "parent_span": "c0c5178b53bd6e75",
+          "child_span": "21da9d01ba8edd10",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET",
+          "duration": 2886.0
+        },
+        {
+          "trace_id": "fe815cdd31e68061ca6405293fa65cc2",
+          "parent_span": "6d5d3f6e1c9a3208",
+          "child_span": "61a5f939f198dac1",
+          "parent_service": "frontend-proxy",
+          "child_service": "frontend",
+          "parent_operation": "router frontend egress",
+          "child_operation": "GET",
+          "duration": 6833.0
+        }
+      ]
+    },
+    {
+      "source": "frontend-web",
+      "target": "frontend-proxy",
+      "span_relationship_count": 136,
+      "examples": [
+        {
+          "trace_id": "560fdd62040fefbbbfcfb0fc49ce5ee7",
+          "parent_span": "9942a1cb0d76a341",
+          "child_span": "6677529aacc557d7",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 26913.0
+        },
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "60cbba9a82bd3f09",
+          "child_span": "fd0b3b502c505c02",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 104701.0
+        },
+        {
+          "trace_id": "758961391d9c92946a886c31fe1cadfb",
+          "parent_span": "8b583e9235b77a41",
+          "child_span": "5a5f60c23645d00c",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 12878.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "d307cbde44c1883a",
+          "child_span": "a0c19dd1796785a0",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 68650.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "2c80a4edee02a5e6",
+          "child_span": "2c9bd2b655986432",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 111014.0
+        },
+        {
+          "trace_id": "c4198c16e132ed5bd30839b6ec379eba",
+          "parent_span": "146e6ebe77889145",
+          "child_span": "d4b379ebd4d9b2cd",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 16697.0
+        },
+        {
+          "trace_id": "00a5d2631197ee7d597600a4b6883d9d",
+          "parent_span": "cc337116fa04fdc9",
+          "child_span": "1786d3d25cff0981",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 29609.0
+        },
+        {
+          "trace_id": "a2ad71752bc1d40c99771966e9b67dd6",
+          "parent_span": "2de7e9a991c3bdf6",
+          "child_span": "99a099f79080b846",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 259946.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "dbcd8afb8e101271",
+          "child_span": "98dd7ba43c93aa20",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 237021.0
+        },
+        {
+          "trace_id": "8b7291b28ca2c064d889697688a48a03",
+          "parent_span": "52cecabab3c75625",
+          "child_span": "76c0407894a167a0",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "POST",
+          "child_operation": "POST",
+          "duration": 5246.0
+        },
+        {
+          "trace_id": "54ddd342e71da3b9d27a18426ce33d48",
+          "parent_span": "67b219ab00a26837",
+          "child_span": "a179103b260350f4",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 1516.0
+        },
+        {
+          "trace_id": "54988bfccd17da6920b36b187978bfbf",
+          "parent_span": "464ae2d380e3b3e9",
+          "child_span": "2bec3d57e3a9ce96",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 3331.0
+        },
+        {
+          "trace_id": "791666aaa42a3b9b0a5c7f42197744ce",
+          "parent_span": "658645ffec96740b",
+          "child_span": "50f6601e56c505ed",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 11538.0
+        },
+        {
+          "trace_id": "7e9926be967fe17f5e9ccfda6c76980c",
+          "parent_span": "1b178a21e005e75c",
+          "child_span": "66a8c9add25441eb",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 1453.0
+        },
+        {
+          "trace_id": "a695a1dec08ae85d509011f11dc20288",
+          "parent_span": "9b1da37e2f4cadeb",
+          "child_span": "8f5eafb1787fb168",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 2227.0
+        },
+        {
+          "trace_id": "fc93e1ced9e75d1fefd6c052f2148dd3",
+          "parent_span": "0f566540518905d4",
+          "child_span": "4bd8ca143a81032e",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 1939.0
+        },
+        {
+          "trace_id": "c63caaa226905e1856333f2100e686e0",
+          "parent_span": "59a3f0070075c46b",
+          "child_span": "212252fe84c3cdb5",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 3229.0
+        },
+        {
+          "trace_id": "ca48a2af7e63685ad60180f9edf4789f",
+          "parent_span": "8464090a4027fd36",
+          "child_span": "1ee2c0272f449a79",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 4524.0
+        },
+        {
+          "trace_id": "05d0a09f01a67a3de6f7b898b99e90a1",
+          "parent_span": "59acf0f9531a2bd4",
+          "child_span": "d27637559838f7c2",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 4182.0
+        },
+        {
+          "trace_id": "b1ba1f677d0976b85ddcc432117807ff",
+          "parent_span": "43f779c0f13f9293",
+          "child_span": "07e95512d0ebeb75",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 1026.0
+        },
+        {
+          "trace_id": "5c6ac8a9baad5119b2e446e17426f262",
+          "parent_span": "97337f4aee67c9e7",
+          "child_span": "fb23e72a5c7e49fd",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 2918.0
+        },
+        {
+          "trace_id": "49e481753d69e01fd3e83b3b59f37531",
+          "parent_span": "da2e40ee277558c9",
+          "child_span": "ab3c5b57324c7a1c",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 1619.0
+        },
+        {
+          "trace_id": "54e445e573be249bf61a290f6dc26b89",
+          "parent_span": "99fce09521f67a5b",
+          "child_span": "ee715b9d505811dd",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 12012.0
+        },
+        {
+          "trace_id": "ce39443e403ffce87a00979bb7ce8910",
+          "parent_span": "0cb7005896914c57",
+          "child_span": "dc88354c4fe02ccf",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 2384.0
+        },
+        {
+          "trace_id": "c2bd58f9fc9fabab9c34f442bd70b060",
+          "parent_span": "848d8eca65cefb10",
+          "child_span": "33b47d4604259a07",
+          "parent_service": "frontend-web",
+          "child_service": "frontend-proxy",
+          "parent_operation": "GET",
+          "child_operation": "GET",
+          "duration": 12500.0
+        }
+      ]
+    },
+    {
+      "source": "frontend",
+      "target": "product-catalog",
+      "span_relationship_count": 122,
+      "examples": [
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "e8e3a5957bcf95a4",
+          "child_span": "6191217897cdd10e",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 7363.0
+        },
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "a0e7d067395e73c4",
+          "child_span": "c53ffb87c8f5b910",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 8777.0
+        },
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "2552458fa60d52ea",
+          "child_span": "35835166d81679ad",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 45109.0
+        },
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "14a48f1af64049b7",
+          "child_span": "0719261697e91efd",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 57307.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "d067bb85be51c31a",
+          "child_span": "bfbdd7a6b4e99de1",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 8886.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "7deda21257e8262e",
+          "child_span": "bc9f448a465e9e75",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 9189.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "f1b63b42e372dbfd",
+          "child_span": "ea1e603e41aecd7e",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 22007.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "bccfcd2dec1a000e",
+          "child_span": "5ef8ec7f77fd9d8c",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 42193.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "031b3be4ebc40975",
+          "child_span": "0399e85ada91e94a",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 10846.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "a329d2df5256e2f3",
+          "child_span": "0da1db1d7c5c8db0",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 13538.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "dce24e139a5c732f",
+          "child_span": "23f53073fe14d007",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 23824.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "044e172fd165c4ad",
+          "child_span": "344c7ffb432a70c4",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 40254.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "54891bb9cae35729",
+          "child_span": "4a9e6ffec0e8fbd2",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 14031.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "fce63aecc159f1ab",
+          "child_span": "391a46797d7e9933",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 35396.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "828f1c150a9d513f",
+          "child_span": "dd6b249343d177f5",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 72392.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "9fa66f4417c22292",
+          "child_span": "11f52918c72d76f7",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 88367.0
+        },
+        {
+          "trace_id": "170209cd0b8109cf9202ff23fa6483d7",
+          "parent_span": "5d3892d18e86db79",
+          "child_span": "825c1a169fe93ee3",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 8554.0
+        },
+        {
+          "trace_id": "170209cd0b8109cf9202ff23fa6483d7",
+          "parent_span": "7abdd2375efd4313",
+          "child_span": "86e63eff9b6ed683",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 14864.0
+        },
+        {
+          "trace_id": "170209cd0b8109cf9202ff23fa6483d7",
+          "parent_span": "cca14a3eadef4fdf",
+          "child_span": "da4bda608469565e",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 7815.0
+        },
+        {
+          "trace_id": "170209cd0b8109cf9202ff23fa6483d7",
+          "parent_span": "5abc3c836f48b5da",
+          "child_span": "b3591025d5adf9dd",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 13109.0
+        },
+        {
+          "trace_id": "fe6b950d7794a498eb83a2905decf9de",
+          "parent_span": "1e41f9cbc46992c3",
+          "child_span": "e8297ebec29576da",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 6885.0
+        },
+        {
+          "trace_id": "fe6b950d7794a498eb83a2905decf9de",
+          "parent_span": "509e06b714c274f4",
+          "child_span": "7c83a3f93558867f",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 10366.0
+        },
+        {
+          "trace_id": "fe6b950d7794a498eb83a2905decf9de",
+          "parent_span": "d3daf32f42d7310b",
+          "child_span": "d6f524053251aea0",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 15176.0
+        },
+        {
+          "trace_id": "fe6b950d7794a498eb83a2905decf9de",
+          "parent_span": "357331de3e2d359e",
+          "child_span": "d52229e2e209399c",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 21382.0
+        },
+        {
+          "trace_id": "46cbf377ec72429d505bbbda37d16c94",
+          "parent_span": "b2371e85137901f7",
+          "child_span": "ca7047f65c504f41",
+          "parent_service": "frontend",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "child_operation": "oteldemo.ProductCatalogService/GetProduct",
+          "duration": 2090.0
+        }
+      ]
+    },
+    {
+      "source": "frontend-proxy",
+      "target": "image-provider",
+      "span_relationship_count": 111,
+      "examples": [
+        {
+          "trace_id": "54ddd342e71da3b9d27a18426ce33d48",
+          "parent_span": "049a648b5515bd6e",
+          "child_span": "32aa2324f37a2aa3",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "54988bfccd17da6920b36b187978bfbf",
+          "parent_span": "412086f3737d4224",
+          "child_span": "25554039b082d878",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "791666aaa42a3b9b0a5c7f42197744ce",
+          "parent_span": "5e0d4ff163a48105",
+          "child_span": "ed473c73a59bea6d",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "7e9926be967fe17f5e9ccfda6c76980c",
+          "parent_span": "f70fd9015c6572fb",
+          "child_span": "f904924eb0cf7e17",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "a695a1dec08ae85d509011f11dc20288",
+          "parent_span": "3abb7344c7e65883",
+          "child_span": "4d07d7e605cd14fc",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "fc93e1ced9e75d1fefd6c052f2148dd3",
+          "parent_span": "210d15dbb7f46764",
+          "child_span": "eeaa8c119c931ce1",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "1e18f7da53c8a3d539fce68914a33a92",
+          "parent_span": "b133afbb8681bf87",
+          "child_span": "e4c8893a36740d69",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "c63caaa226905e1856333f2100e686e0",
+          "parent_span": "7339710942bf299f",
+          "child_span": "0611f6aa7195d42d",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "ca48a2af7e63685ad60180f9edf4789f",
+          "parent_span": "09470eb250ebef8b",
+          "child_span": "d3399a3acf2c04cf",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 3000.0
+        },
+        {
+          "trace_id": "b295a3ddcaa7da3aba8adeccd8e94ec4",
+          "parent_span": "bab43cacd9df95fd",
+          "child_span": "d1ce1b24ed1643ff",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "98f66f319bc7263eb558fbd75486760f",
+          "parent_span": "f0195e2a1cd03d91",
+          "child_span": "2e85d43a1138014c",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "05d0a09f01a67a3de6f7b898b99e90a1",
+          "parent_span": "8c8fee9e2a680441",
+          "child_span": "59dead967d3da811",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "b1ba1f677d0976b85ddcc432117807ff",
+          "parent_span": "7f2292f431cd8cb7",
+          "child_span": "40388a6817fd0c56",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "5c6ac8a9baad5119b2e446e17426f262",
+          "parent_span": "a51bed966f3b221e",
+          "child_span": "3672558340477cf6",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "4e00c2e41228c95c3741c9e37bafc1c9",
+          "parent_span": "d4fceff665d4e9d2",
+          "child_span": "c73607b98dbd0fb7",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "49e481753d69e01fd3e83b3b59f37531",
+          "parent_span": "58b74933fa6e6db3",
+          "child_span": "804a31b263155049",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "54e445e573be249bf61a290f6dc26b89",
+          "parent_span": "dda0747b320eeb09",
+          "child_span": "599acedcbec229b9",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "ce39443e403ffce87a00979bb7ce8910",
+          "parent_span": "d9209d209b655afe",
+          "child_span": "717ae307d9ed8a10",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "c2bd58f9fc9fabab9c34f442bd70b060",
+          "parent_span": "21e597d476d6f42b",
+          "child_span": "4fd12b23f46fb09e",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "22eae989bdc7421a33fb2e940866b752",
+          "parent_span": "e5d6c3963d1b1e8e",
+          "child_span": "fc3f8334dc967efd",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "4cf5c038964bbba4bbe78686c9640468",
+          "parent_span": "541d484570632278",
+          "child_span": "ba9453fbe8d72bdc",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "c30351c4e26d79fd4ac4d49fade5ab02",
+          "parent_span": "dd1905cb0afe4219",
+          "child_span": "92a81cbb0cbff75f",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "a24e1f94bf210ef6989add538093e9d6",
+          "parent_span": "08e7dc7e366b8f68",
+          "child_span": "51046c5d18997b35",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 2000.0
+        },
+        {
+          "trace_id": "cdedffce1ba9f2437c6aafdf4849977e",
+          "parent_span": "1a44e757f42efe71",
+          "child_span": "871b32e4a72d81f7",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        },
+        {
+          "trace_id": "6045eea6592cb577717de082bcd32572",
+          "parent_span": "9fc37fd418031bc4",
+          "child_span": "3aed49a3a0bdaf32",
+          "parent_service": "frontend-proxy",
+          "child_service": "image-provider",
+          "parent_operation": "router image-provider egress",
+          "child_operation": "GET",
+          "duration": 0.0
+        }
+      ]
+    },
+    {
+      "source": "frontend",
+      "target": "cart",
+      "span_relationship_count": 47,
+      "examples": [
+        {
+          "trace_id": "46cbf377ec72429d505bbbda37d16c94",
+          "parent_span": "aa264b7a5a9e190a",
+          "child_span": "999a2c81bd8aa120",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 1742.0
+        },
+        {
+          "trace_id": "39a7f08f68fad72a1ce6c2c533b0873e",
+          "parent_span": "0d41414c04eac30e",
+          "child_span": "c6ac879283b0f916",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/AddItem",
+          "child_operation": "POST /oteldemo.CartService/AddItem",
+          "duration": 2689.0
+        },
+        {
+          "trace_id": "39a7f08f68fad72a1ce6c2c533b0873e",
+          "parent_span": "fc6c65ebcdd8c26a",
+          "child_span": "b535de81223524d9",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 525.0
+        },
+        {
+          "trace_id": "de7670b3623c4e1aebd8c08bda32ab98",
+          "parent_span": "fa33dd05efe29b2f",
+          "child_span": "2dc580fb0aa2e45c",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 2991.0
+        },
+        {
+          "trace_id": "01f5a3cd054d1cceb9c89fe0408d7c6c",
+          "parent_span": "89695483b4585da0",
+          "child_span": "4661c4263ae5727c",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 1518.0
+        },
+        {
+          "trace_id": "9d734a27bc568dde816979b75a5f0ca8",
+          "parent_span": "5407a6da97b9acd9",
+          "child_span": "98bf3c6b2832b847",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 980.0
+        },
+        {
+          "trace_id": "389034ccd513d3de7d3a03e47259527e",
+          "parent_span": "f7ba80f26f637317",
+          "child_span": "79091aceed1e4e5a",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 2243.0
+        },
+        {
+          "trace_id": "b1dbe3ba1c5ae6cf38bc3bfe793e2d69",
+          "parent_span": "d22764ef6e47032d",
+          "child_span": "b53447f0e40437a6",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 2851.0
+        },
+        {
+          "trace_id": "03f04f80b67df050915bef403064fa9d",
+          "parent_span": "913c0135b80c4cae",
+          "child_span": "6544b438802b51ac",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 2161.0
+        },
+        {
+          "trace_id": "f1cc16c03d913b433ded631ce2cb7b3a",
+          "parent_span": "6b08c8d53b773941",
+          "child_span": "50ce9a65b00e7241",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 2834.0
+        },
+        {
+          "trace_id": "de4b1020d3692912eb141d8c29f639da",
+          "parent_span": "52891d0c9f1ecc7c",
+          "child_span": "457126c8ed14a1ee",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 1946.0
+        },
+        {
+          "trace_id": "d694bc0ae6443f70445fca054ba92f31",
+          "parent_span": "f78f72d96846c65c",
+          "child_span": "c0d69f9424b64e65",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 2105.0
+        },
+        {
+          "trace_id": "1ccbc39afcceb3b20c153c5f5afa983d",
+          "parent_span": "bcf193e3d9c57b45",
+          "child_span": "24332599db5cabc7",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 16750.0
+        },
+        {
+          "trace_id": "0c9ff4fe565ab4e430e2e102fec2427b",
+          "parent_span": "baf67874f1e588b7",
+          "child_span": "25c51ff874078239",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 9086.0
+        },
+        {
+          "trace_id": "ad35d316f81b55ef46c9697525f9f190",
+          "parent_span": "578274229d896fef",
+          "child_span": "b14e6068ec04fbbd",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/AddItem",
+          "child_operation": "POST /oteldemo.CartService/AddItem",
+          "duration": 7899.0
+        },
+        {
+          "trace_id": "ad35d316f81b55ef46c9697525f9f190",
+          "parent_span": "ad0f80ce1dbe585a",
+          "child_span": "fbb258724247b06c",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 2063.0
+        },
+        {
+          "trace_id": "47ab5ccac1d5752648d30965fda78130",
+          "parent_span": "18fa04d33c87ed9e",
+          "child_span": "5873f3de072da742",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 1276.0
+        },
+        {
+          "trace_id": "d14bf1631e8157ad1e86f25540e8a847",
+          "parent_span": "b8dac363006a086b",
+          "child_span": "3fbccdb4b772032a",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/AddItem",
+          "child_operation": "POST /oteldemo.CartService/AddItem",
+          "duration": 2265.0
+        },
+        {
+          "trace_id": "d14bf1631e8157ad1e86f25540e8a847",
+          "parent_span": "091c3b6336bab07f",
+          "child_span": "b2777620d423f276",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 821.0
+        },
+        {
+          "trace_id": "f1dada29f52898a5b77a26455b2ee73f",
+          "parent_span": "f96e109ade0893e0",
+          "child_span": "61941f93fdde1caf",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/AddItem",
+          "child_operation": "POST /oteldemo.CartService/AddItem",
+          "duration": 1560.0
+        },
+        {
+          "trace_id": "f1dada29f52898a5b77a26455b2ee73f",
+          "parent_span": "d47bdde6c7b0af9b",
+          "child_span": "06bc7c6efca488e1",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 612.0
+        },
+        {
+          "trace_id": "f1dada29f52898a5b77a26455b2ee73f",
+          "parent_span": "08920d9ef9933212",
+          "child_span": "29abfc4de302d4ae",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/AddItem",
+          "child_operation": "POST /oteldemo.CartService/AddItem",
+          "duration": 2255.0
+        },
+        {
+          "trace_id": "f1dada29f52898a5b77a26455b2ee73f",
+          "parent_span": "713f045d70bcf183",
+          "child_span": "8d690c39c51c61ed",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 1561.0
+        },
+        {
+          "trace_id": "7bf89321b613ff31df5204d824de28a1",
+          "parent_span": "ca2cd58f38ec4459",
+          "child_span": "b839c78815900275",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/AddItem",
+          "child_operation": "POST /oteldemo.CartService/AddItem",
+          "duration": 2899.0
+        },
+        {
+          "trace_id": "7bf89321b613ff31df5204d824de28a1",
+          "parent_span": "57a1594a060180d2",
+          "child_span": "696dcc620bfc845f",
+          "parent_service": "frontend",
+          "child_service": "cart",
+          "parent_operation": "oteldemo.CartService/GetCart",
+          "child_operation": "POST /oteldemo.CartService/GetCart",
+          "duration": 710.0
+        }
+      ]
+    },
+    {
+      "source": "frontend",
+      "target": "currency",
+      "span_relationship_count": 27,
+      "examples": [
+        {
+          "trace_id": "560fdd62040fefbbbfcfb0fc49ce5ee7",
+          "parent_span": "fa0210c7a992d48c",
+          "child_span": "764b738ba0ef134a",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 43.0
+        },
+        {
+          "trace_id": "3fb5b52aaaafa98517f29cd866360624",
+          "parent_span": "2994b6830bf609cd",
+          "child_span": "e0a6cf72ab1db34a",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "child_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "duration": 32.0
+        },
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "2ce0015f92354431",
+          "child_span": "61fce52e4e543145",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 41.0
+        },
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "56c37fd09aaaa2bc",
+          "child_span": "91e03e7e66b21b29",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 22.0
+        },
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "1f061ce67e4d607d",
+          "child_span": "c2a292df17c0aaec",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 44.0
+        },
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "b0e7d1a3094ce78f",
+          "child_span": "5140d321db866e6b",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 30.0
+        },
+        {
+          "trace_id": "758961391d9c92946a886c31fe1cadfb",
+          "parent_span": "8107f025c9b95200",
+          "child_span": "62c7e27b5789d7bf",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "child_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "duration": 29.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "bb8fb5ab0d7e1e11",
+          "child_span": "326be47d41a99bf5",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 38.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "35015307c0847bf1",
+          "child_span": "cabb982301ce8c81",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 19.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "52d1154ee6ec88e9",
+          "child_span": "7819f771b6e08999",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 43.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "fb93de9f582fe88a",
+          "child_span": "8d410eb057805ece",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 44.0
+        },
+        {
+          "trace_id": "ce908df943dd5095f183e3d65fd2ce1c",
+          "parent_span": "ad6865d1b0d13f64",
+          "child_span": "5ebbb938eec32a6f",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "child_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "duration": 56.0
+        },
+        {
+          "trace_id": "38d0599caad004b257284b3b5aba662c",
+          "parent_span": "24cf89c203a32fc6",
+          "child_span": "ca4b272b99843847",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "child_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "duration": 32.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "cbba091a281d06f3",
+          "child_span": "efcad8f16bdd591c",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 48.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "307dd1a7781b40c0",
+          "child_span": "c96f25a9f9e3b067",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 26.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "bd3fbbeadcd85e33",
+          "child_span": "287b5e94720b3cb9",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 38.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "3cfb50ba498bf353",
+          "child_span": "ccb615715e613e47",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 40.0
+        },
+        {
+          "trace_id": "c4198c16e132ed5bd30839b6ec379eba",
+          "parent_span": "95caa8c515e0feb7",
+          "child_span": "865805b4901623ed",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "child_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "duration": 33.0
+        },
+        {
+          "trace_id": "00a5d2631197ee7d597600a4b6883d9d",
+          "parent_span": "423fe76df780bf47",
+          "child_span": "1cb76372f60756e0",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 42.0
+        },
+        {
+          "trace_id": "0f9db885796f5ecf294b9d17386c911c",
+          "parent_span": "bb512d36f50d1df1",
+          "child_span": "436a7ffa9bc1ca38",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "child_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "duration": 55.0
+        },
+        {
+          "trace_id": "a2ad71752bc1d40c99771966e9b67dd6",
+          "parent_span": "e969b6d71dc72f7f",
+          "child_span": "1a0b0ca59388b61a",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 86.0
+        },
+        {
+          "trace_id": "d2a3d0e82ad7394d0fbc542547b89056",
+          "parent_span": "6747c65f3fab3914",
+          "child_span": "e82ca2bf7d5a736c",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "child_operation": "oteldemo.CurrencyService/GetSupportedCurrencies",
+          "duration": 36.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "df2a2c82b0aa374a",
+          "child_span": "189c40ed8d882c73",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 44.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "15c50af46c372d92",
+          "child_span": "2eb41601b6cb8891",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 20.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "c2f93b769132687f",
+          "child_span": "c36b413f09fb53e3",
+          "parent_service": "frontend",
+          "child_service": "currency",
+          "parent_operation": "oteldemo.CurrencyService/Convert",
+          "child_operation": "oteldemo.CurrencyService/Convert",
+          "duration": 19.0
+        }
+      ]
+    },
+    {
+      "source": "recommendation",
+      "target": "product-catalog",
+      "span_relationship_count": 23,
+      "examples": [
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "618b2bdc3ac26df5",
+          "child_span": "82486e435b41fb82",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 9046.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "2f1ce275be575a64",
+          "child_span": "f44a68591bd2974e",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 3159.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "e93b9bd52b8848e8",
+          "child_span": "4fabaa9b6362625f",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 773.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "f40c2ae7ca70d14f",
+          "child_span": "7e49bdc647cd18d4",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 5403.0
+        },
+        {
+          "trace_id": "170209cd0b8109cf9202ff23fa6483d7",
+          "parent_span": "d1b78403943290c2",
+          "child_span": "f779de237c109c0b",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 1569.0
+        },
+        {
+          "trace_id": "fe6b950d7794a498eb83a2905decf9de",
+          "parent_span": "1c70465e96f1d0b6",
+          "child_span": "cde08b9f609847c2",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 1864.0
+        },
+        {
+          "trace_id": "44e86430b1c9566497e692d957a106ae",
+          "parent_span": "10fafc9cda39420c",
+          "child_span": "867145acd81bf6d6",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 2966.0
+        },
+        {
+          "trace_id": "9267e9fe8508142bd5fcf1d5847bd325",
+          "parent_span": "59df3f397e41fa16",
+          "child_span": "34fea1b203c4f75d",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 1915.0
+        },
+        {
+          "trace_id": "885c1a2ba84e7cd88671606e07394271",
+          "parent_span": "1998b3beee8ee687",
+          "child_span": "355c49a98963ec72",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 2208.0
+        },
+        {
+          "trace_id": "812d4e3080d84ca7196ac768958f5e03",
+          "parent_span": "682ef029f570d7d9",
+          "child_span": "6c9153e37e7c61bb",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 5592.0
+        },
+        {
+          "trace_id": "1050f6752d1a7ead770bcc878fd5954f",
+          "parent_span": "76c58afe12212484",
+          "child_span": "f908bd59af979910",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 1091.0
+        },
+        {
+          "trace_id": "0ecd5b658cca57a212a68ffe7283d2f8",
+          "parent_span": "48ff32f4a96a4984",
+          "child_span": "0c11a50191b37629",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 2122.0
+        },
+        {
+          "trace_id": "eb8d1a8bcfffe19aa25ce22ad11de7d3",
+          "parent_span": "90793914b0732777",
+          "child_span": "8ed63e44de14c91f",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 1001.0
+        },
+        {
+          "trace_id": "07d290ad9930d80a69511ccce483628e",
+          "parent_span": "b26d42358b71d481",
+          "child_span": "7a37c24d35070dcc",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 1201.0
+        },
+        {
+          "trace_id": "70353bba14a05975a36f16f378ea6230",
+          "parent_span": "32edce40fc71cd3f",
+          "child_span": "b6f71c97c8bcc533",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 1797.0
+        },
+        {
+          "trace_id": "45ba1464482c4bf656fb22b999d2008e",
+          "parent_span": "3bafc3cb1fab2959",
+          "child_span": "854f225048708fee",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 994.0
+        },
+        {
+          "trace_id": "bcc5b2e5ec6773c5b33c6c50f239ec29",
+          "parent_span": "858054b83de55ba7",
+          "child_span": "e9c174dc932ae55e",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 859.0
+        },
+        {
+          "trace_id": "95f1840bbcffef8bff83ef1db2bfeef7",
+          "parent_span": "391321fe5ebc65da",
+          "child_span": "1328e132e3ef9de9",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 1356.0
+        },
+        {
+          "trace_id": "df7bf5eecb463f7d0e759c7852fe422f",
+          "parent_span": "92bf227d99f5c8eb",
+          "child_span": "70a3453ef25d4f7b",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 1134.0
+        },
+        {
+          "trace_id": "01d8fdd969569e0f3590246db08381b4",
+          "parent_span": "9d4e6d1fff288000",
+          "child_span": "fcdc57b168ac05ef",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 898.0
+        },
+        {
+          "trace_id": "dbddafd62bab7d452d029e12e847c2ad",
+          "parent_span": "500bdee62d6c0a63",
+          "child_span": "d30f80aad8d579e6",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 1218.0
+        },
+        {
+          "trace_id": "6cdd7b51928ed321df3ae247242d7599",
+          "parent_span": "09775ba4b6629f40",
+          "child_span": "07aa650afb21194c",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 14901.0
+        },
+        {
+          "trace_id": "50ebd7ee715690c88d512c42ba5beaf4",
+          "parent_span": "a3bb4ed53c3a0292",
+          "child_span": "24ccc4a38f2d3825",
+          "parent_service": "recommendation",
+          "child_service": "product-catalog",
+          "parent_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "child_operation": "oteldemo.ProductCatalogService/ListProducts",
+          "duration": 35774.0
+        }
+      ]
+    },
+    {
+      "source": "frontend",
+      "target": "recommendation",
+      "span_relationship_count": 23,
+      "examples": [
+        {
+          "trace_id": "04936b7f738ad23578f4351913de68da",
+          "parent_span": "b28f44970ddd9741",
+          "child_span": "9df90a28c0eef307",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 20360.0
+        },
+        {
+          "trace_id": "93c6eaace73658769d83e03ddbd63eb1",
+          "parent_span": "7730914db6be52e1",
+          "child_span": "132d9895d9fa5be0",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 8673.0
+        },
+        {
+          "trace_id": "4ab206c3154928807e4b98b1e5569662",
+          "parent_span": "e333e6a06711659a",
+          "child_span": "8ddfc8b9b728b37d",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 5037.0
+        },
+        {
+          "trace_id": "7ec56a67fe8fecaa979d406f7aa64481",
+          "parent_span": "6e88b8821b96e668",
+          "child_span": "f2323f93d676d909",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 32982.0
+        },
+        {
+          "trace_id": "170209cd0b8109cf9202ff23fa6483d7",
+          "parent_span": "c38800b4d8ceb737",
+          "child_span": "d01b918333b0b020",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 10129.0
+        },
+        {
+          "trace_id": "fe6b950d7794a498eb83a2905decf9de",
+          "parent_span": "40797313bbd52151",
+          "child_span": "0de0c2d3bede420f",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 24380.0
+        },
+        {
+          "trace_id": "44e86430b1c9566497e692d957a106ae",
+          "parent_span": "56b301088c654fc2",
+          "child_span": "eb025ff05ccdbbb2",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 9813.0
+        },
+        {
+          "trace_id": "9267e9fe8508142bd5fcf1d5847bd325",
+          "parent_span": "c17d150f19b4656e",
+          "child_span": "b2cb1ea4ddf62148",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 9331.0
+        },
+        {
+          "trace_id": "885c1a2ba84e7cd88671606e07394271",
+          "parent_span": "8f383f1e640dbe60",
+          "child_span": "2f9d5fceebc8b989",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 7111.0
+        },
+        {
+          "trace_id": "812d4e3080d84ca7196ac768958f5e03",
+          "parent_span": "3917475d1ec6e34f",
+          "child_span": "f624998b9993b93d",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 20901.0
+        },
+        {
+          "trace_id": "1050f6752d1a7ead770bcc878fd5954f",
+          "parent_span": "65b19a8cb37d32ee",
+          "child_span": "67dded3c633d1e47",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 6907.0
+        },
+        {
+          "trace_id": "0ecd5b658cca57a212a68ffe7283d2f8",
+          "parent_span": "9a932c08b00ae0f5",
+          "child_span": "8b0ba60340289f57",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 12464.0
+        },
+        {
+          "trace_id": "eb8d1a8bcfffe19aa25ce22ad11de7d3",
+          "parent_span": "f94e41dccff44b19",
+          "child_span": "3436de72c0dfe763",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 5271.0
+        },
+        {
+          "trace_id": "07d290ad9930d80a69511ccce483628e",
+          "parent_span": "4d5ae7040108e597",
+          "child_span": "f265e6577ed72742",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 10130.0
+        },
+        {
+          "trace_id": "70353bba14a05975a36f16f378ea6230",
+          "parent_span": "d32d7b41bb7173b1",
+          "child_span": "327e401705bf72ea",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 6611.0
+        },
+        {
+          "trace_id": "45ba1464482c4bf656fb22b999d2008e",
+          "parent_span": "62425a32238ff4ea",
+          "child_span": "72974d9eb40833a1",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 4494.0
+        },
+        {
+          "trace_id": "bcc5b2e5ec6773c5b33c6c50f239ec29",
+          "parent_span": "150abf2c65965b02",
+          "child_span": "fc955e8c58b4e516",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 11706.0
+        },
+        {
+          "trace_id": "95f1840bbcffef8bff83ef1db2bfeef7",
+          "parent_span": "4e0ab019d812c67d",
+          "child_span": "4b3f4f303058b5c1",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 6309.0
+        },
+        {
+          "trace_id": "df7bf5eecb463f7d0e759c7852fe422f",
+          "parent_span": "e9fcc898f9dfe56f",
+          "child_span": "635705d6dcc2f550",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 10201.0
+        },
+        {
+          "trace_id": "01d8fdd969569e0f3590246db08381b4",
+          "parent_span": "48792f6b7317ab0a",
+          "child_span": "5e0abc7240105851",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 8666.0
+        },
+        {
+          "trace_id": "dbddafd62bab7d452d029e12e847c2ad",
+          "parent_span": "cf6459637b22d844",
+          "child_span": "62952b70ed87485f",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 11558.0
+        },
+        {
+          "trace_id": "6cdd7b51928ed321df3ae247242d7599",
+          "parent_span": "38f2df5120e4a541",
+          "child_span": "a6e3955ba15eaf95",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 67386.0
+        },
+        {
+          "trace_id": "50ebd7ee715690c88d512c42ba5beaf4",
+          "parent_span": "452805869df62597",
+          "child_span": "3796c85fe095f72e",
+          "parent_service": "frontend",
+          "child_service": "recommendation",
+          "parent_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "child_operation": "oteldemo.RecommendationService/ListRecommendations",
+          "duration": 77207.0
+        }
+      ]
+    },
+    {
+      "source": "frontend-proxy",
+      "target": "flagd",
+      "span_relationship_count": 12,
+      "examples": [
+        {
+          "trace_id": "94964cc0dae9d90861bb853ec7dc5ca7",
+          "parent_span": "4c062f577d98ca9a",
+          "child_span": "ed3ffc22c4a8e53e",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/ResolveAll",
+          "duration": 1212.0
+        },
+        {
+          "trace_id": "ea3743487e6af4e4584a8876374c16ce",
+          "parent_span": "7b48c507473f85cc",
+          "child_span": "8bb8b240c51ea4df",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/EventStream",
+          "duration": 3386801.0
+        },
+        {
+          "trace_id": "1bcd930a053ad64e3e9a2fb470e1508f",
+          "parent_span": "9ced1d2e28a7120a",
+          "child_span": "c256360ba75331fe",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/ResolveAll",
+          "duration": 297.0
+        },
+        {
+          "trace_id": "d62e4e121a49b65977cfefe9dcb6d836",
+          "parent_span": "fea9c56189c5fe59",
+          "child_span": "82c746a6543fe7be",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/EventStream",
+          "duration": 3336977.0
+        },
+        {
+          "trace_id": "6b1cf1c70b591710feaa13c6f33dd04c",
+          "parent_span": "408d1460e06a4a1c",
+          "child_span": "8ab058a07e67c7cc",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/ResolveAll",
+          "duration": 550.0
+        },
+        {
+          "trace_id": "0e07d6a41d8ecbb922827b65ffab0e89",
+          "parent_span": "03606055e3d5f520",
+          "child_span": "f089493dc44dae3e",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/EventStream",
+          "duration": 3502071.0
+        },
+        {
+          "trace_id": "73848f13aeefeea33bc22761026059d0",
+          "parent_span": "1176e6ede4348733",
+          "child_span": "45ca20ef76139e50",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/EventStream",
+          "duration": 4548756.0
+        },
+        {
+          "trace_id": "8b7291b28ca2c064d889697688a48a03",
+          "parent_span": "0a5b4aecc680f192",
+          "child_span": "4aceb47173cc1240",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/ResolveAll",
+          "duration": 592.0
+        },
+        {
+          "trace_id": "3f1df44a893fb94123a5e7822d83abc2",
+          "parent_span": "18a5efbe3f59d5b8",
+          "child_span": "d493e6617790a505",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/ResolveAll",
+          "duration": 1789.0
+        },
+        {
+          "trace_id": "4d903ec73c4c06e97e763e31a2d583c1",
+          "parent_span": "37de31efea012d36",
+          "child_span": "a45bf1b5ad33ce60",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/EventStream",
+          "duration": 5510628.0
+        },
+        {
+          "trace_id": "a8f5897ab880b5cb7d794191e268af54",
+          "parent_span": "09805fa0141afb82",
+          "child_span": "4f3bdc32c33502fb",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/ResolveAll",
+          "duration": 318.0
+        },
+        {
+          "trace_id": "a2a4dc45f13c334ad6e890729881690b",
+          "parent_span": "d0563da89e467006",
+          "child_span": "19396f78d48b5a35",
+          "parent_service": "frontend-proxy",
+          "child_service": "flagd",
+          "parent_operation": "router flagservice egress",
+          "child_operation": "flagd.evaluation.v1.Service/EventStream",
+          "duration": 5657899.0
+        }
+      ]
+    },
+    {
+      "source": "frontend",
+      "target": "ad",
+      "span_relationship_count": 4,
+      "examples": [
+        {
+          "trace_id": "4dfcb72e65c65bf9f946495335a8d38b",
+          "parent_span": "a713e5345f1e3d6f",
+          "child_span": "ab6a2bd03ada73e0",
+          "parent_service": "frontend",
+          "child_service": "ad",
+          "parent_operation": "oteldemo.AdService/GetAds",
+          "child_operation": "oteldemo.AdService/GetAds",
+          "duration": 635866.0
+        },
+        {
+          "trace_id": "4239a5290172959c790fa3b6b6110f2f",
+          "parent_span": "746ad1fbd94e5d58",
+          "child_span": "39dee20c8cd3f15f",
+          "parent_service": "frontend",
+          "child_service": "ad",
+          "parent_operation": "oteldemo.AdService/GetAds",
+          "child_operation": "oteldemo.AdService/GetAds",
+          "duration": 22834.0
+        },
+        {
+          "trace_id": "1dee5b209149f5b8f1d0d59da8c90cd1",
+          "parent_span": "fd379524f1dc45d6",
+          "child_span": "880db4bd6a54f89f",
+          "parent_service": "frontend",
+          "child_service": "ad",
+          "parent_operation": "oteldemo.AdService/GetAds",
+          "child_operation": "oteldemo.AdService/GetAds",
+          "duration": 6157.0
+        },
+        {
+          "trace_id": "6f642c2f004b5b9f1eb90b54592316f5",
+          "parent_span": "e53dc7645d6734a4",
+          "child_span": "fad277022688b33c",
+          "parent_service": "frontend",
+          "child_service": "ad",
+          "parent_operation": "oteldemo.AdService/GetAds",
+          "child_operation": "oteldemo.AdService/GetAds",
+          "duration": 11689.0
+        }
+      ]
+    },
+    {
+      "source": "frontend",
+      "target": "shipping",
+      "span_relationship_count": 3,
+      "examples": [
+        {
+          "trace_id": "560fdd62040fefbbbfcfb0fc49ce5ee7",
+          "parent_span": "8b8dcba2e74b1103",
+          "child_span": "86720b408eba2ad4",
+          "parent_service": "frontend",
+          "child_service": "shipping",
+          "parent_operation": "POST",
+          "child_operation": "POST /get-quote",
+          "duration": 6529.0
+        },
+        {
+          "trace_id": "00a5d2631197ee7d597600a4b6883d9d",
+          "parent_span": "dce979e02b203d20",
+          "child_span": "8b993d170f4fec5a",
+          "parent_service": "frontend",
+          "child_service": "shipping",
+          "parent_operation": "POST",
+          "child_operation": "POST /get-quote",
+          "duration": 3773.0
+        },
+        {
+          "trace_id": "a2ad71752bc1d40c99771966e9b67dd6",
+          "parent_span": "06b2bbed33c5f86e",
+          "child_span": "9578457b95f1faaf",
+          "parent_service": "frontend",
+          "child_service": "shipping",
+          "parent_operation": "POST",
+          "child_operation": "POST /get-quote",
+          "duration": 116087.0
+        }
+      ]
+    },
+    {
+      "source": "shipping",
+      "target": "quote",
+      "span_relationship_count": 3,
+      "examples": [
+        {
+          "trace_id": "560fdd62040fefbbbfcfb0fc49ce5ee7",
+          "parent_span": "741f35fba1493a3d",
+          "child_span": "43fb63c8bd1dd247",
+          "parent_service": "shipping",
+          "child_service": "quote",
+          "parent_operation": "POST",
+          "child_operation": "POST /getquote",
+          "duration": 551.0
+        },
+        {
+          "trace_id": "00a5d2631197ee7d597600a4b6883d9d",
+          "parent_span": "3aebd06d25fe0cca",
+          "child_span": "09343d273c120beb",
+          "parent_service": "shipping",
+          "child_service": "quote",
+          "parent_operation": "POST",
+          "child_operation": "POST /getquote",
+          "duration": 507.0
+        },
+        {
+          "trace_id": "a2ad71752bc1d40c99771966e9b67dd6",
+          "parent_span": "7d476aaed6d437b1",
+          "child_span": "07b18dd13935b286",
+          "parent_service": "shipping",
+          "child_service": "quote",
+          "parent_operation": "POST",
+          "child_operation": "POST /getquote",
+          "duration": 68241.0
+        }
+      ]
+    },
+    {
+      "source": "agent",
+      "target": "frontend",
+      "span_relationship_count": 3,
+      "examples": [
+        {
+          "trace_id": "38d0599caad004b257284b3b5aba662c",
+          "parent_span": "b00059826f5db233",
+          "child_span": "39422302a4d93581",
+          "parent_service": "agent",
+          "child_service": "frontend",
+          "parent_operation": "GET",
+          "child_operation": "GET /api/currency",
+          "duration": 5010.0
+        },
+        {
+          "trace_id": "1dbc84e3b1a89ec204b0e5045ec17d53",
+          "parent_span": "3dbd16c50b7f7039",
+          "child_span": "e60db6a41b57dd5b",
+          "parent_service": "agent",
+          "child_service": "frontend",
+          "parent_operation": "GET",
+          "child_operation": "GET /api/products/index",
+          "duration": 7539.0
+        },
+        {
+          "trace_id": "5f2cc2d77bec9e6337e2acba1bbc5ba9",
+          "parent_span": "5770c9d6f1e7fc49",
+          "child_span": "fdf284098113eaac",
+          "parent_service": "agent",
+          "child_service": "frontend",
+          "parent_operation": "GET",
+          "child_operation": "GET /api/data",
+          "duration": 8102.0
+        }
+      ]
+    },
+    {
+      "source": "ad",
+      "target": "flagd",
+      "span_relationship_count": 3,
+      "examples": [
+        {
+          "trace_id": "4dfcb72e65c65bf9f946495335a8d38b",
+          "parent_span": "07147beefb9aa388",
+          "child_span": "73d37ee4c8621090",
+          "parent_service": "ad",
+          "child_service": "flagd",
+          "parent_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "child_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "duration": 167.0
+        },
+        {
+          "trace_id": "4dfcb72e65c65bf9f946495335a8d38b",
+          "parent_span": "f89b08c2dd5c7836",
+          "child_span": "6382d1850587abd2",
+          "parent_service": "ad",
+          "child_service": "flagd",
+          "parent_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "child_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "duration": 103.0
+        },
+        {
+          "trace_id": "4dfcb72e65c65bf9f946495335a8d38b",
+          "parent_span": "b8faba716b5cbadd",
+          "child_span": "4f02b8a6078fe4ce",
+          "parent_service": "ad",
+          "child_service": "flagd",
+          "parent_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "child_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "duration": 123.0
+        }
+      ]
+    },
+    {
+      "source": "cart",
+      "target": "flagd",
+      "span_relationship_count": 2,
+      "examples": [
+        {
+          "trace_id": "39530e3c88525572d43724436124854f",
+          "parent_span": "3e6934412a8af5fa",
+          "child_span": "1965b58bfee47314",
+          "parent_service": "cart",
+          "child_service": "flagd",
+          "parent_operation": "POST",
+          "child_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "duration": 123.0
+        },
+        {
+          "trace_id": "7e37167c6bd6317474ed86be3c3bd3b4",
+          "parent_span": "5510d98b307645a8",
+          "child_span": "6fe021bb6bd21e85",
+          "parent_service": "cart",
+          "child_service": "flagd",
+          "parent_operation": "POST",
+          "child_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "duration": 167.0
+        }
+      ]
+    },
+    {
+      "source": "recommendation",
+      "target": "flagd",
+      "span_relationship_count": 2,
+      "examples": [
+        {
+          "trace_id": "6cdd7b51928ed321df3ae247242d7599",
+          "parent_span": "ee6f3164e719b0d6",
+          "child_span": "98ea741c23918c69",
+          "parent_service": "recommendation",
+          "child_service": "flagd",
+          "parent_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "child_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "duration": 4053.0
+        },
+        {
+          "trace_id": "50ebd7ee715690c88d512c42ba5beaf4",
+          "parent_span": "1ad875f91daefae6",
+          "child_span": "18514bf56fcd518c",
+          "parent_service": "recommendation",
+          "child_service": "flagd",
+          "parent_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "child_operation": "flagd.evaluation.v2.Service/ResolveBoolean",
+          "duration": 123.0
+        }
+      ]
+    }
+  ]
+}

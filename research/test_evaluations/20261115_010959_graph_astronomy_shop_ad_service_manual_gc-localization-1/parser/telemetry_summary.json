@@ -1,0 +1,136 @@
+{
+  "metadata": {
+    "input_file": "traces_1794705006.csv",
+    "span_count": 0,
+    "trace_count": 0,
+    "service_count": 0,
+    "columns": [
+      "trace_id",
+      "span_id",
+      "parent_span",
+      "service_name",
+      "operation_name",
+      "start_time",
+      "duration",
+      "has_error",
+      "response"
+    ]
+  },
+  "services": {},
+  "operations": [],
+  "traces": [],
+  "dependency_graph": {
+    "services": [],
+    "edges": []
+  },
+  "response_summary": {},
+  "latency_anomalies": [],
+  "explicit_error_evidence": [],
+  "status_error_evidence": [],
+  "ranked_evidence": [],
+  "universal_evidence": {
+    "categories": [
+      "INCIDENT_OVERVIEW",
+      "BEHAVIOURAL_EVIDENCE",
+      "DEPENDENCY_CAUSAL_EVIDENCE",
+      "ERROR_STATUS_EVIDENCE",
+      "PERFORMANCE_ANOMALY_EVIDENCE",
+      "TELEMETRY_AVAILABILITY_LIMITATIONS"
+    ],
+    "incident_overview": {
+      "spans": 0,
+      "traces": 0,
+      "services": 0,
+      "operations": 0
+    },
+    "behavioural_evidence": {
+      "services": {},
+      "top_operations": []
+    },
+    "dependency_causal_evidence": {
+      "services": [],
+      "edges": []
+    },
+    "error_status_evidence": {
+      "explicit_span_errors": 0,
+      "status_or_error_records": 0,
+      "status_summary": {
+        "response_distribution": {},
+        "status_distribution": {},
+        "failure_like_status_distribution": {},
+        "status_fields_observed": {}
+      }
+    },
+    "performance_anomaly_evidence": {
+      "latency_anomalies": []
+    },
+    "telemetry_availability_limitations": {
+      "availability": {
+        "row_count": 0,
+        "fields": {
+          "trace_id": {
+            "present_in_schema": true,
+            "populated_rows": 0,
+            "population_rate": 0.0
+          },
+          "span_id": {
+            "present_in_schema": true,
+            "populated_rows": 0,
+            "population_rate": 0.0
+          },
+          "parent_span": {
+            "present_in_schema": true,
+            "populated_rows": 0,
+            "population_rate": 0.0
+          },
+          "service_name": {
+            "present_in_schema": true,
+            "populated_rows": 0,
+            "population_rate": 0.0
+          },
+          "operation_name": {
+            "present_in_schema": true,
+            "populated_rows": 0,
+            "population_rate": 0.0
+          },
+          "start_time": {
+            "present_in_schema": true,
+            "populated_rows": 0,
+            "population_rate": 0.0
+          },
+          "duration": {
+            "present_in_schema": true,
+            "populated_rows": 0,
+            "population_rate": 0.0
+          },
+          "has_error": {
+            "present_in_schema": true,
+            "populated_rows": 0,
+            "population_rate": 0.0
+          },
+          "response": {
+            "present_in_schema": true,
+            "populated_rows": 0,
+            "population_rate": 0.0
+          }
+        }
+      },
+      "temporal": {
+        "available": false,
+        "count": 0,
+        "earliest": null,
+        "latest": null,
+        "span": null
+      },
+      "limitations": [
+        "No dedicated status-code field was present; response values are available as status-related evidence.",
+        "No dedicated error/exception text field was present in the supplied telemetry.",
+        "A response field was present in the schema but contained no populated values.",
+        "No cross-service dependency edges could be constructed from the supplied parent-child relationships.",
+        "Absence of observed errors is not evidence that the incident contained no failure.",
+        "Latency anomalies identify unusual performance behaviour; they do not establish root cause.",
+        "The parser does not use incident ground truth when constructing evidence."
+      ]
+    }
+  }
+}

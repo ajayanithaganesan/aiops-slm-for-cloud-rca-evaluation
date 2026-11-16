@@ -1,0 +1,8 @@
+{
+  "problem_id": "astronomy_shop_payment_service_unreachable-localization-1",
+  "condition": "baseline",
+  "elapsed_seconds": 86.33539319038391,
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1794698414.csv"
+  ]
+}

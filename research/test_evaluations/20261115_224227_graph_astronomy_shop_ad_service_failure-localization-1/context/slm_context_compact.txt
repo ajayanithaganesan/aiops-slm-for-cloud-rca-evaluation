@@ -1,0 +1,145 @@
+DISTRIBUTED SYSTEM TELEMETRY RCA CONTEXT
+Telemetry source: traces_1794782553.csv
+Total spans: 2169
+Unique services: 16
+
+UNIVERSAL EVIDENCE PROFILE
+- Incident scope: spans=2169, traces=358, services=16, operations=96
+- Behavioural evidence: highest-volume operations
+  - frontend-proxy | GET | count=227
+  - flagd | resolveBoolean | count=178
+  - frontend-proxy | router frontend egress | count=166
+  - product-catalog | astronomy-db | count=122
+  - frontend-web | resourceFetch | count=117
+  - frontend-web | GET | count=108
+  - product-catalog | oteldemo.ProductCatalogService/GetProduct | count=98
+  - flagd | flagd.evaluation.v2.Service/ResolveBoolean | count=89
+  - frontend | oteldemo.ProductCatalogService/GetProduct | count=86
+  - frontend-proxy | router image-provider egress | count=76
+- Dependency evidence:
+  - frontend-proxy -> frontend | observations=153
+  - frontend-web -> frontend-proxy | observations=107
+  - frontend -> product-catalog | observations=90
+  - frontend-proxy -> image-provider | observations=76
+  - frontend -> cart | observations=43
+  - frontend -> currency | observations=21
+  - recommendation -> product-catalog | observations=17
+  - frontend -> recommendation | observations=17
+  - frontend-proxy -> flagd | observations=9
+  - frontend -> ad | observations=3
+  - ad -> flagd | observations=3
+  - cart -> flagd | observations=2
+  - frontend -> shipping | observations=2
+  - shipping -> quote | observations=2
+  - recommendation -> flagd | observations=1
+  - agent -> frontend | observations=1
+- Error/status evidence: explicit_span_errors=33, status_or_error_records=33
+  - Response distribution:
+    - Unknown: 1407
+    - 200: 747
+    - 500: 14
+    - 301: 1
+- Performance evidence: latency_anomalies=100
+- Temporal failure evidence:
+  - service=frontend-proxy | operation=POST | first_error_seen=1794782513983252 | last_error_seen=1794782538865734 | error_observations=2
+  - service=frontend-proxy | operation=router frontend egress | first_error_seen=1794782513983446 | last_error_seen=1794782538865906 | error_observations=3
+  - service=frontend | operation=POST /api/checkout | first_error_seen=1794782513984000 | last_error_seen=1794782538866000 | error_observations=4
+  - service=frontend | operation=executing api route (pages) /api/checkout | first_error_seen=1794782513990000 | last_error_seen=1794782538867000 | error_observations=2
+  - service=frontend | operation=oteldemo.CheckoutService/PlaceOrder | first_error_seen=1794782513994000 | last_error_seen=1794782538867000 | error_observations=2
+  - service=frontend | operation=tcp.connect | first_error_seen=1794782514002000 | last_error_seen=1794782542029000 | error_observations=7
+  - service=frontend-web | operation=GET | first_error_seen=1794782528662000 | last_error_seen=1794782528662000 | error_observations=1
+  - service=frontend-proxy | operation=GET | first_error_seen=1794782528845124 | last_error_seen=1794782528845124 | error_observations=1
+  - service=frontend | operation=GET /api/data | first_error_seen=1794782528853000 | last_error_seen=1794782528854000 | error_observations=2
+  - service=frontend | operation=executing api route (pages) /api/data | first_error_seen=1794782528858000 | last_error_seen=1794782528858000 | error_observations=1
+  - service=frontend | operation=oteldemo.AdService/GetAds | first_error_seen=1794782528858000 | last_error_seen=1794782528858000 | error_observations=1
+  - service=agent | operation=POST /prompt | first_error_seen=1794782544486171 | last_error_seen=1794782544486171 | error_observations=1
+  - service=agent | operation=astronomy_shop_agent_workflow.workflow | first_error_seen=1794782544487024 | last_error_seen=1794782544487024 | error_observations=1
+  - service=agent | operation=invoke_agent LangGraph | first_error_seen=1794782544535803 | last_error_seen=1794782544535803 | error_observations=1
+  - service=agent | operation=LangGraph.workflow | first_error_seen=1794782544537869 | last_error_seen=1794782544537869 | error_observations=1
+  - service=agent | operation=execute_task model | first_error_seen=1794782544539339 | last_error_seen=1794782544539339 | error_observations=1
+  - service=agent | operation=ChatLLM.chat | first_error_seen=1794782544552254 | last_error_seen=1794782544552254 | error_observations=1
+  - service=agent | operation=POST /prompt http send | first_error_seen=1794782545365191 | last_error_seen=1794782545365191 | error_observations=1
+- Service failure comparison:
+  - service=ad | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=agent | explicit_errors=7 | failed_operations=ChatLLM.chat, LangGraph.workflow, POST /prompt, POST /prompt http send, astronomy_shop_agent_workflow.workflow, execute_task model, invoke_agent LangGraph | first_error_seen=1794782544486171 | last_error_seen=1794782545365191
+  - service=cart | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=chatbot | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=currency | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=flagd | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=frontend | explicit_errors=19 | failed_operations=GET /api/data, POST /api/checkout, executing api route (pages) /api/checkout, executing api route (pages) /api/data, oteldemo.AdService/GetAds, oteldemo.CheckoutService/PlaceOrder, tcp.connect | first_error_seen=1794782513984000 | last_error_seen=1794782542029000
+  - service=frontend-proxy | explicit_errors=6 | failed_operations=GET, POST, router frontend egress | first_error_seen=1794782513983252 | last_error_seen=1794782538865906
+  - service=frontend-web | explicit_errors=1 | failed_operations=GET | first_error_seen=1794782528662000 | last_error_seen=1794782528662000
+  - service=image-provider | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=mcp | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=payment | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=product-catalog | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=quote | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=recommendation | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=shipping | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+- Evidence limitations / interpretation safeguards:
+  - No dedicated status-code field was present; response values are available as status-related evidence.
+  - No dedicated error/exception text field was present in the supplied telemetry.
+  - Absence of observed errors is not evidence that the incident contained no failure.
+  - Latency anomalies identify unusual performance behaviour; they do not establish root cause.
+  - The parser does not use incident ground truth when constructing evidence.
+
+STATUS AND ERROR EVIDENCE
+- Extracted status/error/message records: 33
+- Records by service:
+    frontend: 19
+    agent: 7
+    frontend-proxy: 6
+    frontend-web: 1
+- Records by service and operation:
+    frontend | tcp.connect: 7
+    frontend | POST /api/checkout: 4
+- frontend-proxy -> frontend (observed relationships: 153)
+- frontend-web -> frontend-proxy (observed relationships: 107)
+- frontend -> product-catalog (observed relationships: 90)
+- frontend-proxy -> image-provider (observed relationships: 76)
+- frontend -> cart (observed relationships: 43)
+- frontend -> currency (observed relationships: 21)
+- recommendation -> product-catalog (observed relationships: 17)
+- frontend -> recommendation (observed relationships: 17)
+- frontend-proxy -> flagd (observed relationships: 9)
+- frontend -> ad (observed relationships: 3)
+- ad -> flagd (observed relationships: 3)
+- cart -> flagd (observed relationships: 2)
+- frontend -> shipping (observed relationships: 2)
+- shipping -> quote (observed relationships: 2)
+- recommendation -> flagd (observed relationships: 1)
+- agent -> frontend (observed relationships: 1)
+- frontend: spans=527, mean_duration=36236.98292220114, p95=122785.49999999991, max=447577.0, explicit_errors=19
+- frontend-proxy: spans=502, mean_duration=99194.44023904382, p95=178014.84999999954, max=5789488.0, explicit_errors=6
+- flagd: spans=300, mean_duration=57841.113333333335, p95=2701.750000000018, max=5788402.0, explicit_errors=0
+- frontend-web: spans=244, mean_duration=203175.0, p95=442409.9999999998, max=1427700.0, explicit_errors=1
+- product-catalog: spans=244, mean_duration=12123.422131147541, p95=48099.899999999994, max=120607.0, explicit_errors=0
+- cart: spans=125, mean_duration=11712.456, p95=20277.599999999995, max=284386.0, explicit_errors=0
+- image-provider: spans=81, mean_duration=222.22222222222223, p95=0.0, max=13000.0, explicit_errors=0
+- recommendation: spans=55, mean_duration=10857.981818181817, p95=26056.19999999996, max=70987.0, explicit_errors=0
+- agent: spans=37, mean_duration=319647.91891891893, p95=824161.1999999997, max=880757.0, explicit_errors=7
+- currency: spans=25, mean_duration=591.32, p95=265.5999999999992, max=13668.0, explicit_errors=0
+- ad: spans=15, mean_duration=40181.933333333334, p95=198390.2999999998, max=318966.0, explicit_errors=0
+  Path 1: frontend-web -> frontend-proxy
+  Path 2: frontend-proxy -> frontend
+OPERATION FAILURE SUMMARY
+- emitter=frontend | operation=tcp.connect | observations=14 | response=Unknown | operation_target_label=unknown
+- emitter=frontend-proxy | operation=router frontend egress | observations=6 | response=500 | operation_target_label=unknown
+- emitter=frontend-proxy | operation=POST | observations=4 | response=500 | operation_target_label=unknown
+- emitter=frontend | operation=oteldemo.CheckoutService/PlaceOrder | observations=4 | response=Unknown | operation_target_label=checkout
+- emitter=frontend | operation=executing api route (pages) /api/checkout | observations=4 | response=500 | operation_target_label=checkout
+- emitter=frontend | operation=POST /api/checkout | observations=4 | response=500 | operation_target_label=checkout
+- emitter=frontend | operation=POST /api/checkout | observations=4 | response=Unknown | operation_target_label=checkout
+- emitter=frontend-proxy | operation=GET | observations=2 | response=500 | operation_target_label=unknown
+- emitter=frontend-web | operation=GET | observations=2 | response=Unknown | operation_target_label=unknown
+- emitter=frontend | operation=executing api route (pages) /api/data | observations=2 | response=500 | operation_target_label=data
+- emitter=frontend | operation=GET /api/data | observations=2 | response=500 | operation_target_label=data
+- emitter=frontend | operation=GET /api/data | observations=2 | response=Unknown | operation_target_label=data
+- emitter=frontend | operation=oteldemo.AdService/GetAds | observations=2 | response=Unknown | operation_target_label=ad
+- emitter=agent | operation=ChatLLM.chat | observations=2 | response=Unknown | operation_target_label=unknown
+- emitter=agent | operation=execute_task model | observations=2 | response=Unknown | operation_target_label=unknown
+- emitter=agent | operation=LangGraph.workflow | observations=2 | response=Unknown | operation_target_label=unknown
+- emitter=agent | operation=POST /prompt | observations=1 | response=500 | operation_target_label=unknown
+
+CONTEXT BUDGET: 512 lower-priority parser lines omitted from the SLM prompt.
+Complete parser evidence remains available in the preserved graph artifact.

@@ -1,0 +1,12 @@
+{
+  "source": "parser-produced graph context",
+  "source_line_count": 615,
+  "compact_line_count": 153,
+  "budget_chars": 12000,
+  "budget_lines_omitted": 513,
+  "compact_char_count": 11620,
+  "repeated_records_summarized": 25,
+  "raw_parser_artifacts_preserved": true,
+  "root_cause_decision_made_by_processor": false,
+  "ground_truth_used": false
+}

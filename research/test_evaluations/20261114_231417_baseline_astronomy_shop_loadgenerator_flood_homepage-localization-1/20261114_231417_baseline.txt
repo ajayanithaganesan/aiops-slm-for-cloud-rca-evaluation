@@ -1,0 +1,47 @@
+AIOpsLab LOCAL SLM EVALUATION
+timestamp: 2026-11-14T23:15:49
+problem_id: astronomy_shop_loadgenerator_flood_homepage-localization-1
+condition: baseline
+model: nemotron-3-nano:4b
+elapsed_seconds: 92.366
+max_steps: 1
+steps: 1
+input_tokens: 8194
+output_tokens: 204
+model_calls: 1
+tools_observed: submit
+context_files: /home/codespace/AIOpsLab/trace_output/traces_1794698066.csv
+
+RESULTS
+{
+  "history": [
+    "role='assistant' content='```\\nsubmit([])\\n```'",
+    "role='env' content='1'"
+  ],
+  "final_state": "SubmissionStatus.VALID_SUBMISSION",
+  "results": {
+    "Localization Accuracy": 0.0,
+    "TTL": 14.042702436447144,
+    "steps": 1,
+    "in_tokens": 1,
+    "out_tokens": 5,
+    "success": false,
+    "is_subset": false
+  },
+  "framework_overhead": 312.4158055782318
+}
+
+MODEL_CALL_METRICS
+[
+  {
+    "model": "nemotron-3-nano:4b",
+    "prompt_tokens": 8194,
+    "completion_tokens": 204,
+    "total_duration_ns": 13858551800,
+    "load_duration_ns": 4103636800,
+    "prompt_eval_duration_ns": 4049919000,
+    "eval_duration_ns": 3605745000,
+    "prompt_chars": 752525,
+    "prompt_messages": 2
+  }
+]

@@ -1,0 +1,47 @@
+AIOpsLab LOCAL SLM EVALUATION
+timestamp: 2026-11-15T00:04:56
+problem_id: astronomy_shop_image_slow_load-localization-1
+condition: baseline
+model: nemotron-3-nano:4b
+elapsed_seconds: 92.163
+max_steps: 1
+steps: 1
+input_tokens: 8194
+output_tokens: 358
+model_calls: 1
+tools_observed: submit
+context_files: /home/codespace/AIOpsLab/trace_output/traces_1794701013.csv
+
+RESULTS
+{
+  "history": [
+    "role='assistant' content='```\\nsubmit([])\\n```'",
+    "role='env' content='1'"
+  ],
+  "final_state": "SubmissionStatus.VALID_SUBMISSION",
+  "results": {
+    "Localization Accuracy": 0.0,
+    "TTL": 16.86204695701599,
+    "steps": 1,
+    "in_tokens": 1,
+    "out_tokens": 5,
+    "success": false,
+    "is_subset": false
+  },
+  "framework_overhead": 331.7246572971344
+}
+
+MODEL_CALL_METRICS
+[
+  {
+    "model": "nemotron-3-nano:4b",
+    "prompt_tokens": 8194,
+    "completion_tokens": 358,
+    "total_duration_ns": 16696381300,
+    "load_duration_ns": 4032802000,
+    "prompt_eval_duration_ns": 4061070000,
+    "eval_duration_ns": 6184417000,
+    "prompt_chars": 912315,
+    "prompt_messages": 2
+  }
+]

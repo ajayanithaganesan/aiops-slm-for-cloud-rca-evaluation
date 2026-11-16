@@ -1,0 +1,8 @@
+{
+  "problem_id": "astronomy_shop_ad_service_failure-localization-1",
+  "condition": "baseline",
+  "elapsed_seconds": 97.50959396362305,
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1794696306.csv"
+  ]
+}

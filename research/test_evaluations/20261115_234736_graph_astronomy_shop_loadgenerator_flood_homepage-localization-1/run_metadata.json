@@ -1,0 +1,9 @@
+{
+  "problem_id": "astronomy_shop_loadgenerator_flood_homepage-localization-1",
+  "condition": "graph",
+  "elapsed_seconds": 89.68461036682129,
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1794786461.csv",
+    "research/test_evaluations/20261115_234736_graph_astronomy_shop_loadgenerator_flood_homepage-localization-1/context/slm_context_compact.txt"
+  ]
+}

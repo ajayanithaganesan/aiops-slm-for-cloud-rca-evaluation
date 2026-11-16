@@ -1,0 +1,19 @@
+CLOUD-AGNOSTIC TRACE ANALYSIS
+======================================================================
+Input: /home/codespace/AIOpsLab/trace_output/traces_1794705006.csv
+Spans: 0
+Traces: 0
+Services: 0
+
+Services:
+
+Dependency edges:
+
+Explicit errors: 0
+Latency anomalies: 0
+
+Output files:
+  raw_traces.json
+  dependency_graph.json
+  telemetry_summary.json
+  slm_context.txt
