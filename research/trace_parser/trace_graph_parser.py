@@ -578,6 +578,195 @@ def build_dependency_graph(rows):
 
 
 # ---------------------------------------------------------------------------
+# Advanced Causal Graph Metrics (Domain-Theoretic Foundations)
+# ---------------------------------------------------------------------------
+
+def compute_differential_trace_slices(rows):
+    """
+    Strategy 4 (Differential Slicing - Fonseca et al., NSDI '07; Zhou et al., TSE '21):
+    Partition trace executions into anomalous (errors/outliers) vs nominal baseline.
+    Universal across any distributed architecture.
+    """
+    traces = defaultdict(list)
+    for r in rows:
+        tid = r.get("trace_id")
+        if tid:
+            traces[tid].append(r)
+
+    anomalous_traces = []
+    nominal_traces = []
+
+    for tid, spans in traces.items():
+        is_anom = any(
+            r.get("_has_error_bool") is True or
+            _looks_like_failure_status(r.get("response"))
+            for r in spans
+        )
+        if is_anom:
+            anomalous_traces.append(tid)
+        else:
+            nominal_traces.append(tid)
+
+    return {
+        "total_traces": len(traces),
+        "anomalous_count": len(anomalous_traces),
+        "nominal_count": len(nominal_traces),
+        "anomalous_trace_ids": anomalous_traces,
+    }
+
+
+def compute_topological_centrality(rows, graph):
+    """
+    Strategy 1 (Topological Centrality - Freeman 1978; Page et al. 1999):
+    Compute caller in-degree ratio to characterize ambient utility / sidecar nodes
+    topologically without hardcoded service names.
+    """
+    services = graph.get("services", [])
+    total_svcs = len(services)
+    if total_svcs <= 1:
+        return {}
+
+    span_index = {r["span_id"]: r for r in rows if r.get("span_id")}
+    callers_by_callee = {s: set() for s in services}
+    durations_by_svc = defaultdict(list)
+
+    for r in rows:
+        svc = r.get("service_name")
+        dur = r.get("_duration_numeric")
+        if svc and dur is not None:
+            durations_by_svc[svc].append(dur)
+
+        pid = r.get("parent_span")
+        if pid and pid in span_index:
+            p_svc = span_index[pid].get("service_name")
+            if p_svc and svc and p_svc != svc:
+                callers_by_callee[svc].add(p_svc)
+
+    centrality_profiles = {}
+    for svc in services:
+        callers = callers_by_callee[svc]
+        ratio = len(callers) / max(1, total_svcs - 1)
+        durs = durations_by_svc.get(svc, [])
+        med_dur = median(durs) if durs else 0.0
+
+        # Ambient utility nodes: high caller in-degree ratio with sub-millisecond execution
+        is_ambient_utility = (ratio >= 0.25 and med_dur < 2000.0)
+        centrality_profiles[svc] = {
+            "caller_count": len(callers),
+            "in_degree_ratio": round(ratio, 3),
+            "median_duration_us": round(med_dur, 1),
+            "is_ambient_utility": is_ambient_utility,
+            "callers": sorted(callers),
+        }
+    return centrality_profiles
+
+
+def compute_critical_path_self_time(rows):
+    """
+    Strategy 2 (Critical Path Self-Time - Sigelman et al., Dapper 2010; Sambasivan et al., NSDI '11):
+    Span self-time = duration - sum(child_duration) to isolate local computation/saturation.
+    """
+    traces = defaultdict(list)
+    for r in rows:
+        tid = r.get("trace_id")
+        if tid:
+            traces[tid].append(r)
+
+    svc_self_time = defaultdict(float)
+    svc_total_dur = defaultdict(float)
+    op_self_time = defaultdict(float)
+    op_counts = Counter()
+
+    for tid, spans in traces.items():
+        ch_map = defaultdict(list)
+        for s in spans:
+            pid = s.get("parent_span")
+            if pid:
+                ch_map[pid].append(s)
+
+        for s in spans:
+            dur = s.get("_duration_numeric") or 0.0
+            svc = s.get("service_name")
+            op = s.get("operation_name")
+            if not svc:
+                continue
+
+            # Exclude long-lived persistent streaming operations (eventstream/watch)
+            if op and ("eventstream" in op.lower() or "watch" in op.lower()):
+                continue
+
+            svc_total_dur[svc] += dur
+            ch_list = ch_map.get(s.get("span_id"), [])
+            ch_dur = sum(c.get("_duration_numeric") or 0.0 for c in ch_list)
+            self_time = max(0.0, dur - ch_dur)
+
+            svc_self_time[svc] += self_time
+            if op:
+                op_self_time[(svc, op)] += self_time
+                op_counts[(svc, op)] += 1
+
+    ranked_ops = []
+    for (svc, op), st in sorted(op_self_time.items(), key=lambda x: -x[1])[:15]:
+        cnt = op_counts[(svc, op)]
+        avg_st = st / cnt if cnt > 0 else 0.0
+        ranked_ops.append({
+            "service": svc,
+            "operation": op,
+            "count": cnt,
+            "total_self_time_us": round(st, 1),
+            "avg_self_time_us": round(avg_st, 1),
+        })
+
+    ranked_svcs = []
+    for svc, st in sorted(svc_self_time.items(), key=lambda x: -x[1]):
+        tot = svc_total_dur.get(svc, 0.0)
+        ratio = (st / tot) if tot > 0 else 0.0
+        ranked_svcs.append({
+            "service": svc,
+            "self_time_us": round(st, 1),
+            "total_duration_us": round(tot, 1),
+            "self_time_ratio": round(ratio, 3),
+        })
+
+    return {
+        "services": ranked_svcs,
+        "operations": ranked_ops,
+    }
+
+
+def compute_terminal_error_leaves(rows):
+    """
+    Strategy 3 (Terminal Error Leaves - Chen et al., Pinpoint IPDS '02; Weng et al., MicroCause INFOCOM '20):
+    Identify error DAG sink nodes (out_degree_G_err == 0) to separate root failure points from caller propagation.
+    """
+    err_spans = [
+        r for r in rows
+        if r.get("_has_error_bool") is True or _looks_like_failure_status(r.get("response"))
+    ]
+    if not err_spans:
+        return {}
+
+    span_index = {r["span_id"]: r for r in rows if r.get("span_id")}
+    err_span_ids = set(r["span_id"] for r in err_spans)
+    err_children = {sid: [] for sid in err_span_ids}
+
+    for r in err_spans:
+        pid = r.get("parent_span")
+        if pid in err_children:
+            err_children[pid].append(r["span_id"])
+
+    # Sinks in error DAG: has error, but none of its error children are in the error subgraph
+    leaves = [sid for sid, ch in err_children.items() if len(ch) == 0]
+    leaf_counts = Counter()
+    for sid in leaves:
+        svc = span_index[sid].get("service_name", "unknown")
+        leaf_counts[svc] += 1
+
+    return dict(leaf_counts.most_common())
+
+
+
+# ---------------------------------------------------------------------------
 # Trace summaries
 # ---------------------------------------------------------------------------
 
@@ -1422,6 +1611,39 @@ def build_slm_context(
     lines.append(
         "UNIVERSAL EVIDENCE PROFILE"
     )
+
+    # Advanced causal graph metrics
+    diff_slices = compute_differential_trace_slices(rows)
+    centrality_map = compute_topological_centrality(rows, graph)
+    self_time_res = compute_critical_path_self_time(rows)
+    terminal_leaves = compute_terminal_error_leaves(rows)
+
+    lines.append(
+        f"- Differential trace execution: {diff_slices['anomalous_count']} anomalous traces (errors/failures), "
+        f"{diff_slices['nominal_count']} nominal baseline traces"
+    )
+
+    if centrality_map:
+        ambient_nodes = [
+            f"{s} (in_degree_ratio={p['in_degree_ratio']}, median_duration={p['median_duration_us']}us)"
+            for s, p in centrality_map.items() if p["is_ambient_utility"]
+        ]
+        if ambient_nodes:
+            lines.append(f"- Topological ambient utility / sidecar nodes: {', '.join(ambient_nodes)}")
+
+    if terminal_leaves:
+        leaf_str = ", ".join(f"{svc}: {cnt} sinks" for svc, cnt in list(terminal_leaves.items())[:6])
+        lines.append(f"- Error propagation DAG terminal leaves (deepest failure points): {leaf_str}")
+
+    top_self_ops = [
+        f"{op['service']} | {op['operation']} (avg_self_time={op['avg_self_time_us']}us, count={op['count']})"
+        for op in self_time_res.get("operations", [])[:5]
+        if op.get("avg_self_time_us", 0) > 1000.0
+    ]
+    if top_self_ops:
+        lines.append("- Critical-path span self-time bottlenecks (excluding child waits):")
+        for op_desc in top_self_ops:
+            lines.append(f"  - {op_desc}")
 
     if universal_evidence:
 

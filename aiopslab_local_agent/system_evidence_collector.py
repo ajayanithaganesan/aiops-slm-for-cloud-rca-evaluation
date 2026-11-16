@@ -236,7 +236,7 @@ class SystemEvidenceCollector:
                     resp = str(row.get("response", "")).strip()
 
                     target = None
-                    # 1. Standard gRPC Service convention: e.g. "oteldemo.PaymentService/Charge" -> "payment"
+                    # 1. Standard gRPC Service convention: e.g. "com.example.BillingService/Process" -> "billing"
                     grpc_match = re.search(r"/?(?:[a-zA-Z0-9_]+\.)*([a-zA-Z0-9]+)Service/", op)
                     if grpc_match:
                         name = grpc_match.group(1)
