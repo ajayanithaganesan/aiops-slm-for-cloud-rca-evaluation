@@ -1,0 +1,9 @@
+{
+  "problem_id": "astronomy_shop_kafka_queue_problems-localization-1",
+  "condition": "graph",
+  "elapsed_seconds": 74.01225423812866,
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1794786196.csv",
+    "research/test_evaluations/20261115_234308_graph_astronomy_shop_kafka_queue_problems-localization-1/context/slm_context_compact.txt"
+  ]
+}

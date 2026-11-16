@@ -1,0 +1,9 @@
+{
+  "problem_id": "astronomy_shop_image_slow_load-localization-1",
+  "condition": "graph",
+  "elapsed_seconds": 98.65052771568298,
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1794705361.csv",
+    "research/test_evaluations/20261115_011548_graph_astronomy_shop_image_slow_load-localization-1/context/slm_context_compact.txt"
+  ]
+}

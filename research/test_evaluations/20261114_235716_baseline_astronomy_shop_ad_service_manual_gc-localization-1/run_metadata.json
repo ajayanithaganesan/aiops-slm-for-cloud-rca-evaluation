@@ -1,0 +1,8 @@
+{
+  "problem_id": "astronomy_shop_ad_service_manual_gc-localization-1",
+  "condition": "baseline",
+  "elapsed_seconds": 92.74028372764587,
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1794700648.csv"
+  ]
+}

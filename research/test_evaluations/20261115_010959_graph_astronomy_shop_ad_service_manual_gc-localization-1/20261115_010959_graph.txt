@@ -1,0 +1,47 @@
+AIOpsLab LOCAL SLM EVALUATION
+timestamp: 2026-11-15T01:11:23
+problem_id: astronomy_shop_ad_service_manual_gc-localization-1
+condition: graph
+model: nemotron-3-nano:4b
+elapsed_seconds: 84.269
+max_steps: 1
+steps: 1
+input_tokens: 7082
+output_tokens: 515
+model_calls: 1
+tools_observed: submit
+context_files: /home/codespace/AIOpsLab/trace_output/traces_1794705006.csv, research/test_evaluations/20261115_010959_graph_astronomy_shop_ad_service_manual_gc-localization-1/context/slm_context_compact.txt
+
+RESULTS
+{
+  "history": [
+    "role='assistant' content='```\\nsubmit([])\\n```'",
+    "role='env' content='1'"
+  ],
+  "final_state": "SubmissionStatus.VALID_SUBMISSION",
+  "results": {
+    "Localization Accuracy": 0.0,
+    "TTL": 16.265811443328857,
+    "steps": 1,
+    "in_tokens": 1,
+    "out_tokens": 5,
+    "success": false,
+    "is_subset": false
+  },
+  "framework_overhead": 308.8287446498871
+}
+
+MODEL_CALL_METRICS
+[
+  {
+    "model": "nemotron-3-nano:4b",
+    "prompt_tokens": 7082,
+    "completion_tokens": 515,
+    "total_duration_ns": 16021004000,
+    "load_duration_ns": 3593393900,
+    "prompt_eval_duration_ns": 3484666000,
+    "eval_duration_ns": 8880442000,
+    "prompt_chars": 18132,
+    "prompt_messages": 2
+  }
+]

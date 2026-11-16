@@ -1,0 +1,9 @@
+{
+  "problem_id": "astronomy_shop_ad_service_high_cpu-localization-1",
+  "condition": "graph",
+  "elapsed_seconds": 80.85067629814148,
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1794787841.csv",
+    "research/test_evaluations/20261116_001032_graph_astronomy_shop_ad_service_high_cpu-localization-1/context/slm_context_compact.txt"
+  ]
+}

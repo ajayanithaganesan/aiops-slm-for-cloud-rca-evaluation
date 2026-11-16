@@ -1,0 +1,47 @@
+AIOpsLab LOCAL SLM EVALUATION
+timestamp: 2026-11-14T23:35:06
+problem_id: astronomy_shop_product_catalog_service_failure-localization-1
+condition: baseline
+model: nemotron-3-nano:4b
+elapsed_seconds: 189.351
+max_steps: 1
+steps: 1
+input_tokens: 8194
+output_tokens: 6287
+model_calls: 1
+tools_observed: submit
+context_files: /home/codespace/AIOpsLab/trace_output/traces_1794699125.csv
+
+RESULTS
+{
+  "history": [
+    "role='assistant' content='```\\nsubmit([\"jaeger\", \"currency\"])\\n```'",
+    "role='env' content='1'"
+  ],
+  "final_state": "SubmissionStatus.VALID_SUBMISSION",
+  "results": {
+    "Localization Accuracy": 0.0,
+    "TTL": 122.07895255088806,
+    "steps": 1,
+    "in_tokens": 1,
+    "out_tokens": 11,
+    "success": false,
+    "is_subset": false
+  },
+  "framework_overhead": 315.2481622695923
+}
+
+MODEL_CALL_METRICS
+[
+  {
+    "model": "nemotron-3-nano:4b",
+    "prompt_tokens": 8194,
+    "completion_tokens": 6287,
+    "total_duration_ns": 121862573700,
+    "load_duration_ns": 4126782100,
+    "prompt_eval_duration_ns": 4050146000,
+    "eval_duration_ns": 111121068000,
+    "prompt_chars": 818593,
+    "prompt_messages": 2
+  }
+]

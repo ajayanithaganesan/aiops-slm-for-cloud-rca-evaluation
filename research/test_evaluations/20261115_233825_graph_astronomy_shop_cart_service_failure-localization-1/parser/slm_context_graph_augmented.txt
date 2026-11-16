@@ -1,0 +1,571 @@
+DISTRIBUTED SYSTEM TELEMETRY RCA CONTEXT
+Telemetry source: traces_1794785914.csv
+Total spans: 2721
+Unique services: 17
+
+UNIVERSAL EVIDENCE PROFILE
+- Incident scope: spans=2721, traces=433, services=17, operations=100
+- Behavioural evidence: highest-volume operations
+  - frontend-proxy | GET | count=306
+  - frontend-proxy | router frontend egress | count=193
+  - flagd | resolveBoolean | count=172
+  - frontend-web | GET | count=156
+  - product-catalog | astronomy-db | count=153
+  - frontend | oteldemo.ProductCatalogService/GetProduct | count=128
+  - frontend-proxy | router image-provider egress | count=128
+  - image-provider | GET | count=128
+  - product-catalog | oteldemo.ProductCatalogService/GetProduct | count=119
+  - flagd | flagd.evaluation.v2.Service/ResolveBoolean | count=86
+- Dependency evidence:
+  - frontend-proxy -> frontend | observations=190
+  - frontend-web -> frontend-proxy | observations=162
+  - frontend -> product-catalog | observations=130
+  - frontend-proxy -> image-provider | observations=128
+  - frontend -> cart | observations=52
+  - frontend -> currency | observations=26
+  - frontend -> recommendation | observations=24
+  - recommendation -> product-catalog | observations=23
+  - frontend -> ad | observations=10
+  - frontend-proxy -> flagd | observations=10
+  - frontend -> shipping | observations=5
+  - shipping -> quote | observations=4
+  - agent -> frontend | observations=4
+  - ad -> flagd | observations=3
+  - cart -> flagd | observations=2
+  - recommendation -> flagd | observations=1
+- Error/status evidence: explicit_span_errors=20, status_or_error_records=20
+  - Response distribution:
+    - Unknown: 1660
+    - 200: 1049
+    - 500: 8
+    - 308: 4
+- Performance evidence: latency_anomalies=100
+- Temporal failure evidence:
+  - service=frontend-proxy | operation=POST | first_error_seen=1794785867907791 | last_error_seen=1794785890395602 | error_observations=2
+  - service=frontend-proxy | operation=router frontend egress | first_error_seen=1794785867907961 | last_error_seen=1794785890395748 | error_observations=2
+  - service=frontend | operation=POST /api/checkout | first_error_seen=1794785867936000 | last_error_seen=1794785890397000 | error_observations=4
+  - service=frontend | operation=executing api route (pages) /api/checkout | first_error_seen=1794785867940000 | last_error_seen=1794785890398000 | error_observations=2
+  - service=frontend | operation=oteldemo.CheckoutService/PlaceOrder | first_error_seen=1794785867941000 | last_error_seen=1794785890399000 | error_observations=2
+  - service=frontend | operation=tcp.connect | first_error_seen=1794785867948000 | last_error_seen=1794785897873000 | error_observations=7
+  - service=accounting | operation=receive orders | first_error_seen=1794785909622397 | last_error_seen=1794785909622397 | error_observations=1
+- Service failure comparison:
+  - service=accounting | explicit_errors=1 | failed_operations=receive orders | first_error_seen=1794785909622397 | last_error_seen=1794785909622397
+  - service=ad | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=agent | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=cart | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=chatbot | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=currency | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=flagd | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=frontend | explicit_errors=15 | failed_operations=POST /api/checkout, executing api route (pages) /api/checkout, oteldemo.CheckoutService/PlaceOrder, tcp.connect | first_error_seen=1794785867936000 | last_error_seen=1794785897873000
+  - service=frontend-proxy | explicit_errors=4 | failed_operations=POST, router frontend egress | first_error_seen=1794785867907791 | last_error_seen=1794785890395748
+  - service=frontend-web | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=image-provider | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=mcp | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=payment | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=product-catalog | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=quote | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=recommendation | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=shipping | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+- Evidence limitations / interpretation safeguards:
+  - No dedicated status-code field was present; response values are available as status-related evidence.
+  - No dedicated error/exception text field was present in the supplied telemetry.
+  - Absence of observed errors is not evidence that the incident contained no failure.
+  - Latency anomalies identify unusual performance behaviour; they do not establish root cause.
+  - The parser does not use incident ground truth when constructing evidence.
+
+STATUS AND ERROR EVIDENCE
+- Extracted status/error/message records: 20
+- Records by service:
+    frontend: 15
+    frontend-proxy: 4
+    accounting: 1
+- Records by service and operation:
+    frontend | tcp.connect: 7
+    frontend | POST /api/checkout: 4
+    frontend | executing api route (pages) /api/checkout: 2
+    frontend | oteldemo.CheckoutService/PlaceOrder: 2
+    frontend-proxy | POST: 2
+    frontend-proxy | router frontend egress: 2
+    accounting | receive orders: 1
+- Response values in extracted records:
+    Unknown: 12
+    500: 8
+- Explicit error flag values:
+    True: 20
+- Repeated status/error details:
+    has_error=True: 12
+    response=500 | has_error=True: 8
+- Representative trace references (up to 5):
+    trace=2029e8ca24f823175f9cd13ada963185 | observed_services=frontend -> frontend-proxy | evidence=has_error=True; response=500
+    trace=b4c000f48e1a1fadf0104080417ac725 | observed_services=frontend -> frontend-proxy | evidence=has_error=True; response=500
+    trace=f7f84e8fb5318319abb220488f2d3603 | observed_services=accounting | evidence=has_error=True
+- This section aggregates extracted records. Consult retained raw telemetry for individual spans and complete field values.
+
+SERVICE DEPENDENCY GRAPH
+- frontend-proxy -> frontend (observed relationships: 190)
+- frontend-web -> frontend-proxy (observed relationships: 162)
+- frontend -> product-catalog (observed relationships: 130)
+- frontend-proxy -> image-provider (observed relationships: 128)
+- frontend -> cart (observed relationships: 52)
+- frontend -> currency (observed relationships: 26)
+- frontend -> recommendation (observed relationships: 24)
+- recommendation -> product-catalog (observed relationships: 23)
+- frontend -> ad (observed relationships: 10)
+- frontend-proxy -> flagd (observed relationships: 10)
+- frontend -> shipping (observed relationships: 5)
+- shipping -> quote (observed relationships: 4)
+- agent -> frontend (observed relationships: 4)
+- ad -> flagd (observed relationships: 3)
+- cart -> flagd (observed relationships: 2)
+- recommendation -> flagd (observed relationships: 1)
+
+SERVICE TELEMETRY SUMMARY
+- frontend: spans=742, mean_duration=53850.36253369272, p95=123881.19999999956, max=1451167.0, explicit_errors=15
+- frontend-proxy: spans=661, mean_duration=99716.28290468987, p95=127589.0, max=4840031.0, explicit_errors=4
+- product-catalog: spans=306, mean_duration=20550.166666666668, p95=37144.25, max=1416958.0, explicit_errors=0
+- flagd: spans=296, mean_duration=70034.37162162163, p95=2137.5, max=4839177.0, explicit_errors=0
+- frontend-web: spans=249, mean_duration=180402.4096385542, p95=388199.9999999999, max=1534000.0, explicit_errors=0
+- image-provider: spans=130, mean_duration=30.76923076923077, p95=0.0, max=3000.0, explicit_errors=0
+- cart: spans=124, mean_duration=10849.661290322581, p95=23655.099999999984, max=587329.0, explicit_errors=0
+- recommendation: spans=73, mean_duration=10948.657534246575, p95=35441.799999999945, max=63755.0, explicit_errors=0
+- agent: spans=56, mean_duration=163939.55357142858, p95=621966.75, max=742741.0, explicit_errors=0
+- ad: spans=30, mean_duration=46560.7, p95=183728.8999999996, max=588344.0, explicit_errors=0
+- currency: spans=26, mean_duration=109.73076923076923, p95=61.5, max=1926.0, explicit_errors=0
+- quote: spans=12, mean_duration=14928.583333333334, p95=85946.24999999997, max=111315.0, explicit_errors=0
+- shipping: spans=10, mean_duration=57204.2, p95=255265.55, max=255509.0, explicit_errors=0
+- chatbot: spans=2, mean_duration=126176.0, p95=177201.5, max=182871.0, explicit_errors=0
+- accounting: spans=2, mean_duration=1316075.0, p95=2111114.3, max=2199452.0, explicit_errors=1
+- payment: spans=1, mean_duration=764.0, p95=764.0, max=764.0, explicit_errors=0
+- mcp: spans=1, mean_duration=69786.0, p95=69786.0, max=69786.0, explicit_errors=0
+
+TOP OPERATIONS BY TRACE VOLUME
+- frontend-proxy | GET | count=306 | mean=35663.86601307189 | p95=104800.75 | max=1453309.0 | errors=0
+- frontend-proxy | router frontend egress | count=193 | mean=61643.74611398964 | p95=145798.79999999935 | max=1453175.0 | errors=2
+- flagd | resolveBoolean | count=172 | mean=132.88372093023256 | p95=415.59999999999945 | max=2529.0 | errors=0
+- frontend-web | GET | count=156 | mean=196115.38461538462 | p95=406750.0 | max=1534000.0 | errors=0
+- product-catalog | astronomy-db | count=153 | mean=4077.0196078431372 | p95=13255.400000000005 | max=57494.0 | errors=0
+- frontend | oteldemo.ProductCatalogService/GetProduct | count=128 | mean=56618.3046875 | p95=99067.24999999994 | max=1425552.0 | errors=0
+- frontend-proxy | router image-provider egress | count=128 | mean=2857.2578125 | p95=12489.499999999987 | max=19677.0 | errors=0
+- image-provider | GET | count=128 | mean=31.25 | p95=0.0 | max=3000.0 | errors=0
+- product-catalog | oteldemo.ProductCatalogService/GetProduct | count=119 | mean=46490.10924369748 | p95=58060.899999999994 | max=1416958.0 | errors=0
+- flagd | flagd.evaluation.v2.Service/ResolveBoolean | count=86 | mean=293.2674418604651 | p95=1608.75 | max=4160.0 | errors=0
+- frontend-web | resourceFetch | count=73 | mean=150958.90410958903 | p95=274799.99999999977 | max=336500.0 | errors=0
+- cart | valkey-cart:6379 | count=68 | mean=2813.529411764706 | p95=13220.049999999994 | max=35828.0 | errors=0
+- frontend | GET | count=65 | mean=20139.6 | p95=67171.8 | max=126303.0 | errors=0
+- frontend | GET /api/cart | count=56 | mean=22168.535714285714 | p95=61079.5 | max=72442.0 | errors=0
+- frontend | GET /api/recommendations | count=50 | mean=183621.12 | p95=1354535.5 | max=1451167.0 | errors=0
+- frontend | GET /api/products/[productId]/index | count=46 | mean=36264.5 | p95=137802.0 | max=187835.0 | errors=0
+- cart | POST /oteldemo.CartService/GetCart | count=40 | mean=7484.3 | p95=18966.64999999995 | max=119048.0 | errors=0
+- frontend | oteldemo.CartService/GetCart | count=40 | mean=16829.65 | p95=51766.79999999999 | max=130239.0 | errors=0
+- frontend | executing api route (pages) /api/cart | count=40 | mean=43034.375 | p95=53522.69999999998 | max=919341.0 | errors=0
+- product-catalog | oteldemo.ProductCatalogService/ListProducts | count=34 | mean=3889.529411764706 | p95=16009.949999999993 | max=30197.0 | errors=0
+- frontend | oteldemo.RecommendationService/ListRecommendations | count=25 | mean=23105.36 | p95=61761.2 | max=75885.0 | errors=0
+- frontend | executing api route (pages) /api/recommendations | count=25 | mean=177667.72 | p95=1116171.5999999966 | max=1448444.0 | errors=0
+- frontend-proxy | POST | count=24 | mean=918053.1666666666 | p95=4429542.199999999 | max=4839943.0 | errors=2
+- frontend | POST /api/cart | count=24 | mean=102452.95833333333 | p95=795569.3499999981 | max=928223.0 | errors=0
+- recommendation | oteldemo.ProductCatalogService/ListProducts | count=24 | mean=9444.791666666666 | p95=21056.399999999994 | max=55757.0 | errors=0
+- recommendation | oteldemo.RecommendationService/ListRecommendations | count=24 | mean=12807.541666666666 | p95=37007.649999999965 | max=63755.0 | errors=0
+- recommendation | get_product_list | count=24 | mean=10875.916666666666 | p95=30927.899999999972 | max=62846.0 | errors=0
+- frontend | executing api route (pages) /api/products/[productId]/index | count=23 | mean=31506.0 | p95=132551.79999999996 | max=160460.0 | errors=0
+- frontend | GET /api/data | count=22 | mean=89262.04545454546 | p95=665939.4499999996 | max=697921.0 | errors=0
+- frontend | GET /api/products/index | count=22 | mean=32610.909090909092 | p95=76103.95 | max=81706.0 | errors=0
+
+CAUSAL EVIDENCE PATTERNS
+- Unique service-level path patterns: 28
+  Path 1: frontend-web -> frontend-proxy
+    affected traces: 162
+    span observations: 324
+    latency-anomalous spans: 17
+    key operations:
+      - GET: 156 observations
+      - router image-provider egress: 94 observations
+      - router frontend egress: 67 observations
+      - POST: 6 observations
+      - router flagservice egress: 1 observations
+  Path 2: frontend-proxy -> frontend
+    affected traces: 109
+    span observations: 331
+    latency-anomalous spans: 12
+    key operations:
+      - GET: 65 observations
+      - GET /api/products/[productId]/index: 36 observations
+      - oteldemo.ProductCatalogService/GetProduct: 30 observations
+      - GET /api/cart: 24 observations
+      - oteldemo.CartService/GetCart: 19 observations
+  Path 3: frontend-web -> frontend-proxy -> image-provider
+    affected traces: 94
+    span observations: 94
+    latency-anomalous spans: 0
+    key operations:
+      - GET: 94 observations
+  Path 4: frontend-web -> frontend-proxy -> frontend
+    affected traces: 67
+    span observations: 395
+    latency-anomalous spans: 17
+    key operations:
+      - oteldemo.ProductCatalogService/GetProduct: 98 observations
+      - GET /api/recommendations: 44 observations
+      - GET /api/cart: 32 observations
+      - oteldemo.RecommendationService/ListRecommendations: 22 observations
+      - executing api route (pages) /api/recommendations: 22 observations
+  Path 5: frontend-proxy -> image-provider
+    affected traces: 34
+    span observations: 34
+    latency-anomalous spans: 0
+    key operations:
+      - GET: 34 observations
+  Path 6: frontend-web -> frontend-proxy -> frontend -> product-catalog
+    affected traces: 33
+    span observations: 186
+    latency-anomalous spans: 6
+    key operations:
+      - astronomy-db: 93 observations
+      - oteldemo.ProductCatalogService/GetProduct: 89 observations
+      - oteldemo.ProductCatalogService/ListProducts: 4 observations
+  Path 7: frontend-proxy -> frontend -> product-catalog
+    affected traces: 24
+    span observations: 72
+    latency-anomalous spans: 0
+    key operations:
+      - astronomy-db: 36 observations
+      - oteldemo.ProductCatalogService/GetProduct: 30 observations
+      - oteldemo.ProductCatalogService/ListProducts: 6 observations
+  Path 8: frontend-web -> frontend-proxy -> frontend -> recommendation
+    affected traces: 21
+    span observations: 64
+    latency-anomalous spans: 3
+    key operations:
+      - oteldemo.ProductCatalogService/ListProducts: 21 observations
+      - oteldemo.RecommendationService/ListRecommendations: 21 observations
+      - get_product_list: 21 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 1 observations
+  Path 9: frontend-web -> frontend-proxy -> frontend -> cart
+    affected traces: 21
+    span observations: 56
+    latency-anomalous spans: 0
+    key operations:
+      - valkey-cart:6379: 30 observations
+      - POST /oteldemo.CartService/GetCart: 21 observations
+      - POST /oteldemo.CartService/AddItem: 5 observations
+  Path 10: frontend-web -> frontend-proxy -> frontend -> recommendation -> product-catalog
+    affected traces: 20
+    span observations: 40
+    latency-anomalous spans: 1
+    key operations:
+      - astronomy-db: 20 observations
+      - oteldemo.ProductCatalogService/ListProducts: 20 observations
+  Path 11: frontend-proxy -> frontend -> cart
+    affected traces: 16
+    span observations: 64
+    latency-anomalous spans: 7
+    key operations:
+      - valkey-cart:6379: 38 observations
+      - POST /oteldemo.CartService/GetCart: 19 observations
+      - POST /oteldemo.CartService/AddItem: 7 observations
+  Path 12: frontend-web -> frontend-proxy -> frontend -> currency
+    affected traces: 11
+    span observations: 20
+    latency-anomalous spans: 0
+    key operations:
+      - oteldemo.CurrencyService/Convert: 17 observations
+      - oteldemo.CurrencyService/GetSupportedCurrencies: 3 observations
+  Path 13: frontend-proxy -> flagd
+    affected traces: 9
+    span observations: 17
+    latency-anomalous spans: 2
+    key operations:
+      - resolveAll: 8 observations
+      - flagd.evaluation.v1.Service/EventStream: 5 observations
+      - flagd.evaluation.v1.Service/ResolveAll: 4 observations
+  Path 14: frontend-web -> frontend-proxy -> frontend -> ad
+    affected traces: 6
+    span observations: 18
+    latency-anomalous spans: 2
+    key operations:
+      - getAdsByCategory: 6 observations
+      - oteldemo.AdService/GetAds: 6 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 3 observations
+      - resolve: 3 observations
+  Path 15: frontend-web -> frontend-proxy -> frontend -> shipping
+    affected traces: 5
+    span observations: 10
+    latency-anomalous spans: 2
+    key operations:
+      - POST: 5 observations
+      - POST /get-quote: 5 observations
+  Path 16: frontend-proxy -> frontend -> currency
+    affected traces: 5
+    span observations: 5
+    latency-anomalous spans: 0
+    key operations:
+      - oteldemo.CurrencyService/GetSupportedCurrencies: 5 observations
+  Path 17: agent -> frontend
+    affected traces: 4
+    span observations: 16
+    latency-anomalous spans: 0
+    key operations:
+      - GET /api/data: 4 observations
+      - GET /api/currency: 2 observations
+      - GET /api/products/index: 2 observations
+      - executing api route (pages) /api/data: 2 observations
+      - oteldemo.AdService/GetAds: 2 observations
+  Path 18: frontend-web -> frontend-proxy -> frontend -> shipping -> quote
+    affected traces: 4
+    span observations: 12
+    latency-anomalous spans: 0
+    key operations:
+      - calculate-quote: 4 observations
+      - {closure}: 4 observations
+      - POST /getquote: 4 observations
+  Path 19: frontend-proxy -> frontend -> recommendation
+    affected traces: 3
+    span observations: 9
+    latency-anomalous spans: 0
+    key operations:
+      - oteldemo.ProductCatalogService/ListProducts: 3 observations
+      - oteldemo.RecommendationService/ListRecommendations: 3 observations
+      - get_product_list: 3 observations
+  Path 20: frontend-proxy -> frontend -> recommendation -> product-catalog
+    affected traces: 3
+    span observations: 6
+    latency-anomalous spans: 0
+    key operations:
+      - astronomy-db: 3 observations
+      - oteldemo.ProductCatalogService/ListProducts: 3 observations
+  Path 21: cart -> flagd
+    affected traces: 2
+    span observations: 6
+    latency-anomalous spans: 0
+    key operations:
+      - resolveBoolean: 4 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 2 observations
+  Path 22: agent -> frontend -> ad
+    affected traces: 2
+    span observations: 4
+    latency-anomalous spans: 0
+    key operations:
+      - getAdsByCategory: 2 observations
+      - oteldemo.AdService/GetAds: 2 observations
+  Path 23: frontend-proxy -> frontend -> ad
+    affected traces: 2
+    span observations: 4
+    latency-anomalous spans: 0
+    key operations:
+      - getAdsByCategory: 2 observations
+      - oteldemo.AdService/GetAds: 2 observations
+  Path 24: frontend-web -> frontend-proxy -> frontend -> ad -> flagd
+    affected traces: 1
+    span observations: 9
+    latency-anomalous spans: 4
+    key operations:
+      - resolveBoolean: 6 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 3 observations
+  Path 25: frontend-web -> frontend-proxy -> flagd
+    affected traces: 1
+    span observations: 3
+    latency-anomalous spans: 0
+    key operations:
+      - resolveAll: 2 observations
+      - flagd.evaluation.v1.Service/ResolveAll: 1 observations
+  Path 26: frontend-web -> frontend-proxy -> frontend -> recommendation -> flagd
+    affected traces: 1
+    span observations: 3
+    latency-anomalous spans: 0
+    key operations:
+      - resolveBoolean: 2 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 1 observations
+  Path 27: agent -> frontend -> product-catalog
+    affected traces: 1
+    span observations: 2
+    latency-anomalous spans: 0
+    key operations:
+      - astronomy-db: 1 observations
+      - oteldemo.ProductCatalogService/ListProducts: 1 observations
+  Path 28: agent -> frontend -> currency
+    affected traces: 1
+    span observations: 1
+    latency-anomalous spans: 1
+    key operations:
+      - oteldemo.CurrencyService/GetSupportedCurrencies: 1 observations
+
+EXPLICIT ERROR EVIDENCE
+- service=frontend-proxy | operation=router frontend egress | duration=5341.0 | response=500 | trace=2029e8ca24f823175f9cd13ada963185 | span=54d9d21ba0ca5faa
+- service=frontend-proxy | operation=POST | duration=5517.0 | response=500 | trace=2029e8ca24f823175f9cd13ada963185 | span=0f23064cae3a5de4
+- service=frontend | operation=executing api route (pages) /api/checkout | duration=2687.0 | response=500 | trace=2029e8ca24f823175f9cd13ada963185 | span=f545c132f6957cbf
+- service=frontend | operation=POST /api/checkout | duration=4408.0 | response=500 | trace=2029e8ca24f823175f9cd13ada963185 | span=307086f35c160a61
+- service=frontend | operation=POST /api/checkout | duration=4834.0 | response=Unknown | trace=2029e8ca24f823175f9cd13ada963185 | span=15264f975cddabf9
+- service=frontend | operation=oteldemo.CheckoutService/PlaceOrder | duration=953.0 | response=Unknown | trace=2029e8ca24f823175f9cd13ada963185 | span=9c169d3f5943c6f5
+- service=frontend-proxy | operation=router frontend egress | duration=48004.0 | response=500 | trace=b4c000f48e1a1fadf0104080417ac725 | span=4d6469eb91327074
+- service=frontend-proxy | operation=POST | duration=48367.0 | response=500 | trace=b4c000f48e1a1fadf0104080417ac725 | span=7b1512ac6ae82087
+- service=frontend | operation=executing api route (pages) /api/checkout | duration=14505.0 | response=500 | trace=b4c000f48e1a1fadf0104080417ac725 | span=2bfcad249d211e7d
+- service=frontend | operation=POST /api/checkout | duration=17919.0 | response=500 | trace=b4c000f48e1a1fadf0104080417ac725 | span=3182e58688666008
+- service=frontend | operation=POST /api/checkout | duration=18564.0 | response=Unknown | trace=b4c000f48e1a1fadf0104080417ac725 | span=4f4430bfbd865a19
+- service=frontend | operation=oteldemo.CheckoutService/PlaceOrder | duration=9387.0 | response=Unknown | trace=b4c000f48e1a1fadf0104080417ac725 | span=301a790d243a5512
+- service=frontend | operation=tcp.connect | duration=1379.0 | response=Unknown | trace=b4c000f48e1a1fadf0104080417ac725 | span=e34c4c097b591d43
+- service=frontend | operation=tcp.connect | duration=605.0 | response=Unknown | trace=b4c000f48e1a1fadf0104080417ac725 | span=e35e9ed7ab494dde
+- service=frontend | operation=tcp.connect | duration=444.0 | response=Unknown | trace=b4c000f48e1a1fadf0104080417ac725 | span=b4dfa20d875505ae
+- service=frontend | operation=tcp.connect | duration=400.0 | response=Unknown | trace=b4c000f48e1a1fadf0104080417ac725 | span=24fe250bd9a32642
+- service=frontend | operation=tcp.connect | duration=407.0 | response=Unknown | trace=b4c000f48e1a1fadf0104080417ac725 | span=dfed66065c1357bd
+- service=frontend | operation=tcp.connect | duration=493.0 | response=Unknown | trace=b4c000f48e1a1fadf0104080417ac725 | span=56f15f0c7717d2bf
+- service=frontend | operation=tcp.connect | duration=655.0 | response=Unknown | trace=b4c000f48e1a1fadf0104080417ac725 | span=5caa63e1e87f8813
+- service=accounting | operation=receive orders | duration=432698.0 | response=Unknown | trace=f7f84e8fb5318319abb220488f2d3603 | span=d1e8cf59c67546e9
+
+UNUSUAL LATENCY EVIDENCE
+- service=currency | operation=oteldemo.CurrencyService/GetSupportedCurrencies | duration=1926.0 | robust_z=1277.503 | trace=f2b549a93e48443e48535d5a03c92f91
+- service=ad | operation=getAdsByCategory | duration=96227.0 | robust_z=284.42 | trace=f63873087d93cbfecd50f3a849cf9daf
+- service=product-catalog | operation=oteldemo.ProductCatalogService/GetProduct | duration=1416958.0 | robust_z=175.094 | trace=d7a7141afe92bb77fe62e1c75fee0e72
+- service=cart | operation=POST /oteldemo.CartService/AddItem | duration=587329.0 | robust_z=171.357 | trace=d1e188c064cd65d773ac32a1682813a3
+- service=product-catalog | operation=oteldemo.ProductCatalogService/GetProduct | duration=1265462.0 | robust_z=156.251 | trace=5e36293d94218301b722d3b697342890
+- service=frontend-proxy | operation=POST | duration=4839943.0 | robust_z=155.896 | trace=d5e3cc2aecdd71032e3ee8cd27ae5ecf
+- service=frontend-proxy | operation=POST | duration=4440251.0 | robust_z=142.953 | trace=41ce40934f00310a33051ba9497728a1
+- service=frontend-proxy | operation=POST | duration=4368859.0 | robust_z=140.642 | trace=cc421497b064f78e6162e5b5c00e8c9b
+- service=product-catalog | operation=oteldemo.ProductCatalogService/GetProduct | duration=1100566.0 | robust_z=135.742 | trace=5e36293d94218301b722d3b697342890
+- service=frontend | operation=oteldemo.CartService/AddItem | duration=784638.0 | robust_z=120.395 | trace=d1e188c064cd65d773ac32a1682813a3
+- service=frontend-proxy | operation=POST | duration=3642272.0 | robust_z=117.115 | trace=e0c59a74f335ae32801e5d9572bec338
+- service=frontend-proxy | operation=GET | duration=1453309.0 | robust_z=114.561 | trace=d7a7141afe92bb77fe62e1c75fee0e72
+- service=frontend-proxy | operation=POST | duration=3376585.0 | robust_z=108.511 | trace=53d961a6e9c5d75b38fb057151db5c1b
+- service=frontend-proxy | operation=GET | duration=1366532.0 | robust_z=107.675 | trace=5e36293d94218301b722d3b697342890
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | duration=1425552.0 | robust_z=90.743 | trace=d7a7141afe92bb77fe62e1c75fee0e72
+- service=flagd | operation=resolveBoolean | duration=2529.0 | robust_z=85.489 | trace=3774d23199ae1fdce14620b86868a837
+- service=flagd | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=4160.0 | robust_z=82.677 | trace=3774d23199ae1fdce14620b86868a837
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | duration=1277860.0 | robust_z=81.206 | trace=5e36293d94218301b722d3b697342890
+- service=flagd | operation=resolveBoolean | duration=2346.0 | robust_z=79.159 | trace=3774d23199ae1fdce14620b86868a837
+- service=frontend | operation=executing api route (pages) /api/cart | duration=919341.0 | robust_z=78.525 | trace=d1e188c064cd65d773ac32a1682813a3
+- service=cart | operation=POST /oteldemo.CartService/GetCart | duration=119048.0 | robust_z=75.638 | trace=d1e188c064cd65d773ac32a1682813a3
+- service=frontend | operation=executing api route (pages) /api/data | duration=696427.0 | robust_z=75.303 | trace=f63873087d93cbfecd50f3a849cf9daf
+- service=frontend | operation=oteldemo.AdService/GetAds | duration=694040.0 | robust_z=74.819 | trace=f63873087d93cbfecd50f3a849cf9daf
+- service=shipping | operation=POST | duration=254968.0 | robust_z=73.99 | trace=e625031fd629d1307137a1262def0ab2
+- service=frontend-proxy | operation=router frontend egress | duration=1453175.0 | robust_z=73.894 | trace=d7a7141afe92bb77fe62e1c75fee0e72
+- service=flagd | operation=resolveBoolean | duration=2104.0 | robust_z=70.788 | trace=05e627856e033babd455b129b8f91699
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | duration=1111962.0 | robust_z=70.494 | trace=5e36293d94218301b722d3b697342890
+- service=frontend-proxy | operation=router frontend egress | duration=1366415.0 | robust_z=69.416 | trace=5e36293d94218301b722d3b697342890
+- service=shipping | operation=POST /get-quote | duration=255509.0 | robust_z=64.994 | trace=e625031fd629d1307137a1262def0ab2
+- service=frontend | operation=GET /api/data | duration=697921.0 | robust_z=57.601 | trace=f63873087d93cbfecd50f3a849cf9daf
+
+HIGH-VALUE TELEMETRY EVIDENCE
+- score=14.0 | service=frontend | operation=executing api route (pages) /api/data | duration=696427.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=GET /api/data | duration=697325.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend-proxy | operation=router frontend egress | duration=702525.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=executing api route (pages) /api/shipping | duration=367463.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=GET /api/shipping | duration=373338.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend-proxy | operation=router frontend egress | duration=374807.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=executing api route (pages) /api/recommendations | duration=1448444.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=GET /api/recommendations | duration=1449322.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend-proxy | operation=router frontend egress | duration=1453175.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=executing api route (pages) /api/cart | duration=919341.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=POST /api/cart | duration=926275.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend-proxy | operation=router frontend egress | duration=929775.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=executing api route (pages) /api/recommendations | duration=1348666.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=GET /api/recommendations | duration=1352539.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend-proxy | operation=router frontend egress | duration=1366415.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=14.0 | service=frontend | operation=GET /api/products/[productId]/index | duration=171441.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=13.5 | service=flagd | operation=resolveBoolean | duration=941.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=ad | operation=oteldemo.AdService/GetAds | duration=588344.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=oteldemo.AdService/GetAds | duration=694040.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=GET /api/data | duration=697921.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=recommendation | operation=oteldemo.ProductCatalogService/ListProducts | duration=55757.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=recommendation | operation=get_product_list | duration=62846.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=shipping | operation=POST /get-quote | duration=255509.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=POST | duration=285037.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=GET /api/shipping | duration=374018.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | duration=1425552.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=GET /api/recommendations | duration=1451167.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=cart | operation=POST /oteldemo.CartService/GetCart | duration=119048.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=oteldemo.CartService/GetCart | duration=130239.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=cart | operation=POST /oteldemo.CartService/AddItem | duration=587329.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=oteldemo.CartService/AddItem | duration=784638.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=POST /api/cart | duration=928223.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=flagd | operation=resolveBoolean | duration=730.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | duration=1111962.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | duration=1277860.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=frontend | operation=GET /api/recommendations | duration=1356169.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=13.5 | service=flagd | operation=resolveBoolean | duration=2529.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span
+- score=12.5 | service=frontend | operation=executing api route (pages) /api/products/[productId]/index | duration=160460.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=12.5 | service=frontend | operation=GET /api/currency | duration=51840.0 | response=200 | reasons=operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=12.0 | service=flagd | operation=resolveAnyValue | duration=108.0 | response=Unknown | reasons=operation_latency_anomaly,child_of_anomalous_span
+
+IMPORTANT: Evidence ranking identifies potentially useful telemetry only. It does not identify the root cause.
+IMPORTANT: 'Unknown' response values are not treated as errors.
+
+GRAPH-AUGMENTED DISTRIBUTED SYSTEM RCA CONTEXT
+
+This file augments the baseline telemetry context with observed
+service dependencies and service-level evidence.
+Observed dependencies do not, by themselves, prove root cause.
+
+OBSERVED SERVICE DEPENDENCY GRAPH
+- frontend-proxy -> frontend | observed_relationships=190
+- frontend-web -> frontend-proxy | observed_relationships=162
+- frontend -> product-catalog | observed_relationships=130
+- frontend-proxy -> image-provider | observed_relationships=128
+- frontend -> cart | observed_relationships=52
+- frontend -> currency | observed_relationships=26
+- frontend -> recommendation | observed_relationships=24
+- recommendation -> product-catalog | observed_relationships=23
+- frontend -> ad | observed_relationships=10
+- frontend-proxy -> flagd | observed_relationships=10
+- frontend -> shipping | observed_relationships=5
+- shipping -> quote | observed_relationships=4
+- agent -> frontend | observed_relationships=4
+- ad -> flagd | observed_relationships=3
+- cart -> flagd | observed_relationships=2
+- recommendation -> flagd | observed_relationships=1
+
+SERVICE-LEVEL DIAGNOSTIC EVIDENCE
+- service=frontend-proxy | spans=661 | explicit_errors=4 | median_duration=10710.0 | p95_duration=127589.0
+- service=cart | spans=124 | explicit_errors=0 | median_duration=1294.5 | p95_duration=23655.099999999984
+- service=frontend-web | spans=249 | explicit_errors=0 | median_duration=133100.0 | p95_duration=388199.9999999999
+- service=frontend | spans=742 | explicit_errors=15 | median_duration=15989.0 | p95_duration=123881.19999999956
+- service=product-catalog | spans=306 | explicit_errors=0 | median_duration=3791.5 | p95_duration=37144.25
+- service=flagd | spans=296 | explicit_errors=0 | median_duration=78.5 | p95_duration=2137.5
+- service=image-provider | spans=130 | explicit_errors=0 | median_duration=0.0 | p95_duration=0.0
+- service=recommendation | spans=73 | explicit_errors=0 | median_duration=6734.0 | p95_duration=35441.799999999945
+- service=ad | spans=30 | explicit_errors=0 | median_duration=6826.0 | p95_duration=183728.8999999996
+- service=currency | spans=26 | explicit_errors=0 | median_duration=38.0 | p95_duration=61.5
+- service=shipping | spans=10 | explicit_errors=0 | median_duration=5908.0 | p95_duration=255265.55
+- service=quote | spans=12 | explicit_errors=0 | median_duration=315.5 | p95_duration=85946.24999999997
+- service=agent | spans=56 | explicit_errors=0 | median_duration=72987.5 | p95_duration=621966.75
+- service=payment | spans=1 | explicit_errors=0 | median_duration=764.0 | p95_duration=764.0
+- service=chatbot | spans=2 | explicit_errors=0 | median_duration=126176.0 | p95_duration=177201.5
+- service=accounting | spans=2 | explicit_errors=1 | median_duration=1316075.0 | p95_duration=2111114.3
+- service=mcp | spans=1 | explicit_errors=0 | median_duration=69786.0 | p95_duration=69786.0
+
+LATENCY ANOMALIES
+- service=currency | operation=oteldemo.CurrencyService/GetSupportedCurrencies | duration=1926.0 | trace=f2b549a93e48443e48535d5a03c92f91 | span=f704191f64be60b3
+- service=ad | operation=getAdsByCategory | duration=96227.0 | trace=f63873087d93cbfecd50f3a849cf9daf | span=e1087d2a2c00e35c
+- service=product-catalog | operation=oteldemo.ProductCatalogService/GetProduct | duration=1416958.0 | trace=d7a7141afe92bb77fe62e1c75fee0e72 | span=38e0ef26c4928d9a
+- service=cart | operation=POST /oteldemo.CartService/AddItem | duration=587329.0 | trace=d1e188c064cd65d773ac32a1682813a3 | span=683b38547dad1f32
+- service=product-catalog | operation=oteldemo.ProductCatalogService/GetProduct | duration=1265462.0 | trace=5e36293d94218301b722d3b697342890 | span=53ddac3db3e01951
+- service=frontend-proxy | operation=POST | duration=4839943.0 | trace=d5e3cc2aecdd71032e3ee8cd27ae5ecf | span=2621db9ea952c010
+- service=frontend-proxy | operation=POST | duration=4440251.0 | trace=41ce40934f00310a33051ba9497728a1 | span=b534d3e2a41d0045
+- service=frontend | operation=oteldemo.CartService/AddItem | duration=784638.0 | trace=d1e188c064cd65d773ac32a1682813a3 | span=9ec8b4b29fbdb794
+- service=frontend-proxy | operation=GET | duration=1453309.0 | trace=d7a7141afe92bb77fe62e1c75fee0e72 | span=4f1ae1fc12ea61f6
+- service=frontend-proxy | operation=GET | duration=1366532.0 | trace=5e36293d94218301b722d3b697342890 | span=aaee3e9b0668867d
+
+STATUS AND ERROR EVIDENCE
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=2029e8ca24f823175f9cd13ada963185 | span=54d9d21ba0ca5faa
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=2029e8ca24f823175f9cd13ada963185 | span=0f23064cae3a5de4
+- service=frontend | operation=executing api route (pages) /api/checkout | has_error=True | response=500 | status_field=None | status_value= | trace=2029e8ca24f823175f9cd13ada963185 | span=f545c132f6957cbf
+- service=frontend | operation=POST /api/checkout | has_error=True | response=500 | status_field=None | status_value= | trace=2029e8ca24f823175f9cd13ada963185 | span=307086f35c160a61
+- service=frontend | operation=POST /api/checkout | has_error=True | response=Unknown | status_field=None | status_value= | trace=2029e8ca24f823175f9cd13ada963185 | span=15264f975cddabf9
+- service=frontend | operation=oteldemo.CheckoutService/PlaceOrder | has_error=True | response=Unknown | status_field=None | status_value= | trace=2029e8ca24f823175f9cd13ada963185 | span=9c169d3f5943c6f5
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=4d6469eb91327074
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=7b1512ac6ae82087
+- service=frontend | operation=executing api route (pages) /api/checkout | has_error=True | response=500 | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=2bfcad249d211e7d
+- service=frontend | operation=POST /api/checkout | has_error=True | response=500 | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=3182e58688666008
+- service=frontend | operation=POST /api/checkout | has_error=True | response=Unknown | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=4f4430bfbd865a19
+- service=frontend | operation=oteldemo.CheckoutService/PlaceOrder | has_error=True | response=Unknown | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=301a790d243a5512
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=e34c4c097b591d43
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=e35e9ed7ab494dde
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=b4dfa20d875505ae
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=24fe250bd9a32642
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=dfed66065c1357bd
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=56f15f0c7717d2bf
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=b4c000f48e1a1fadf0104080417ac725 | span=5caa63e1e87f8813
+- service=accounting | operation=receive orders | has_error=True | response=Unknown | status_field=None | status_value= | trace=f7f84e8fb5318319abb220488f2d3603 | span=d1e8cf59c67546e9
+
+INTERPRETATION SAFEGUARDS
+- A dependency edge indicates observed communication, not causality.
+- Latency anomalies are clues, not proof of root cause.
+- Missing explicit error flags do not prove that no failure occurred.
+- Diagnose using the evidence provided; do not assume a root cause.

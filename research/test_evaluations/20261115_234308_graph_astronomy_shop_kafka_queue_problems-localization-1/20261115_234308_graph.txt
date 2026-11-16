@@ -1,0 +1,47 @@
+AIOpsLab LOCAL SLM EVALUATION
+timestamp: 2026-11-15T23:44:22
+problem_id: astronomy_shop_kafka_queue_problems-localization-1
+condition: graph
+model: nemotron-3-nano:4b
+elapsed_seconds: 74.012
+max_steps: 1
+steps: 1
+input_tokens: 8824
+output_tokens: 417
+model_calls: 1
+tools_observed: submit
+context_files: /home/codespace/AIOpsLab/trace_output/traces_1794786196.csv, research/test_evaluations/20261115_234308_graph_astronomy_shop_kafka_queue_problems-localization-1/context/slm_context_compact.txt
+
+RESULTS
+{
+  "history": [
+    "role='assistant' content='```\\nsubmit([\"checkout\"])\\n```'",
+    "role='env' content='1'"
+  ],
+  "final_state": "SubmissionStatus.VALID_SUBMISSION",
+  "results": {
+    "Localization Accuracy": 0.0,
+    "TTL": 11.910895109176636,
+    "steps": 1,
+    "in_tokens": 1,
+    "out_tokens": 7,
+    "success": false,
+    "is_subset": false
+  },
+  "framework_overhead": 232.87531089782715
+}
+
+MODEL_CALL_METRICS
+[
+  {
+    "model": "nemotron-3-nano:4b",
+    "prompt_tokens": 8824,
+    "completion_tokens": 417,
+    "total_duration_ns": 11670083200,
+    "load_duration_ns": 24434700,
+    "prompt_eval_duration_ns": 3993583000,
+    "eval_duration_ns": 7220414000,
+    "prompt_chars": 22302,
+    "prompt_messages": 2
+  }
+]

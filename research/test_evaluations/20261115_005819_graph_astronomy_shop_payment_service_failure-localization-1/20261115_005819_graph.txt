@@ -1,0 +1,47 @@
+AIOpsLab LOCAL SLM EVALUATION
+timestamp: 2026-11-15T00:59:45
+problem_id: astronomy_shop_payment_service_failure-localization-1
+condition: graph
+model: nemotron-3-nano:4b
+elapsed_seconds: 85.990
+max_steps: 1
+steps: 1
+input_tokens: 10056
+output_tokens: 266
+model_calls: 1
+tools_observed: submit
+context_files: /home/codespace/AIOpsLab/trace_output/traces_1794704308.csv, research/test_evaluations/20261115_005819_graph_astronomy_shop_payment_service_failure-localization-1/context/slm_context_compact.txt
+
+RESULTS
+{
+  "history": [
+    "role='assistant' content='```\\nsubmit([\"otel-collector\"])\\n```'",
+    "role='env' content='1'"
+  ],
+  "final_state": "SubmissionStatus.VALID_SUBMISSION",
+  "results": {
+    "Localization Accuracy": 0.0,
+    "TTL": 13.13777756690979,
+    "steps": 1,
+    "in_tokens": 1,
+    "out_tokens": 9,
+    "success": false,
+    "is_subset": false
+  },
+  "framework_overhead": 316.96686577796936
+}
+
+MODEL_CALL_METRICS
+[
+  {
+    "model": "nemotron-3-nano:4b",
+    "prompt_tokens": 10056,
+    "completion_tokens": 266,
+    "total_duration_ns": 12822890500,
+    "load_duration_ns": 3318054500,
+    "prompt_eval_duration_ns": 4828999000,
+    "eval_duration_ns": 4586533000,
+    "prompt_chars": 25247,
+    "prompt_messages": 2
+  }
+]

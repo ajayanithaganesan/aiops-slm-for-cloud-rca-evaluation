@@ -1,0 +1,47 @@
+AIOpsLab LOCAL SLM EVALUATION
+timestamp: 2026-11-15T00:42:13
+problem_id: astronomy_shop_payment_service_unreachable-localization-1
+condition: graph
+model: nemotron-3-nano:4b
+elapsed_seconds: 97.936
+max_steps: 1
+steps: 1
+input_tokens: 9830
+output_tokens: 684
+model_calls: 1
+tools_observed: submit
+context_files: /home/codespace/AIOpsLab/trace_output/traces_1794703247.csv, research/test_evaluations/20261115_004035_graph_astronomy_shop_payment_service_unreachable-localization-1/context/slm_context_compact.txt
+
+RESULTS
+{
+  "history": [
+    "role='assistant' content='```\\nsubmit([\"currency\"])\\n```'",
+    "role='env' content='1'"
+  ],
+  "final_state": "SubmissionStatus.VALID_SUBMISSION",
+  "results": {
+    "Localization Accuracy": 0.0,
+    "TTL": 21.082758903503418,
+    "steps": 1,
+    "in_tokens": 1,
+    "out_tokens": 7,
+    "success": false,
+    "is_subset": false
+  },
+  "framework_overhead": 314.3782603740692
+}
+
+MODEL_CALL_METRICS
+[
+  {
+    "model": "nemotron-3-nano:4b",
+    "prompt_tokens": 9830,
+    "completion_tokens": 684,
+    "total_duration_ns": 20764683900,
+    "load_duration_ns": 3847421300,
+    "prompt_eval_duration_ns": 4830577000,
+    "eval_duration_ns": 11992743000,
+    "prompt_chars": 24896,
+    "prompt_messages": 2
+  }
+]
