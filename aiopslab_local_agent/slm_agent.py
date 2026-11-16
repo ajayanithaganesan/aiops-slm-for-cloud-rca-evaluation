@@ -39,27 +39,6 @@ class SLMAgent:
 
     def init_context(self, problem_desc: str, instructions: str, actions: dict[str, str]) -> None:
         action_text = "\n\n".join(f"{name}\n{description}" for name, description in actions.items())
-        self.history = [
-            {
-                "role": "system",
-                "content": (
-                    "You are an AIOps incident localization agent.\n"
-                    "Use only the APIs listed below. Inspect telemetry before submitting.\n"
-                    "Return exactly one API call inside one Markdown code block.\n"
-                    "Do not return JSON, XML, or multiple actions.\n"
-                    "Use exact Kubernetes namespaces and lowercase service identifiers, not display names.\n"
-                    "For this task, begin with this exact form: get_traces(\"test-hotel-reservation\", 5)\n"
-                    "A valid log call is: get_logs(\"test-hotel-reservation\", \"geo\")\n"
-                    "A valid submission is: submit([\"geo\"])\n"
-                    "Always separate positional arguments with commas.\n"
-                    "Do not use wildcards, shell pipes, redirects, semicolons, or extra text.\n"
-                    "Use exec_shell only when a listed telemetry API cannot answer the question.\n\n"
-                    f"TASK:\n{problem_desc}\n\n"
-                    f"INSTRUCTIONS:\n{instructions}\n\n"
-                    f"AVAILABLE APIS:\n{action_text}"
-                ),
-            }
-        ]
         match = re.search(r"Namespace:\s*([\w-]+)", problem_desc)
         if match:
             self.namespace = match.group(1)
@@ -73,6 +52,31 @@ class SLMAgent:
         self.preload_decision_calls = 0
         self.invalid_model_actions = 0
         self.decision_contract_passed = False
+        self.candidate_services: set[str] = set()
+        self.flagged_anomalous_services: set[str] = set()
+
+        ns_placeholder = self.namespace if self.namespace else "target-namespace"
+        self.history = [
+            {
+                "role": "system",
+                "content": (
+                    "You are an AIOps incident localization agent.\n"
+                    "Use only the APIs listed below. Inspect telemetry before submitting.\n"
+                    "Return exactly one API call inside one Markdown code block.\n"
+                    "Do not return JSON, XML, or multiple actions.\n"
+                    "Use exact Kubernetes namespaces and lowercase service identifiers, not display names.\n"
+                    f'For this task, begin with this exact form: get_traces("{ns_placeholder}", 5)\n'
+                    f'A valid log call is: get_logs("{ns_placeholder}", "service-name")\n'
+                    'A valid submission is: submit(["service-name"])\n'
+                    "Always separate positional arguments with commas.\n"
+                    "Do not use wildcards, shell pipes, redirects, semicolons, or extra text.\n"
+                    "Use exec_shell only when a listed telemetry API cannot answer the question.\n\n"
+                    f"TASK:\n{problem_desc}\n\n"
+                    f"INSTRUCTIONS:\n{instructions}\n\n"
+                    f"AVAILABLE APIS:\n{action_text}"
+                ),
+            }
+        ]
         self.candidate_services: set[str] = set()
         self.flagged_anomalous_services: set[str] = set()
 
@@ -104,8 +108,8 @@ class SLMAgent:
             "DECISION RULES:\n"
             "1. If a service has pods with non-zero restarts, status like RunContainerError or CrashLoopBackOff, or 0/1 ready, that service is the root cause.\n"
             "2. If an endpoint is missing for a service, that service is unreachable and the root cause.\n"
-            "3. If callers fail when invoking a downstream RPC target (e.g. frontend fails calling target 'user'), the target service is the root cause.\n"
-            "4. Do not blame caller services (e.g. frontend) for connection refused errors caused by downstream service failures.\n"
+            "3. If callers fail when invoking a downstream RPC target (e.g. gateway-proxy fails calling target 'service-b'), the target service is the root cause.\n"
+            "4. Do not blame ingress or gateway callers for connection-refused errors caused by downstream callee failures.\n"
             "FORMAT & ACCURACY CONTRACT:\n"
             "- Submit ONLY the single root-cause service that triggered the incident, NOT the callers or collateral services.\n"
             "- Do NOT submit multiple services when one specific service crashed or failed. Accuracy is penalized for every non-faulty service included.\n"
@@ -266,12 +270,12 @@ class SLMAgent:
                 regular_services = []
                 for t in str_tokens:
                     t_low = t.lower()
-                    # Check if token is explicitly tagged with an anomaly suffix (e.g. geo_anomaly)
+                    # Check if token is explicitly tagged with an anomaly suffix (e.g. service_anomaly)
                     cleaned_anom = re.sub(r"(_anomaly|_fault|_failure|_crash|_restart|_issue)$", "", t_low)
                     if cleaned_anom != t_low and cleaned_anom in self.candidate_services:
                         anomaly_services.append(cleaned_anom)
                     else:
-                        # Strip other descriptive suffixes (e.g. consul_error, frontend_error, user-service)
+                        # Strip other descriptive suffixes (e.g. timeout_error, rpc_error, backend-service)
                         cleaned_svc = re.sub(r"(_error|_log|_warning|_service|_rest|_api)$", "", t_low)
                         if cleaned_svc in self.candidate_services:
                             regular_services.append(cleaned_svc)

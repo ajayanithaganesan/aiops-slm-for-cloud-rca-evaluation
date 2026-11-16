@@ -26,6 +26,8 @@ def _apply_context_budget(lines: list[str], budget: int) -> tuple[list[str], int
     priority_terms = (
         "Incident scope:", "Behavioural evidence:", "Dependency evidence:",
         "Error/status evidence:", "Performance evidence:", "Temporal failure evidence",
+        "Differential trace execution:", "Topological ambient utility",
+        "Error propagation DAG terminal leaves", "Critical-path span self-time bottlenecks",
         "Service failure comparison", "explicit_errors=", "failed_operations=",
         "Evidence limitations", "score=", "Path ",
         "observed relationships:", "repeated evidence pattern",
