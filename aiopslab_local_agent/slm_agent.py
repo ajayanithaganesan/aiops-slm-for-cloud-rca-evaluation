@@ -1,18 +1,31 @@
-"""SLM agent using AIOpsLab's native action protocol across local models."""
+"""
+AIOpsLab SLM Agent for Root Cause Localization
 
-import json
+Implements an autonomous agent using a local Small Language Model (SLM) served via Ollama.
+The agent interacts with the AIOpsLab benchmark environment through strict API actions:
+- get_traces(namespace, count)
+- get_logs(namespace, service)
+- get_metrics(namespace, count)
+- submit([root_cause_service])
+
+Includes normalization to resolve minor syntax issues emitted by small parameter models.
+"""
+
+from __future__ import annotations
+
 import csv
-import re
+import json
 import os
+from pathlib import Path
+import re
 import subprocess
 import sys
-from pathlib import Path
 
 from .ollama_client import OllamaClient
 
 
 class SLMAgent:
-    """Universal Small Language Model (SLM) agent for incident root-cause localization."""
+    """Universal Small Language Model agent for cloud incident localization."""
 
     def __init__(self, model: str | None = None, base_url: str | None = None, condition: str = "baseline"):
         self.llm = OllamaClient(model=model, base_url=base_url)
@@ -34,14 +47,17 @@ class SLMAgent:
         self.flagged_anomalous_services: set[str] = set()
 
     def configure_run(self, run_directory: str | Path) -> None:
+        """Sets the directory where run artifacts, context files, and parser outputs are saved."""
         self.run_directory = Path(run_directory)
         self.run_directory.mkdir(parents=True, exist_ok=True)
 
     def init_context(self, problem_desc: str, instructions: str, actions: dict[str, str]) -> None:
+        """Initializes conversation history and system instructions with strict action contracts."""
         action_text = "\n\n".join(f"{name}\n{description}" for name, description in actions.items())
         match = re.search(r"Namespace:\s*([\w-]+)", problem_desc)
         if match:
             self.namespace = match.group(1)
+
         self.bootstrapped = False
         self.evidence_context = ""
         self.context_paths = []
@@ -52,10 +68,10 @@ class SLMAgent:
         self.preload_decision_calls = 0
         self.invalid_model_actions = 0
         self.decision_contract_passed = False
-        self.candidate_services: set[str] = set()
-        self.flagged_anomalous_services: set[str] = set()
+        self.candidate_services = set()
+        self.flagged_anomalous_services = set()
 
-        ns_placeholder = self.namespace if self.namespace else "target-namespace"
+        namespace_label = self.namespace if self.namespace else "target-namespace"
         self.history = [
             {
                 "role": "system",
@@ -65,8 +81,8 @@ class SLMAgent:
                     "Return exactly one API call inside one Markdown code block.\n"
                     "Do not return JSON, XML, or multiple actions.\n"
                     "Use exact Kubernetes namespaces and lowercase service identifiers, not display names.\n"
-                    f'For this task, begin with this exact form: get_traces("{ns_placeholder}", 5)\n'
-                    f'A valid log call is: get_logs("{ns_placeholder}", "service-name")\n'
+                    f'For this task, begin with this exact form: get_traces("{namespace_label}", 5)\n'
+                    f'A valid log call is: get_logs("{namespace_label}", "service-name")\n'
                     'A valid submission is: submit(["service-name"])\n'
                     "Always separate positional arguments with commas.\n"
                     "Do not use wildcards, shell pipes, redirects, semicolons, or extra text.\n"
@@ -77,11 +93,9 @@ class SLMAgent:
                 ),
             }
         ]
-        self.candidate_services: set[str] = set()
-        self.flagged_anomalous_services: set[str] = set()
 
     def preload_evidence(self, evidence: str, paths: list[str] | None = None) -> None:
-        """Seed a tool-selection-free evaluation with fixed evidence."""
+        """Configures the agent with preloaded evidence for zero-tool one-shot evaluation."""
         self.preloaded = True
         self.bootstrapped = True
         self.preload_decision_calls = 0
@@ -101,6 +115,7 @@ class SLMAgent:
             m.group(1).lower()
             for m in re.finditer(r"service:\s*['\"]?([a-zA-Z0-9_-]+)['\"]?[^\n]*\[!\]\s*ATTENTION", evidence)
         }
+
         self.history[0]["content"] = (
             "You are an AIOps RCA classification model in PRELOADED mode.\n"
             "All required traces, logs, and cluster signals are supplied below.\n"
@@ -129,17 +144,22 @@ class SLMAgent:
         })
 
     async def get_action(self, state: str) -> str:
+        """Generates the next API action from the model, normalizing syntax errors and avoiding duplicates."""
         if self.preloaded and self.preload_decision_calls >= 1:
             return "```\nsubmit([])\n```"
+
         if not self.bootstrapped:
             self.bootstrapped = True
             action = f'```\nget_traces("{self.namespace}", 5)\n```'
             self._print_action("bootstrap", action)
             return action
+
         if not self.preloaded:
             self.history.append({"role": "user", "content": self.augment_state(state)})
+
         raw_response = self.llm.chat(self.history)
         response = self.normalize_action(raw_response)
+
         if self.preloaded:
             self.preload_decision_calls += 1
             if response.lstrip().startswith("```\nsubmit("):
@@ -148,23 +168,27 @@ class SLMAgent:
                 self.invalid_model_actions += 1
                 self.decision_contract_passed = False
                 response = "```\nsubmit([])\n```"
+
         response = self.avoid_duplicate_action(response)
         self._print_action("model", raw_response, response)
         self.history.append({"role": "assistant", "content": response})
         return response
 
     def avoid_duplicate_action(self, action: str) -> str:
-        """Avoid wasting evaluation steps on identical telemetry requests."""
+        """Avoids wasting evaluation steps on identical repeated telemetry requests."""
         normalized = action.strip()
         if normalized not in self.action_history:
             self.action_history.append(normalized)
             return action
+
+        # Replace duplicate traces/logs with metric checks to preserve turn budget
         if normalized.startswith("```\nget_traces("):
             replacement = f'```\nget_metrics("{self.namespace}", 5)\n```'
         elif normalized.startswith("```\nget_logs("):
             replacement = f'```\nget_metrics("{self.namespace}", 5)\n```'
         else:
             return action
+
         self.action_history.append(replacement)
         print("===== DUPLICATE ACTION CONTROL =====", flush=True)
         print(f"Repeated action replaced with:\n{replacement}", flush=True)
@@ -172,7 +196,7 @@ class SLMAgent:
 
     @staticmethod
     def _print_action(source: str, raw: str, normalized: str | None = None) -> None:
-        """Print live model output without changing the agent protocol."""
+        """Prints live model interaction to the terminal for debugging."""
         print(f"\n===== {source.upper()} MODEL OUTPUT =====", flush=True)
         print(raw, flush=True)
         if normalized is not None and normalized.strip() != raw.strip():
@@ -180,7 +204,7 @@ class SLMAgent:
             print(normalized, flush=True)
 
     def augment_state(self, state: str) -> str:
-        """Add compact, model-neutral service inventory from exported traces."""
+        """Supplements environment state with candidate services discovered from traces."""
         if self.evidence_context and not self.evidence_context_sent:
             state = (
                 f"{state}\n\n"
@@ -188,6 +212,7 @@ class SLMAgent:
                 f"{self.evidence_context}"
             )
             self.evidence_context_sent = True
+
         if self.evidence_context_sent and len(self.action_history) >= 3:
             state = (
                 f"{state}\n\n"
@@ -196,6 +221,7 @@ class SLMAgent:
                 "file paths. Use one genuinely new signal only if necessary; otherwise "
                 "submit your evidence-based conclusion now."
             )
+
         match = re.search(r"(?:exported to:|file )\s*(/[^\s]+\.csv)", state)
         if not match:
             return state
@@ -203,6 +229,7 @@ class SLMAgent:
         path = match.group(1)
         if self.condition == "graph":
             self._prepare_fresh_context(path)
+
         services: set[str] = set()
         try:
             with open(path, newline="", encoding="utf-8") as file:
@@ -215,6 +242,7 @@ class SLMAgent:
 
         if not services:
             return state
+
         inventory = ", ".join(sorted(services))
         return (
             f"{state}\n\nSERVICE IDENTIFIERS DISCOVERED FROM TELEMETRY: {inventory}\n"
@@ -222,13 +250,15 @@ class SLMAgent:
         )
 
     def _prepare_fresh_context(self, trace_path: str) -> None:
-        """Parse exactly this run's trace file; never reuse stale context."""
+        """Executes the graph parser and evidence compactor to produce compact context."""
         if trace_path in self.parsed_trace_paths or self.run_directory is None:
             return
+
         self.parsed_trace_paths.add(trace_path)
         parser_script = Path("research/trace_parser/trace_graph_parser.py")
         if not parser_script.exists():
             return
+
         parser_output = self.run_directory / "parser"
         try:
             subprocess.run(
@@ -238,25 +268,33 @@ class SLMAgent:
             graph_context = parser_output / "slm_context_graph_augmented.txt"
             if not graph_context.exists():
                 return
+
             from .evidence_compactor import process
             compact_output = self.run_directory / "context"
             process(graph_context, compact_output)
             compact_path = compact_output / "slm_context_compact.txt"
-            # The Ollama context is configured externally. Keep the complete
-            # compact evidence available up to a generous safety ceiling.
             self.evidence_context = compact_path.read_text(encoding="utf-8").strip()[:50000]
             self.context_paths = [str(graph_context), str(compact_path), str(compact_output / "evidence_manifest.json")]
         except (OSError, subprocess.SubprocessError):
             self.evidence_context = ""
 
     def normalize_action(self, response: str) -> str:
-        """Keep AIOpsLab's strict parser boundary to one API call."""
+        """
+        Normalizes SLM text output into strict AIOpsLab Markdown API calls.
+        Resolves markdown formatting errors, unquoted tokens, and JSON-wrapped outputs.
+        """
         text = response or ""
 
         # 1. Multi-line or structured submit(...) extraction
         submit_match = re.search(r"submit\s*\(\s*(\[.*?\]|\{.*?\}|[^\)]*)\s*\)", text, re.DOTALL)
+        if not submit_match:
+            # Also support raw JSON list output like ```json\n["ad"]\n``` or bare ["ad"]
+            raw_list_match = re.search(r"\[\s*[\"']([a-zA-Z0-9_-]+)[\"'](?:\s*,\s*[\"']([a-zA-Z0-9_-]+)[\"'])*\s*\]", text)
+            if raw_list_match:
+                submit_match = raw_list_match
+
         if submit_match:
-            inner = submit_match.group(1).strip()
+            inner = submit_match.group(1).strip() if submit_match.lastindex and submit_match.group(1) else submit_match.group(0).strip()
 
             # If candidates are known, find which candidate service is targeted
             if self.candidate_services:
@@ -313,7 +351,7 @@ class SLMAgent:
                     # Non-candidate tokens (e.g. "warning", "verdict") - strictly reject hallucination
                     return "```\nsubmit([])\n```"
 
-            # Fallback if no candidate service list available: remove basic syntax noise
+            # Fallback if no candidate service list available: removes basic syntax noise
             clean_str_list = re.findall(r"[\"']([a-zA-Z0-9_-]+)[\"']", inner)
             filtered = [
                 s.lower() for s in clean_str_list
@@ -355,6 +393,7 @@ class SLMAgent:
         return f'```\nget_traces("{self.namespace}", 5)\n```'
 
     def metrics(self) -> dict:
+        """Returns runtime telemetry call metrics."""
         return {
             "calls": self.llm.calls,
             "call_count": len(self.llm.calls),
@@ -367,5 +406,3 @@ class SLMAgent:
 
 # Backward-compatibility alias
 NemotronAgent = SLMAgent
-
-
