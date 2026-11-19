@@ -255,8 +255,14 @@ class SLMAgent:
 
         # 1. Multi-line or structured submit(...) extraction
         submit_match = re.search(r"submit\s*\(\s*(\[.*?\]|\{.*?\}|[^\)]*)\s*\)", text, re.DOTALL)
+        if not submit_match:
+            # Also support raw JSON list output like ```json\n["ad"]\n``` or bare ["ad"]
+            raw_list_match = re.search(r"\[\s*[\"']([a-zA-Z0-9_-]+)[\"'](?:\s*,\s*[\"']([a-zA-Z0-9_-]+)[\"'])*\s*\]", text)
+            if raw_list_match:
+                submit_match = raw_list_match
+
         if submit_match:
-            inner = submit_match.group(1).strip()
+            inner = submit_match.group(1).strip() if submit_match.lastindex and submit_match.group(1) else submit_match.group(0).strip()
 
             # If candidates are known, find which candidate service is targeted
             if self.candidate_services:
