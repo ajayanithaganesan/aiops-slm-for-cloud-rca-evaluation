@@ -1629,7 +1629,10 @@ def build_slm_context(
             for s, p in centrality_map.items() if p["is_ambient_utility"]
         ]
         if ambient_nodes:
-            lines.append(f"- Topological ambient utility / sidecar nodes: {', '.join(ambient_nodes)}")
+            lines.append(
+                f"- Ambient background infrastructure & sidecars (healthy utility components, NOT root cause): "
+                f"{', '.join(ambient_nodes)}"
+            )
 
     if terminal_leaves:
         leaf_str = ", ".join(f"{svc}: {cnt} sinks" for svc, cnt in list(terminal_leaves.items())[:6])
