@@ -706,7 +706,9 @@ def compute_critical_path_self_time(rows):
                 op_counts[(svc, op)] += 1
 
     ranked_ops = []
-    for (svc, op), st in sorted(op_self_time.items(), key=lambda x: -x[1])[:15]:
+    # Rank primarily by average self-time per execution to highlight severe latency/compute bottlenecks,
+    # and secondarily by total self-time.
+    for (svc, op), st in sorted(op_self_time.items(), key=lambda x: (x[1] / max(1, op_counts[x[0]]), x[1]), reverse=True)[:15]:
         cnt = op_counts[(svc, op)]
         avg_st = st / cnt if cnt > 0 else 0.0
         ranked_ops.append({
