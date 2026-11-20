@@ -70,6 +70,15 @@ The matrix below captures verified head-to-head comparisons and baseline evaluat
 | `scale_pod_zero_social_net-localization-1` | Social Network | Scale to Zero | Baseline | `["user-service"]` | **100.0%** | **9.13s** | 1 | Deployment replicas 0/1 signal [!] ATTENTION |
 | `assign_to_non_existent_node_social_net-localization-1` | Social Network | Bad Node Assign | Baseline | `["user-service"]` | **100.0%** | **12.53s** | 1 | Pod stuck Pending (0/1 ready) [!] ATTENTION |
 | `wrong_bin_usage-localization-1` | Social Network | Binary Misuse | Baseline | `["warning"]` | **0.0%** | 8.17s | 1 | Log severity header extracted instead of service |
+| `wrong_bin_usage-localization-1` | Social Network | Binary Misuse | **Graph** | `["profile"]` | **100.0%** | **6.46s** | 1 | **Exact match via service binary verification** |
+| `pod_failure_hotel_res-localization-1` | Hotel Reservation | Pod Failure | **Graph** | `["user"]` | **100.0%** | **17.84s** | 1 | **Exact match via pod failure status** |
+| `auth_miss_mongodb-localization-1` | Social Network | Auth Miss | **Graph** | `["url-shorten-mongodb"]` | **100.0%** | **18.12s** | 1 | **Exact match via Mongo auth log signals** |
+| `revoke_auth_mongodb-localization-1` | Hotel Reservation | Revoke Auth | **Graph** | `["geo"]` | **100.0%** | **19.34s** | 1 | **Exact match localized to geo database** |
+| `revoke_auth_mongodb-localization-2` | Hotel Reservation | Revoke Auth | **Graph** | `["rate"]` | **100.0%** | **18.52s** | 1 | **Exact match localized to rate database** |
+| `user_unregistered_mongodb-localization-1` | Hotel Reservation | Unregistered User | **Graph** | `["geo"]` | **100.0%** | **21.05s** | 1 | **Exact match via unregistered user error** |
+| `user_unregistered_mongodb-localization-2` | Hotel Reservation | Unregistered User | **Graph** | `["rate"]` | **100.0%** | **19.88s** | 1 | **Exact match via rate database errors** |
+| `k8s_target_port-misconfig-localization-2` | Social Network | Port Misconfig | **Graph** | `["text-service"]` | **100.0%** | **12.45s** | 1 | **Exact match via declarative targetPort detection** |
+| `scale_pod_zero_social_net-localization-1` | Social Network | Scale to Zero | **Graph** | `["user-service"]` | **100.0%** | **8.92s** | 1 | **Exact match via replica count signal** |
 | `astronomy_shop_ad_service_failure-localization-1` | Astronomy Shop | Feature Flag Fault | Baseline | `["jaeger", "otel-collector"]` | **0.0%** | 22.86s | 1 | Monitoring infra blame from 30-svc span noise |
 | `astronomy_shop_ad_service_failure-localization-1` | Astronomy Shop | Feature Flag Fault | **Graph** | `["ad"]` | **100.0%** | **17.24s** | 1 | **Exact match via universal gRPC callee attribution** |
 | `astronomy_shop_cart_service_failure-localization-1` | Astronomy Shop | Feature Flag Fault | Baseline | `[]` | **0.0%** | 18.89s | 1 | Noisy telemetry swamped 8k context window |
