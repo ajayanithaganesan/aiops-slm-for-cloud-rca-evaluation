@@ -46,7 +46,8 @@ We compared the local model on the exact same 28 incidents under two conditions:
 | **Top-1 Exact Match Accuracy ($A_{\text{top1}}$)** | **28.6%** (8 / 28) | **53.6%** (15 / 28) | **+25.0% absolute gain (1.87x improvement)** |
 | **Mean Time-to-Localize Latency ($\text{TTL}$)** | **31.44s** | **13.31s** | **2.36x faster resolution** |
 | **Average Completion Output Tokens** | **47.5 tokens** | **34.6 tokens** | **27.2% faster answer convergence** |
-| **Format Adherence & Non-Empty Rate** | **64.3%** | **96.4%** | **Eliminated empty answers & junk tokens** |
+| **Format Adherence & Non-Empty Rate** | **50.0%** (14 / 28 valid) | **92.9%** (26 / 28 valid) | **+42.9% gain in valid outputs** |
+| **Hallucination & Empty Collapse Rate** | **50.0%** (12 empty + 2 junk tokens) | **7.1%** (Only 2 empty, 0 junk) | **7x reduction in model failures** |
 | **Trace Payload Footprint (Compression)** | ~36k raw / 4.5k truncated | **~2.2k compact DAG tokens** | **78%+ token reduction (avoids memory overflow)** |
 | **Cascading / Gateway False Alarm Rate** | **64.3%** | **21.4%** | **3x reduction in innocent gateway blame** |
 
