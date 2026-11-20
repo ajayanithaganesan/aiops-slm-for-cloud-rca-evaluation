@@ -81,4 +81,34 @@ We compared the local model on the exact same 28 incidents under two conditions:
 - `Evaluations/`:
   - [`final_evaluation_table.csv`](Evaluations/final_evaluation_table.csv): Full 28-incident head-to-head comparison table.
   - [`Evaluation_results.md`](Evaluations/Evaluation_results.md): Detailed metric breakdown report.
-- `docs/tracker.md`: Technical logbook, system observations, and reproducibility notes.
+
+---
+
+## 🚀 Getting Started & Execution
+
+### Prerequisites
+- Python 3.10+
+- Running Kubernetes cluster (Minikube / Kind / K3s) with AIOpsLab deployed
+- Locally running [Ollama](https://ollama.ai/) instance with `nemotron-3-nano:4b` pulled
+
+### Run Incident Under Graph Mode (Proposed Method)
+```bash
+python3 -m aiopslab_local_agent.run_case \
+    --problem-id container_kill-localization \
+    --condition graph \
+    --preload-evidence \
+    --model nemotron-3-nano:4b \
+    --ollama-host http://127.0.0.1:11434 \
+    --max-steps 1
+```
+
+### Run Incident Under Baseline Mode (Raw Spans Control)
+```bash
+python3 -m aiopslab_local_agent.run_case \
+    --problem-id container_kill-localization \
+    --condition baseline \
+    --preload-evidence \
+    --model nemotron-3-nano:4b \
+    --ollama-host http://127.0.0.1:11434 \
+    --max-steps 1
+```
