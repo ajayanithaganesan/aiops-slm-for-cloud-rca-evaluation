@@ -45,3 +45,7 @@ research/test_evaluations/
 # Reports directory (preserve structure via .gitkeep)
 reports/*
 !reports/.gitkeep
+
+docs/tracker.md
+tracker.md
+*.bak
