@@ -1,0 +1,29 @@
+problem_id,microservice_suite,fault_type,ground_truth_root_cause,baseline_prediction,baseline_accuracy,baseline_ttl_sec,baseline_input_tokens,baseline_steps,graph_prediction,graph_accuracy,graph_ttl_sec,graph_input_tokens,graph_steps,graph_status
+container_kill-localization,Hotel Reservation,Container Kill,geo,"[""geo""]",100.0,20.86,8194,1,"[""geo""]",100.0,7.56,12257,1,Exact Match
+misconfig_app_hotel_res-localization-1,Hotel Reservation,App Misconfig,geo,"[""verdict"", ""verdict_reason""]",0.0,22.39,8194,1,"[""geo""]",100.0,11.46,6776,1,Exact Match
+pod_kill_hotel_res-localization-1,Hotel Reservation,Pod Kill,user,"[""user""]",100.0,34.35,8194,1,"[""user""]",100.0,6.41,6703,1,Exact Match
+pod_failure_hotel_res-localization-1,Hotel Reservation,Pod Failure,user,[],0.0,25.36,8194,1,"[""user""]",100.0,7.53,7004,1,Exact Match
+network_delay_hotel_res-localization-1,Hotel Reservation,Network Delay,geo,[],0.0,25.54,8194,1,"[""geo""]",0.0,4.7,6706,1,Failure
+network_loss_hotel_res-localization-1,Hotel Reservation,Network Loss,frontend,"[""frontend"", ""profile"", ""rate"", ""reservation""]",0.0,38.1,8194,1,"[""consul""]",0.0,17.52,6693,1,Failure
+auth_miss_mongodb-localization-1,Social Network,Auth Miss,url-shorten-mongodb,"[""url-shorten-mongodb""]",100.0,19.43,5368,1,"[""url-shorten-mongodb""]",100.0,11.23,4880,1,Exact Match
+revoke_auth_mongodb-localization-1,Social Network,Revoke Auth,geo,"[""geo"", ""search""]",50.0,20.63,8194,1,"[""geo""]",100.0,13.87,6955,1,Exact Match
+revoke_auth_mongodb-localization-2,Social Network,Revoke Auth,rate,"[""rate""]",100.0,18.77,8194,1,"[""rate""]",100.0,8.67,6609,1,Exact Match
+user_unregistered_mongodb-localization-1,Social Network,Unregistered User,geo,{},0.0,175.43,8194,1,"[""geo""]",100.0,5.77,7017,1,Exact Match
+user_unregistered_mongodb-localization-2,Social Network,Unregistered User,rate,"[""rate""]",100.0,113.29,8194,1,"[""rate""]",100.0,4.46,3475,1,Exact Match
+k8s_target_port-misconfig-localization-1,Social Network,Port Misconfig,user-service,"[""user-mention-""]",0.0,19.89,10490,1,"[""user-service""]",100.0,12.19,8990,1,Exact Match
+k8s_target_port-misconfig-localization-2,Social Network,Port Misconfig,text-service,[],0.0,13.13,4628,1,"[""text-service""]",100.0,8.62,6015,1,Exact Match
+k8s_target_port-misconfig-localization-3,Social Network,Port Misconfig,post-storage-service,"[""post-storage-service""]",100.0,7.72,5163,1,[],0.0,14.78,6408,1,Failure
+scale_pod_zero_social_net-localization-1,Social Network,Scale to Zero,user-service,"[""user-service""]",100.0,9.13,4457,1,"[""user-service""]",100.0,7.37,5655,1,Exact Match
+assign_to_non_existent_node_social_net-localization-1,Social Network,Bad Node Assign,user-service,"[""user-service""]",100.0,12.53,4887,1,"[""user-mention-service""]",0.0,42.86,5607,1,Failure
+wrong_bin_usage-localization-1,Social Network,Binary Misuse,profile,"[""warning""]",0.0,8.17,8194,1,"[""profile""]",100.0,6.46,6177,1,Exact Match
+astronomy_shop_ad_service_failure-localization-1,Astronomy Shop,Feature Flag Fault,ad,"[""jaeger"", ""otel-collector""]",0.0,22.86,8194,1,"[""ad""]",100.0,17.24,9363,1,Exact Match
+astronomy_shop_cart_service_failure-localization-1,Astronomy Shop,Feature Flag Fault,cart,[],0.0,18.89,8194,1,"[""image-provider""]",0.0,14.75,10446,1,Failure
+astronomy_shop_kafka_queue_problems-localization-1,Astronomy Shop,Queue Issue,kafka,[],0.0,15.32,8194,1,"[""ad""]",0.0,15.36,9950,1,Failure
+astronomy_shop_loadgenerator_flood_homepage-localization-1,Astronomy Shop,Load Flood,load-generator,[],0.0,14.04,8194,1,"[""otel-collector""]",0.0,14.62,9638,1,Failure
+astronomy_shop_payment_service_unreachable-localization-1,Astronomy Shop,Net Unreachable,checkout,[],0.0,15.82,8194,1,"[""checkout""]",100.0,15.34,10203,1,Exact Match
+astronomy_shop_product_catalog_service_failure-localization-1,Astronomy Shop,Catalog Failure,product-catalog,"[""jaeger"", ""currency""]",0.0,122.08,8194,1,[],0.0,15.32,10015,1,Failure
+astronomy_shop_recommendation_service_cache_failure-localization-1,Astronomy Shop,Cache Failure,recommendation,[],0.0,21.39,8194,1,"[""ad""]",0.0,15.04,9530,1,Failure
+astronomy_shop_payment_service_failure-localization-1,Astronomy Shop,Payment Error,payment,"[""recommendation""]",0.0,19.5,8194,1,"[""otel-collector""]",0.0,23.63,10351,1,Failure
+astronomy_shop_ad_service_high_cpu-localization-1,Astronomy Shop,CPU Stress,ad,[],0.0,14.79,8194,1,"[""flagd""]",0.0,12.7,10011,1,Failure
+astronomy_shop_ad_service_manual_gc-localization-1,Astronomy Shop,GC Pause,ad,[],0.0,13.94,8194,1,"[""flagd""]",0.0,18.73,9999,1,Failure
+astronomy_shop_image_slow_load-localization-1,Astronomy Shop,Slow Load,image-provider,[],0.0,16.86,8194,1,"[""ad""]",0.0,18.41,10243,1,Failure
