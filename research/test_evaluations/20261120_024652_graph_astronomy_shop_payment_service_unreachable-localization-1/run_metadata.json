@@ -1,0 +1,9 @@
+{
+  "problem_id": "astronomy_shop_payment_service_unreachable-localization-1",
+  "condition": "graph",
+  "elapsed_seconds": 80.78912448883057,
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1795142822.csv",
+    "research/test_evaluations/20261120_024652_graph_astronomy_shop_payment_service_unreachable-localization-1/context/slm_context_compact.txt"
+  ]
+}

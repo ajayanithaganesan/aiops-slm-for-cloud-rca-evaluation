@@ -1,0 +1,45 @@
+{
+  "problem_id": "astronomy_shop_product_catalog_service_failure-localization-1",
+  "condition": "graph",
+  "result": {
+    "history": [
+      "role='assistant' content='```\\nsubmit([])\\n```'",
+      "role='env' content='1'"
+    ],
+    "final_state": "SubmissionStatus.VALID_SUBMISSION",
+    "results": {
+      "Localization Accuracy": 0.0,
+      "TTL": 15.315821170806885,
+      "steps": 1,
+      "in_tokens": 1,
+      "out_tokens": 5,
+      "success": false,
+      "is_subset": false
+    },
+    "framework_overhead": 292.30542373657227
+  },
+  "model_metrics": {
+    "calls": [
+      {
+        "model": "nemotron-3-nano:4b",
+        "prompt_tokens": 10015,
+        "completion_tokens": 366,
+        "total_duration_ns": 15095388500,
+        "load_duration_ns": 3612502000,
+        "prompt_eval_duration_ns": 4974057000,
+        "eval_duration_ns": 6428167000,
+        "prompt_chars": 25554,
+        "prompt_messages": 2
+      }
+    ],
+    "call_count": 1,
+    "preload_enabled": true,
+    "preload_decision_calls": 1,
+    "invalid_model_actions": 0,
+    "decision_contract_passed": true
+  },
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1795143149.csv",
+    "research/test_evaluations/20261120_025221_graph_astronomy_shop_product_catalog_service_failure-localization-1/context/slm_context_compact.txt"
+  ]
+}

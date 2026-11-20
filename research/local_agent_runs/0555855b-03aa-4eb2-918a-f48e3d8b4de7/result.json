@@ -1,0 +1,45 @@
+{
+  "problem_id": "k8s_target_port-misconfig-localization-2",
+  "condition": "graph",
+  "result": {
+    "history": [
+      "role='assistant' content='```\\nsubmit([\"text-service\"])\\n```'",
+      "role='env' content='1'"
+    ],
+    "final_state": "SubmissionStatus.VALID_SUBMISSION",
+    "results": {
+      "Localization Accuracy": 100.0,
+      "TTL": 8.624444484710693,
+      "steps": 1,
+      "in_tokens": 1,
+      "out_tokens": 8,
+      "success": true,
+      "is_subset": true
+    },
+    "framework_overhead": 150.30435419082642
+  },
+  "model_metrics": {
+    "calls": [
+      {
+        "model": "nemotron-3-nano:4b",
+        "prompt_tokens": 6015,
+        "completion_tokens": 311,
+        "total_duration_ns": 8489163500,
+        "load_duration_ns": 40809200,
+        "prompt_eval_duration_ns": 2744291000,
+        "eval_duration_ns": 5313350000,
+        "prompt_chars": 15932,
+        "prompt_messages": 2
+      }
+    ],
+    "call_count": 1,
+    "preload_enabled": true,
+    "preload_decision_calls": 1,
+    "invalid_model_actions": 0,
+    "decision_contract_passed": true
+  },
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1795135731.csv",
+    "research/test_evaluations/20261120_004845_graph_k8s_target_port-misconfig-localization-2/context/slm_context_compact.txt"
+  ]
+}

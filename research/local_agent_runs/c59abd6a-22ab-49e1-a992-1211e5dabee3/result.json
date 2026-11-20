@@ -1,0 +1,45 @@
+{
+  "problem_id": "revoke_auth_mongodb-localization-2",
+  "condition": "graph",
+  "result": {
+    "history": [
+      "role='assistant' content='```\\nsubmit([\"rate\"])\\n```'",
+      "role='env' content='1'"
+    ],
+    "final_state": "SubmissionStatus.VALID_SUBMISSION",
+    "results": {
+      "Localization Accuracy": 100.0,
+      "TTL": 8.674623012542725,
+      "steps": 1,
+      "in_tokens": 1,
+      "out_tokens": 7,
+      "success": true,
+      "is_subset": true
+    },
+    "framework_overhead": 147.12413048744202
+  },
+  "model_metrics": {
+    "calls": [
+      {
+        "model": "nemotron-3-nano:4b",
+        "prompt_tokens": 6609,
+        "completion_tokens": 302,
+        "total_duration_ns": 8542480300,
+        "load_duration_ns": 37539500,
+        "prompt_eval_duration_ns": 2996245000,
+        "eval_duration_ns": 5145600000,
+        "prompt_chars": 17323,
+        "prompt_messages": 2
+      }
+    ],
+    "call_count": 1,
+    "preload_enabled": true,
+    "preload_decision_calls": 1,
+    "invalid_model_actions": 0,
+    "decision_contract_passed": true
+  },
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1795135030.csv",
+    "research/test_evaluations/20261120_003704_graph_revoke_auth_mongodb-localization-2/context/slm_context_compact.txt"
+  ]
+}

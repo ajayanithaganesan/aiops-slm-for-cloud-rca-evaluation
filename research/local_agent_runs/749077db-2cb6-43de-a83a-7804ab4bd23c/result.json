@@ -1,0 +1,45 @@
+{
+  "problem_id": "astronomy_shop_ad_service_failure-localization-1",
+  "condition": "graph",
+  "result": {
+    "history": [
+      "role='assistant' content='```\\nsubmit([\"otel-collector\"])\\n```'",
+      "role='env' content='1'"
+    ],
+    "final_state": "SubmissionStatus.VALID_SUBMISSION",
+    "results": {
+      "Localization Accuracy": 0.0,
+      "TTL": 13.436437368392944,
+      "steps": 1,
+      "in_tokens": 1,
+      "out_tokens": 9,
+      "success": false,
+      "is_subset": false
+    },
+    "framework_overhead": 299.785448551178
+  },
+  "model_metrics": {
+    "calls": [
+      {
+        "model": "nemotron-3-nano:4b",
+        "prompt_tokens": 9973,
+        "completion_tokens": 286,
+        "total_duration_ns": 13055634800,
+        "load_duration_ns": 3307932100,
+        "prompt_eval_duration_ns": 4766237000,
+        "eval_duration_ns": 4894499000,
+        "prompt_chars": 25198,
+        "prompt_messages": 2
+      }
+    ],
+    "call_count": 1,
+    "preload_enabled": true,
+    "preload_decision_calls": 1,
+    "invalid_model_actions": 0,
+    "decision_contract_passed": true
+  },
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1795120421.csv",
+    "research/test_evaluations/20261119_203332_graph_astronomy_shop_ad_service_failure-localization-1/context/slm_context_compact.txt"
+  ]
+}

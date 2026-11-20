@@ -1,0 +1,45 @@
+{
+  "problem_id": "k8s_target_port-misconfig-localization-3",
+  "condition": "graph",
+  "result": {
+    "history": [
+      "role='assistant' content='```\\nsubmit([])\\n```'",
+      "role='env' content='1'"
+    ],
+    "final_state": "SubmissionStatus.VALID_SUBMISSION",
+    "results": {
+      "Localization Accuracy": 0.0,
+      "TTL": 14.779061079025269,
+      "steps": 1,
+      "in_tokens": 1,
+      "out_tokens": 5,
+      "success": false,
+      "is_subset": false
+    },
+    "framework_overhead": 152.79734587669373
+  },
+  "model_metrics": {
+    "calls": [
+      {
+        "model": "nemotron-3-nano:4b",
+        "prompt_tokens": 6408,
+        "completion_tokens": 648,
+        "total_duration_ns": 14518630500,
+        "load_duration_ns": 30275800,
+        "prompt_eval_duration_ns": 2949968000,
+        "eval_duration_ns": 11235933000,
+        "prompt_chars": 17149,
+        "prompt_messages": 2
+      }
+    ],
+    "call_count": 1,
+    "preload_enabled": true,
+    "preload_decision_calls": 1,
+    "invalid_model_actions": 0,
+    "decision_contract_passed": true
+  },
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1795135915.csv",
+    "research/test_evaluations/20261120_005149_graph_k8s_target_port-misconfig-localization-3/context/slm_context_compact.txt"
+  ]
+}

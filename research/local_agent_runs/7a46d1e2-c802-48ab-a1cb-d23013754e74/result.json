@@ -1,0 +1,45 @@
+{
+  "problem_id": "user_unregistered_mongodb-localization-2",
+  "condition": "graph",
+  "result": {
+    "history": [
+      "role='assistant' content='```\\nsubmit([\"rate\"])\\n```'",
+      "role='env' content='1'"
+    ],
+    "final_state": "SubmissionStatus.VALID_SUBMISSION",
+    "results": {
+      "Localization Accuracy": 100.0,
+      "TTL": 4.4621710777282715,
+      "steps": 1,
+      "in_tokens": 1,
+      "out_tokens": 7,
+      "success": true,
+      "is_subset": true
+    },
+    "framework_overhead": 134.6519479751587
+  },
+  "model_metrics": {
+    "calls": [
+      {
+        "model": "nemotron-3-nano:4b",
+        "prompt_tokens": 3475,
+        "completion_tokens": 127,
+        "total_duration_ns": 4166378000,
+        "load_duration_ns": 20293700,
+        "prompt_eval_duration_ns": 1650140000,
+        "eval_duration_ns": 2137661999,
+        "prompt_chars": 9971,
+        "prompt_messages": 2
+      }
+    ],
+    "call_count": 1,
+    "preload_enabled": true,
+    "preload_decision_calls": 1,
+    "invalid_model_actions": 0,
+    "decision_contract_passed": true
+  },
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1795135360.csv",
+    "research/test_evaluations/20261120_004234_graph_user_unregistered_mongodb-localization-2/context/slm_context_compact.txt"
+  ]
+}

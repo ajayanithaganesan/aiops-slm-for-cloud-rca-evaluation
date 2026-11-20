@@ -1,0 +1,52 @@
+CLOUD-AGNOSTIC TRACE ANALYSIS
+======================================================================
+Input: /home/codespace/AIOpsLab/trace_output/traces_1795144151.csv
+Spans: 2483
+Traces: 355
+Services: 16
+
+Services:
+  - ad
+  - cart
+  - chatbot
+  - currency
+  - flagd
+  - frontend
+  - frontend-proxy
+  - frontend-web
+  - image-provider
+  - load-generator
+  - mcp
+  - payment
+  - product-catalog
+  - quote
+  - recommendation
+  - shipping
+
+Dependency edges:
+  - frontend-proxy -> frontend (189)
+  - frontend -> product-catalog (94)
+  - load-generator -> frontend-proxy (89)
+  - frontend-web -> frontend-proxy (85)
+  - frontend -> cart (69)
+  - frontend-proxy -> image-provider (60)
+  - frontend -> currency (13)
+  - recommendation -> product-catalog (13)
+  - frontend -> recommendation (13)
+  - frontend-proxy -> flagd (7)
+  - load-generator -> flagd (5)
+  - cart -> flagd (4)
+  - ad -> flagd (3)
+  - frontend -> ad (2)
+  - frontend -> shipping (1)
+  - shipping -> quote (1)
+  - recommendation -> flagd (1)
+
+Explicit errors: 107
+Latency anomalies: 100
+
+Output files:
+  raw_traces.json
+  dependency_graph.json
+  telemetry_summary.json
+  slm_context.txt
