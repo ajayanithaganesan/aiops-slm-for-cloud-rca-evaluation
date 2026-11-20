@@ -1,0 +1,47 @@
+AIOpsLab LOCAL SLM EVALUATION
+timestamp: 2026-11-20T02:59:12
+problem_id: astronomy_shop_recommendation_service_cache_failure-localization-1
+condition: graph
+model: nemotron-3-nano:4b
+elapsed_seconds: 81.276
+max_steps: 10
+steps: 1
+input_tokens: 9530
+output_tokens: 389
+model_calls: 1
+tools_observed: submit
+context_files: /home/codespace/AIOpsLab/trace_output/traces_1795143479.csv, research/test_evaluations/20261120_025751_graph_astronomy_shop_recommendation_service_cache_failure-localization-1/context/slm_context_compact.txt
+
+RESULTS
+{
+  "history": [
+    "role='assistant' content='```\\nsubmit([\"ad\"])\\n```'",
+    "role='env' content='1'"
+  ],
+  "final_state": "SubmissionStatus.VALID_SUBMISSION",
+  "results": {
+    "Localization Accuracy": 0.0,
+    "TTL": 15.040906190872192,
+    "steps": 1,
+    "in_tokens": 1,
+    "out_tokens": 7,
+    "success": false,
+    "is_subset": false
+  },
+  "framework_overhead": 294.8129971027374
+}
+
+MODEL_CALL_METRICS
+[
+  {
+    "model": "nemotron-3-nano:4b",
+    "prompt_tokens": 9530,
+    "completion_tokens": 389,
+    "total_duration_ns": 14786968900,
+    "load_duration_ns": 3346921100,
+    "prompt_eval_duration_ns": 4611515000,
+    "eval_duration_ns": 6748816000,
+    "prompt_chars": 24233,
+    "prompt_messages": 2
+  }
+]

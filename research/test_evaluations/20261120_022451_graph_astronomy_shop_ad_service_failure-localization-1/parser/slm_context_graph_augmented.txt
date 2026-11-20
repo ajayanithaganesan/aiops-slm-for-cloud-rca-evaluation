@@ -1,0 +1,1249 @@
+DISTRIBUTED SYSTEM TELEMETRY RCA CONTEXT
+Telemetry source: traces_1795141495.csv
+Total spans: 1702
+Unique services: 17
+
+UNIVERSAL EVIDENCE PROFILE
+- Differential trace execution: 123 anomalous traces (errors/failures), 213 nominal baseline traces
+- Ambient background infrastructure & sidecars (healthy utility components, NOT root cause): flagd (in_degree_ratio=0.312, median_duration=110.0us)
+- Error propagation DAG terminal leaves (deepest failure points): frontend: 86 sinks, frontend-proxy: 70 sinks, ad: 11 sinks, load-generator: 11 sinks, recommendation: 8 sinks, agent: 4 sinks
+- Critical-path span self-time bottlenecks (excluding child waits):
+  - load-generator | browser_change_currency (avg_self_time=60113632.0us, count=1)
+  - load-generator | browser_add_to_cart (avg_self_time=17347826.6us, count=5)
+  - accounting | order-consumed (avg_self_time=1886386.0us, count=1)
+  - chatbot | HEAD (avg_self_time=603623.0us, count=1)
+  - agent | ChatLLM.chat (avg_self_time=563316.0us, count=10)
+- Incident scope: spans=1702, traces=336, services=17, operations=100
+- Behavioural evidence: highest-volume operations
+  - frontend-proxy | GET | count=248
+  - frontend-proxy | router frontend egress | count=242
+  - frontend-web | resourceFetch | count=103
+  - load-generator | GET | count=84
+  - frontend | GET | count=53
+  - frontend | GET /api/products/[productId]/index | count=48
+  - frontend-web | GET | count=46
+  - load-generator | POST | count=43
+  - flagd | resolveBoolean | count=36
+  - frontend-proxy | POST | count=36
+- Dependency evidence:
+  - frontend-proxy -> frontend | observations=138
+  - load-generator -> frontend-proxy | observations=115
+  - frontend-web -> frontend-proxy | observations=53
+  - frontend-proxy -> image-provider | observations=18
+  - frontend -> ad | observations=6
+  - frontend -> recommendation | observations=6
+  - load-generator -> agent | observations=5
+  - frontend -> product-catalog | observations=4
+  - frontend -> currency | observations=4
+  - ad -> flagd | observations=3
+  - frontend-proxy -> flagd | observations=3
+  - cart -> flagd | observations=1
+  - recommendation -> flagd | observations=1
+  - load-generator -> flagd | observations=1
+  - agent -> frontend | observations=1
+  - frontend -> checkout | observations=1
+- Error/status evidence: explicit_span_errors=662, status_or_error_records=662
+  - Response distribution:
+    - Unknown: 799
+    - 200: 387
+    - 500: 306
+    - 503: 130
+    - 0: 70
+    - 308: 10
+- Performance evidence: latency_anomalies=100
+- Temporal failure evidence:
+  - service=load-generator | operation=GET | first_error_seen=1795141296115624 | last_error_seen=1795141485900304 | error_observations=74
+  - service=frontend-proxy | operation=GET | first_error_seen=1795141296117722 | last_error_seen=1795141493893236 | error_observations=103
+  - service=load-generator | operation=POST | first_error_seen=1795141296122181 | last_error_seen=1795141471725361 | error_observations=37
+  - service=frontend-proxy | operation=POST | first_error_seen=1795141296122827 | last_error_seen=1795141481558440 | error_observations=33
+  - service=agent | operation=GET | first_error_seen=1795141355891877 | last_error_seen=1795141407051081 | error_observations=4
+  - service=frontend-proxy | operation=router frontend egress | first_error_seen=1795141416884129 | last_error_seen=1795141493893521 | error_observations=68
+  - service=frontend | operation=GET /api/products/[productId]/index | first_error_seen=1795141417921000 | last_error_seen=1795141473670000 | error_observations=42
+  - service=frontend | operation=executing api route (pages) /api/products/[productId]/index | first_error_seen=1795141417930000 | last_error_seen=1795141473671000 | error_observations=21
+  - service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | first_error_seen=1795141417949000 | last_error_seen=1795141473676000 | error_observations=21
+  - service=frontend | operation=GET /api/recommendations | first_error_seen=1795141417957000 | last_error_seen=1795141485971000 | error_observations=12
+  - service=frontend | operation=executing api route (pages) /api/recommendations | first_error_seen=1795141417960000 | last_error_seen=1795141485972000 | error_observations=6
+  - service=frontend | operation=oteldemo.RecommendationService/ListRecommendations | first_error_seen=1795141417961000 | last_error_seen=1795141485972000 | error_observations=6
+  - service=frontend | operation=tcp.connect | first_error_seen=1795141417969000 | last_error_seen=1795141476315000 | error_observations=24
+  - service=recommendation | operation=get_product_list | first_error_seen=1795141418015606 | last_error_seen=1795141486196119 | error_observations=6
+  - service=recommendation | operation=flagd.evaluation.v2.Service/ResolveBoolean | first_error_seen=1795141418016994 | last_error_seen=1795141436063978 | error_observations=2
+  - service=frontend | operation=POST /api/cart | first_error_seen=1795141418220000 | last_error_seen=1795141481561000 | error_observations=22
+  - service=frontend | operation=executing api route (pages) /api/cart | first_error_seen=1795141418224000 | last_error_seen=1795141485969000 | error_observations=26
+  - service=frontend | operation=oteldemo.CartService/AddItem | first_error_seen=1795141418224000 | last_error_seen=1795141481564000 | error_observations=11
+  - service=recommendation | operation=oteldemo.ProductCatalogService/ListProducts | first_error_seen=1795141418542977 | last_error_seen=1795141486196630 | error_observations=6
+  - service=frontend | operation=POST /api/checkout | first_error_seen=1795141432215000 | last_error_seen=1795141471765000 | error_observations=4
+- Service failure comparison:
+  - service=accounting | explicit_errors=1 | failed_operations=receive orders | first_error_seen=1795141440958611 | last_error_seen=1795141440958611
+  - service=ad | explicit_errors=11 | failed_operations=flagd.evaluation.v2.Service/ResolveBoolean | first_error_seen=1795141444142165 | last_error_seen=1795141471971020
+  - service=agent | explicit_errors=4 | failed_operations=GET | first_error_seen=1795141355891877 | last_error_seen=1795141407051081
+  - service=cart | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=chatbot | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=checkout | explicit_errors=2 | failed_operations=oteldemo.CartService/GetCart, oteldemo.CheckoutService/PlaceOrder | first_error_seen=1795141471771991 | last_error_seen=1795141471817561
+  - service=currency | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=flagd | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=frontend | explicit_errors=288 | failed_operations=GET /api/cart, GET /api/products/[productId]/index, GET /api/products/index, GET /api/recommendations, POST /api/cart, POST /api/checkout, executing api route (pages) /api/cart, executing api route (pages) /api/checkout, executing api route (pages) /api/products/[productId]/index, executing api route (pages) /api/products/index, executing api route (pages) /api/recommendations, oteldemo.CartService/AddItem, oteldemo.CartService/GetCart, oteldemo.CheckoutService/PlaceOrder, oteldemo.ProductCatalogService/GetProduct, oteldemo.ProductCatalogService/ListProducts, oteldemo.RecommendationService/ListRecommendations, tcp.connect | first_error_seen=1795141417921000 | last_error_seen=1795141485972000
+  - service=frontend-proxy | explicit_errors=204 | failed_operations=GET, POST, router frontend egress | first_error_seen=1795141296117722 | last_error_seen=1795141493893521
+  - service=frontend-web | explicit_errors=27 | failed_operations=GET, POST | first_error_seen=1795141433432000 | last_error_seen=1795141493878000
+  - service=image-provider | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=load-generator | explicit_errors=111 | failed_operations=GET, POST | first_error_seen=1795141296115624 | last_error_seen=1795141485900304
+  - service=mcp | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=payment | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=product-catalog | explicit_errors=0 | failed_operations=none | first_error_seen=unavailable | last_error_seen=unavailable
+  - service=recommendation | explicit_errors=14 | failed_operations=flagd.evaluation.v2.Service/ResolveBoolean, get_product_list, oteldemo.ProductCatalogService/ListProducts | first_error_seen=1795141418015606 | last_error_seen=1795141486196630
+- Evidence limitations / interpretation safeguards:
+  - No dedicated status-code field was present; response values are available as status-related evidence.
+  - No dedicated error/exception text field was present in the supplied telemetry.
+  - Absence of observed errors is not evidence that the incident contained no failure.
+  - Latency anomalies identify unusual performance behaviour; they do not establish root cause.
+  - The parser does not use incident ground truth when constructing evidence.
+
+STATUS AND ERROR EVIDENCE
+- Extracted status/error/message records: 662
+- Records by service:
+    frontend: 288
+    frontend-proxy: 204
+    load-generator: 111
+    frontend-web: 27
+    recommendation: 14
+    ad: 11
+    agent: 4
+    checkout: 2
+    accounting: 1
+- Records by service and operation:
+    frontend-proxy | GET: 103
+    load-generator | GET: 74
+    frontend-proxy | router frontend egress: 68
+    frontend | GET /api/products/[productId]/index: 42
+    load-generator | POST: 37
+    frontend-proxy | POST: 33
+    frontend | GET /api/cart: 30
+    frontend | executing api route (pages) /api/cart: 26
+    frontend-web | GET: 26
+    frontend | tcp.connect: 24
+    frontend | GET /api/products/index: 22
+    frontend | POST /api/cart: 22
+    frontend | executing api route (pages) /api/products/[productId]/index: 21
+    frontend | oteldemo.ProductCatalogService/GetProduct: 21
+    frontend | oteldemo.CartService/GetCart: 15
+- Response values in extracted records:
+    500: 306
+    Unknown: 226
+    503: 130
+- Explicit error flag values:
+    True: 662
+- Repeated status/error details:
+    response=500 | has_error=True: 306
+    has_error=True: 226
+    response=503 | has_error=True: 130
+- Representative trace references (up to 5):
+    trace=045e09031a426689acc66830b131d9c9 | observed_services=frontend-proxy -> load-generator | evidence=has_error=True; response=503
+    trace=06bf0ff91d7b20a8f1834ea7dd4a657a | observed_services=frontend -> frontend-proxy -> frontend-web | evidence=has_error=True; response=500
+    trace=08b48837db093f265c6a45ce26c277cb | observed_services=frontend-proxy -> load-generator | evidence=has_error=True; response=503
+    trace=0938735ba652433f5828fb01bf12efea | observed_services=frontend-proxy -> load-generator | evidence=has_error=True; response=503
+    trace=095e282cf8601f4357ac702c4dda1b9a | observed_services=accounting | evidence=has_error=True
+- This section aggregates extracted records. Consult retained raw telemetry for individual spans and complete field values.
+
+SERVICE DEPENDENCY GRAPH
+- frontend-proxy -> frontend (observed relationships: 138)
+- load-generator -> frontend-proxy (observed relationships: 115)
+- frontend-web -> frontend-proxy (observed relationships: 53)
+- frontend-proxy -> image-provider (observed relationships: 18)
+- frontend -> ad (observed relationships: 6)
+- frontend -> recommendation (observed relationships: 6)
+- load-generator -> agent (observed relationships: 5)
+- frontend -> product-catalog (observed relationships: 4)
+- frontend -> currency (observed relationships: 4)
+- ad -> flagd (observed relationships: 3)
+- frontend-proxy -> flagd (observed relationships: 3)
+- cart -> flagd (observed relationships: 1)
+- recommendation -> flagd (observed relationships: 1)
+- load-generator -> flagd (observed relationships: 1)
+- agent -> frontend (observed relationships: 1)
+- frontend -> checkout (observed relationships: 1)
+
+SERVICE TELEMETRY SUMMARY
+- frontend-proxy: spans=569, mean_duration=136894.13356766256, p95=166699.40000000002, max=16076353.0, explicit_errors=204
+- frontend: spans=437, mean_duration=105250.69794050344, p95=535466.0, max=3554021.0, explicit_errors=288
+- load-generator: spans=227, mean_duration=1070020.5550660794, p95=3565841.1, max=60113632.0, explicit_errors=111
+- frontend-web: spans=168, mean_duration=299681.54761904763, p95=702600.0, max=2227000.0, explicit_errors=27
+- flagd: spans=71, mean_duration=227999.4366197183, p95=11436.0, max=16076011.0, explicit_errors=0
+- agent: spans=70, mean_duration=628048.3428571429, p95=2139397.75, max=3030590.0, explicit_errors=4
+- ad: spans=55, mean_duration=370429.2727272727, p95=1513626.8, max=3115686.0, explicit_errors=11
+- image-provider: spans=38, mean_duration=789.4736842105264, p95=449.99999999999574, max=27000.0, explicit_errors=0
+- product-catalog: spans=30, mean_duration=5550.766666666666, p95=23248.899999999994, max=24033.0, explicit_errors=0
+- recommendation: spans=21, mean_duration=172359.61904761905, p95=555365.0, max=564609.0, explicit_errors=14
+- currency: spans=5, mean_duration=207.4, p95=720.1999999999998, max=889.0, explicit_errors=0
+- checkout: spans=3, mean_duration=26408.666666666668, p95=45079.1, max=46485.0, explicit_errors=2
+- chatbot: spans=2, mean_duration=382695.0, p95=581530.2, max=603623.0, explicit_errors=0
+- cart: spans=2, mean_duration=16681.0, p95=19873.3, max=20228.0, explicit_errors=0
+- accounting: spans=2, mean_duration=1292000.0, p95=2140873.7, max=2235193.0, explicit_errors=1
+- payment: spans=1, mean_duration=1412.0, p95=1412.0, max=1412.0, explicit_errors=0
+- mcp: spans=1, mean_duration=371840.0, p95=371840.0, max=371840.0, explicit_errors=0
+
+TOP OPERATIONS BY TRACE VOLUME
+- frontend-proxy | GET | count=248 | mean=69490.43145161291 | p95=113694.14999999906 | max=3552833.0 | errors=103
+- frontend-proxy | router frontend egress | count=242 | mean=91976.82644628099 | p95=246360.89999999906 | max=3552657.0 | errors=68
+- frontend-web | resourceFetch | count=103 | mean=285928.1553398058 | p95=470170.0 | max=521300.0 | errors=0
+- load-generator | GET | count=84 | mean=225848.2619047619 | p95=1143955.1500000001 | max=3563942.0 | errors=74
+- frontend | GET | count=53 | mean=18018.056603773584 | p95=55132.2 | max=71227.0 | errors=0
+- frontend | GET /api/products/[productId]/index | count=48 | mean=21553.125 | p95=62382.75 | max=115948.0 | errors=42
+- frontend-web | GET | count=46 | mean=340173.9130434783 | p95=1057250.0 | max=2227000.0 | errors=26
+- load-generator | POST | count=43 | mean=618029.4883720931 | p95=2635321.499999999 | max=11043856.0 | errors=37
+- flagd | resolveBoolean | count=36 | mean=638.5277777777778 | p95=2717.75 | max=10137.0 | errors=0
+- frontend-proxy | POST | count=36 | mean=606196.8055555555 | p95=1568824.5 | max=16075624.0 | errors=33
+- frontend-proxy | router image-provider egress | count=34 | mean=13339.382352941177 | p95=52319.349999999955 | max=85092.0 | errors=0
+- frontend | GET /api/cart | count=30 | mean=13946.333333333334 | p95=47221.349999999926 | max=62679.0 | errors=30
+- frontend | tcp.connect | count=29 | mean=3357.793103448276 | p95=17612.199999999993 | max=43794.0 | errors=24
+- load-generator | user_browse_product | count=27 | mean=146042.25925925927 | p95=551830.5 | max=1145257.0 | errors=0
+- frontend | executing api route (pages) /api/cart | count=26 | mean=12907.76923076923 | p95=29194.25 | max=78907.0 | errors=26
+- frontend | oteldemo.ProductCatalogService/GetProduct | count=24 | mean=5983.458333333333 | p95=22880.849999999966 | max=53320.0 | errors=21
+- frontend | executing api route (pages) /api/products/[productId]/index | count=24 | mean=14420.625 | p95=51689.649999999965 | max=73311.0 | errors=21
+- frontend | GET /api/products/index | count=24 | mean=12912.875 | p95=27995.2 | max=28989.0 | errors=22
+- frontend | POST /api/cart | count=22 | mean=25396.68181818182 | p95=80748.4 | max=90815.0 | errors=22
+- load-generator | user_add_to_cart | count=21 | mean=325106.3333333333 | p95=1359775.0 | max=3670414.0 | errors=0
+- image-provider | GET /status | count=20 | mean=0.0 | p95=0.0 | max=0.0 | errors=0
+- flagd | flagd.evaluation.v2.Service/ResolveBoolean | count=18 | mean=751.3888888888889 | p95=2469.399999999987 | max=10201.0 | errors=0
+- image-provider | GET | count=18 | mean=1666.6666666666667 | p95=6599.999999999965 | max=27000.0 | errors=0
+- ad | GET /metrics | count=15 | mean=59999.13333333333 | p95=264933.59999999934 | max=702351.0 | errors=0
+- product-catalog | astronomy-db | count=15 | mean=2600.5333333333333 | p95=7447.499999999993 | max=12393.0 | errors=0
+- frontend | oteldemo.CartService/GetCart | count=15 | mean=2388.733333333333 | p95=8616.999999999993 | max=12859.0 | errors=15
+- load-generator | user_view_cart | count=15 | mean=61776.26666666667 | p95=235403.5999999995 | max=560422.0 | errors=0
+- ad | flagd.evaluation.v2.Service/ResolveBoolean | count=14 | mean=402900.14285714284 | p95=519148.5 | max=535873.0 | errors=11
+- ad | resolve | count=14 | mean=413542.35714285716 | p95=519465.75 | max=536252.0 | errors=0
+- frontend | GET /api/data | count=12 | mean=1377139.75 | p95=3553488.05 | max=3554021.0 | errors=0
+
+CAUSAL EVIDENCE PATTERNS
+- Unique service-level path patterns: 25
+  Path 1: load-generator -> frontend-proxy
+    affected traces: 77
+    span observations: 230
+    latency-anomalous spans: 27
+    key operations:
+      - router frontend egress: 115 observations
+      - GET: 89 observations
+      - POST: 26 observations
+  Path 2: frontend-proxy -> frontend
+    affected traces: 55
+    span observations: 78
+    latency-anomalous spans: 3
+    key operations:
+      - GET: 48 observations
+      - GET /: 6 observations
+      - GET /api/currency: 4 observations
+      - resolve page components: 3 observations
+      - render route (pages) /: 3 observations
+  Path 3: frontend-web -> frontend-proxy
+    affected traces: 53
+    span observations: 106
+    latency-anomalous spans: 3
+    key operations:
+      - GET: 46 observations
+      - router frontend egress: 32 observations
+      - router image-provider egress: 15 observations
+      - POST: 7 observations
+      - router flagservice egress: 6 observations
+  Path 4: load-generator -> frontend-proxy -> frontend
+    affected traces: 32
+    span observations: 235
+    latency-anomalous spans: 7
+    key operations:
+      - GET /api/products/[productId]/index: 46 observations
+      - tcp.connect: 28 observations
+      - oteldemo.ProductCatalogService/GetProduct: 23 observations
+      - executing api route (pages) /api/products/[productId]/index: 23 observations
+      - POST /api/cart: 20 observations
+  Path 5: frontend-web -> frontend-proxy -> frontend
+    affected traces: 30
+    span observations: 120
+    latency-anomalous spans: 7
+    key operations:
+      - GET /api/cart: 24 observations
+      - GET /api/products/index: 22 observations
+      - executing api route (pages) /api/cart: 13 observations
+      - oteldemo.CartService/GetCart: 12 observations
+      - oteldemo.ProductCatalogService/ListProducts: 11 observations
+  Path 6: frontend-web -> frontend-proxy -> image-provider
+    affected traces: 10
+    span observations: 10
+    latency-anomalous spans: 0
+    key operations:
+      - GET: 10 observations
+  Path 7: frontend-proxy -> image-provider
+    affected traces: 8
+    span observations: 8
+    latency-anomalous spans: 0
+    key operations:
+      - GET: 8 observations
+  Path 8: load-generator -> agent
+    affected traces: 5
+    span observations: 70
+    latency-anomalous spans: 2
+    key operations:
+      - POST /prompt http send: 10 observations
+      - ChatLLM.chat: 10 observations
+      - execute_task model: 10 observations
+      - POST /prompt http receive: 5 observations
+      - POST /prompt: 5 observations
+  Path 9: load-generator -> frontend-proxy -> frontend -> ad
+    affected traces: 5
+    span observations: 34
+    latency-anomalous spans: 2
+    key operations:
+      - flagd.evaluation.v2.Service/ResolveBoolean: 12 observations
+      - resolve: 12 observations
+      - oteldemo.AdService/GetAds: 5 observations
+      - getAdsByCategory: 4 observations
+      - getRandomAds: 1 observations
+  Path 10: load-generator -> frontend-proxy -> frontend -> recommendation
+    affected traces: 3
+    span observations: 11
+    latency-anomalous spans: 1
+    key operations:
+      - oteldemo.ProductCatalogService/ListProducts: 3 observations
+      - oteldemo.RecommendationService/ListRecommendations: 3 observations
+      - get_product_list: 3 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 2 observations
+  Path 11: frontend-web -> frontend-proxy -> frontend -> recommendation
+    affected traces: 3
+    span observations: 10
+    latency-anomalous spans: 0
+    key operations:
+      - oteldemo.ProductCatalogService/ListProducts: 3 observations
+      - oteldemo.RecommendationService/ListRecommendations: 3 observations
+      - get_product_list: 3 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 1 observations
+  Path 12: frontend-proxy -> flagd
+    affected traces: 3
+    span observations: 7
+    latency-anomalous spans: 0
+    key operations:
+      - resolveAll: 4 observations
+      - flagd.evaluation.v1.Service/ResolveAll: 2 observations
+      - flagd.evaluation.v1.Service/EventStream: 1 observations
+  Path 13: frontend-web -> frontend-proxy -> frontend -> product-catalog
+    affected traces: 2
+    span observations: 4
+    latency-anomalous spans: 1
+    key operations:
+      - astronomy-db: 2 observations
+      - oteldemo.ProductCatalogService/GetProduct: 1 observations
+      - oteldemo.ProductCatalogService/ListProducts: 1 observations
+  Path 14: load-generator -> frontend-proxy -> frontend -> product-catalog
+    affected traces: 2
+    span observations: 4
+    latency-anomalous spans: 0
+    key operations:
+      - astronomy-db: 2 observations
+      - oteldemo.ProductCatalogService/GetProduct: 2 observations
+  Path 15: frontend-proxy -> frontend -> currency
+    affected traces: 2
+    span observations: 2
+    latency-anomalous spans: 0
+    key operations:
+      - oteldemo.CurrencyService/GetSupportedCurrencies: 2 observations
+  Path 16: frontend-web -> frontend-proxy -> frontend -> ad
+    affected traces: 1
+    span observations: 6
+    latency-anomalous spans: 0
+    key operations:
+      - flagd.evaluation.v2.Service/ResolveBoolean: 2 observations
+      - resolve: 2 observations
+      - getAdsByCategory: 1 observations
+      - oteldemo.AdService/GetAds: 1 observations
+  Path 17: frontend-web -> frontend-proxy -> frontend -> ad -> flagd
+    affected traces: 1
+    span observations: 6
+    latency-anomalous spans: 0
+    key operations:
+      - resolveBoolean: 4 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 2 observations
+  Path 18: load-generator -> agent -> frontend
+    affected traces: 1
+    span observations: 4
+    latency-anomalous spans: 0
+    key operations:
+      - GET /api/currency: 2 observations
+      - oteldemo.CurrencyService/GetSupportedCurrencies: 1 observations
+      - executing api route (pages) /api/currency: 1 observations
+  Path 19: load-generator -> frontend-proxy -> frontend -> ad -> flagd
+    affected traces: 1
+    span observations: 3
+    latency-anomalous spans: 3
+    key operations:
+      - resolveBoolean: 2 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 1 observations
+  Path 20: cart -> flagd
+    affected traces: 1
+    span observations: 3
+    latency-anomalous spans: 0
+    key operations:
+      - resolveBoolean: 2 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 1 observations
+  Path 21: frontend-web -> frontend-proxy -> frontend -> recommendation -> flagd
+    affected traces: 1
+    span observations: 3
+    latency-anomalous spans: 0
+    key operations:
+      - resolveBoolean: 2 observations
+      - flagd.evaluation.v2.Service/ResolveBoolean: 1 observations
+  Path 22: load-generator -> frontend-proxy -> frontend -> checkout
+    affected traces: 1
+    span observations: 3
+    latency-anomalous spans: 0
+    key operations:
+      - oteldemo.CartService/GetCart: 1 observations
+      - oteldemo.CheckoutService/PlaceOrder: 1 observations
+      - prepareOrderItemsAndShippingQuoteFromCart: 1 observations
+  Path 23: load-generator -> flagd
+    affected traces: 1
+    span observations: 2
+    latency-anomalous spans: 0
+    key operations:
+      - resolveAnyValue: 1 observations
+      - POST: 1 observations
+  Path 24: frontend-web -> frontend-proxy -> frontend -> currency
+    affected traces: 1
+    span observations: 1
+    latency-anomalous spans: 0
+    key operations:
+      - oteldemo.CurrencyService/GetSupportedCurrencies: 1 observations
+  Path 25: load-generator -> agent -> frontend -> currency
+    affected traces: 1
+    span observations: 1
+    latency-anomalous spans: 0
+    key operations:
+      - oteldemo.CurrencyService/GetSupportedCurrencies: 1 observations
+
+EXPLICIT ERROR EVIDENCE
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=503063.0 | response=Unknown | trace=8c606d1f4666ed5e3ea741c0591c724e | span=81fb92aefb9fa629
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=501469.0 | response=Unknown | trace=8c606d1f4666ed5e3ea741c0591c724e | span=634ea23a95295d8b
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=501115.0 | response=Unknown | trace=689becc0e97a87b2293d84ffcdd16b8d | span=dde2dfc488d04433
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=502994.0 | response=Unknown | trace=689becc0e97a87b2293d84ffcdd16b8d | span=297c8999a0e6d041
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=500925.0 | response=Unknown | trace=689becc0e97a87b2293d84ffcdd16b8d | span=3c8542f24fc0a94b
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=501480.0 | response=Unknown | trace=bd4c587e548cc06ca0cca12181d80b39 | span=9e960383a95a2702
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=501205.0 | response=Unknown | trace=bd4c587e548cc06ca0cca12181d80b39 | span=da40dd951f6f362c
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=505484.0 | response=Unknown | trace=bd4c587e548cc06ca0cca12181d80b39 | span=b79b51eefc4b8ae0
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=49921.0 | response=Unknown | trace=9e1cdc9df69e22c66a30ee80fe0f1561 | span=92d03ca22690dbed
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=535873.0 | response=Unknown | trace=9e1cdc9df69e22c66a30ee80fe0f1561 | span=0b8f7fbdb9710fd7
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=501209.0 | response=Unknown | trace=9e1cdc9df69e22c66a30ee80fe0f1561 | span=6a44512f5416c17e
+- service=frontend-proxy | operation=router frontend egress | duration=5873.0 | response=500 | trace=42b58e11f0bee5407e82cc2b981ec931 | span=42f45fbad03937f5
+- service=frontend-proxy | operation=GET | duration=6192.0 | response=500 | trace=42b58e11f0bee5407e82cc2b981ec931 | span=ad530876220b8b63
+- service=frontend-web | operation=GET | duration=31000.0 | response=Unknown | trace=42b58e11f0bee5407e82cc2b981ec931 | span=8c05ba85f783d07b
+- service=frontend-proxy | operation=router frontend egress | duration=63012.0 | response=500 | trace=d611e2328837303f0ae44df063c71c65 | span=123b356d20f3b560
+- service=frontend-proxy | operation=GET | duration=63239.0 | response=500 | trace=d611e2328837303f0ae44df063c71c65 | span=bf0ee98977e53d26
+- service=frontend | operation=oteldemo.CartService/GetCart | duration=6799.0 | response=Unknown | trace=d611e2328837303f0ae44df063c71c65 | span=6d5644579f9de052
+- service=frontend | operation=executing api route (pages) /api/cart | duration=16042.0 | response=500 | trace=d611e2328837303f0ae44df063c71c65 | span=9d7a1e73db809194
+- service=frontend | operation=GET /api/cart | duration=58686.0 | response=500 | trace=d611e2328837303f0ae44df063c71c65 | span=283e5ac98c892542
+- service=frontend | operation=GET /api/cart | duration=62679.0 | response=Unknown | trace=d611e2328837303f0ae44df063c71c65 | span=49597e1705c040a7
+- service=frontend-web | operation=GET | duration=2227000.0 | response=Unknown | trace=d611e2328837303f0ae44df063c71c65 | span=76252a0d5bfc3cc3
+- service=frontend-proxy | operation=router frontend egress | duration=381843.0 | response=500 | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=ee160325c09c4b25
+- service=frontend-proxy | operation=GET | duration=381939.0 | response=500 | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=3f17bb9c877d6e18
+- service=recommendation | operation=oteldemo.ProductCatalogService/ListProducts | duration=5054.0 | response=Unknown | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=d5873904ff2d1a38
+- service=recommendation | operation=get_product_list | duration=7641.0 | response=Unknown | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=f0acafe583b12bd8
+- service=frontend | operation=oteldemo.RecommendationService/ListRecommendations | duration=329211.0 | response=Unknown | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=e028cdd81e767a03
+- service=frontend | operation=executing api route (pages) /api/recommendations | duration=331573.0 | response=500 | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=f38daeadffa7e57c
+- service=frontend | operation=GET /api/recommendations | duration=332474.0 | response=500 | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=177c1546b2383919
+- service=frontend | operation=GET /api/recommendations | duration=332864.0 | response=Unknown | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=9dc91f47299f102b
+- service=frontend-web | operation=GET | duration=1821000.0 | response=Unknown | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=0d675462df5653fa
+
+UNUSUAL LATENCY EVIDENCE
+- service=frontend-proxy | operation=router flagservice egress | duration=16076353.0 | robust_z=13690.417 | trace=1ac8a3eac78a388a647b65088253149a
+- service=frontend-proxy | operation=POST | duration=16075624.0 | robust_z=2335.367 | trace=1ac8a3eac78a388a647b65088253149a
+- service=frontend-proxy | operation=POST | duration=3094800.0 | robust_z=449.001 | trace=b41838943a49d98320d54c3cbe3ad031
+- service=load-generator | operation=POST | duration=11043856.0 | robust_z=330.228 | trace=a988481a2642265fe437eb8f8bf5654c
+- service=frontend | operation=tcp.connect | duration=43794.0 | robust_z=226.559 | trace=c7e1c96e9037154378340c4af29a968c
+- service=flagd | operation=resolveBoolean | duration=10137.0 | robust_z=226.373 | trace=8c606d1f4666ed5e3ea741c0591c724e
+- service=flagd | operation=resolveBoolean | duration=10061.0 | robust_z=224.665 | trace=8c606d1f4666ed5e3ea741c0591c724e
+- service=frontend-proxy | operation=GET | duration=3552833.0 | robust_z=214.733 | trace=9e1cdc9df69e22c66a30ee80fe0f1561
+- service=frontend-proxy | operation=router frontend egress | duration=3552657.0 | robust_z=197.378 | trace=9e1cdc9df69e22c66a30ee80fe0f1561
+- service=frontend-proxy | operation=router frontend egress | duration=3094599.0 | robust_z=171.839 | trace=b41838943a49d98320d54c3cbe3ad031
+- service=frontend-proxy | operation=POST | duration=1060166.0 | robust_z=153.33 | trace=f550396f4798fcf486ccea43df2bbd65
+- service=frontend-proxy | operation=POST | duration=1027722.0 | robust_z=148.615 | trace=e06869a00a52ae92df93e60a4426f7ec
+- service=currency | operation=oteldemo.CurrencyService/GetSupportedCurrencies | duration=889.0 | robust_z=143.668 | trace=b4b66d66571aebf94f74ce64cfe424d6
+- service=flagd | operation=flagd.evaluation.v2.Service/ResolveBoolean | duration=10201.0 | robust_z=140.046 | trace=8c606d1f4666ed5e3ea741c0591c724e
+- service=load-generator | operation=GET | duration=3563942.0 | robust_z=133.243 | trace=9e1cdc9df69e22c66a30ee80fe0f1561
+- service=load-generator | operation=POST | duration=3631086.0 | robust_z=108.079 | trace=b41838943a49d98320d54c3cbe3ad031
+- service=agent | operation=POST /prompt http receive | duration=1295.0 | robust_z=106.655 | trace=d1dbd46e83856d12bfdee4ae821faa5e
+- service=frontend-proxy | operation=GET | duration=1624787.0 | robust_z=97.785 | trace=8c606d1f4666ed5e3ea741c0591c724e
+- service=frontend | operation=tcp.connect | duration=18873.0 | robust_z=96.255 | trace=b4328986a758c5cef6eb70525631a407
+- service=load-generator | operation=GET | duration=2469911.0 | robust_z=92.075 | trace=8c606d1f4666ed5e3ea741c0591c724e
+- service=frontend-proxy | operation=GET | duration=1524743.0 | robust_z=91.717 | trace=bd4c587e548cc06ca0cca12181d80b39
+- service=frontend-proxy | operation=GET | duration=1516471.0 | robust_z=91.215 | trace=689becc0e97a87b2293d84ffcdd16b8d
+- service=frontend-proxy | operation=router frontend egress | duration=1624536.0 | robust_z=89.875 | trace=8c606d1f4666ed5e3ea741c0591c724e
+- service=ad | operation=getAdsByCategory | duration=270442.0 | robust_z=88.845 | trace=9e1cdc9df69e22c66a30ee80fe0f1561
+- service=load-generator | operation=user_add_to_cart | duration=3670414.0 | robust_z=85.314 | trace=b41838943a49d98320d54c3cbe3ad031
+- service=frontend-proxy | operation=router frontend egress | duration=1524625.0 | robust_z=84.305 | trace=bd4c587e548cc06ca0cca12181d80b39
+- service=frontend-proxy | operation=router frontend egress | duration=1516385.0 | robust_z=83.845 | trace=689becc0e97a87b2293d84ffcdd16b8d
+- service=frontend | operation=tcp.connect | duration=15721.0 | robust_z=79.774 | trace=c5915833cc3e957a4af090da86c085c5
+- service=load-generator | operation=POST | duration=2685841.0 | robust_z=79.752 | trace=525c749b6c6bc27d348021e2f9665e87
+- service=ad | operation=GET /metrics | duration=702351.0 | robust_z=73.855 | trace=5833f4c3d442e48e016269c3a4947a32
+
+HIGH-VALUE TELEMETRY EVIDENCE
+- score=24.0 | service=frontend-proxy | operation=POST | duration=1060166.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=24.0 | service=frontend-proxy | operation=GET | duration=539430.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=24.0 | service=frontend-proxy | operation=POST | duration=1027722.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=24.0 | service=load-generator | operation=POST | duration=1159036.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=24.0 | service=frontend-proxy | operation=GET | duration=1139285.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=24.0 | service=load-generator | operation=GET | duration=1143293.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=24.0 | service=frontend-proxy | operation=GET | duration=867568.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=24.0 | service=frontend-proxy | operation=POST | duration=3094800.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=24.0 | service=load-generator | operation=POST | duration=3631086.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=24.0 | service=frontend-proxy | operation=GET | duration=381939.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,parent_of_anomalous_span,explicit_response
+- score=22.5 | service=frontend-proxy | operation=router frontend egress | duration=539213.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.5 | service=load-generator | operation=GET | duration=559277.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.5 | service=load-generator | operation=GET | duration=540186.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.5 | service=frontend-proxy | operation=router frontend egress | duration=1138424.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.5 | service=frontend-proxy | operation=router frontend egress | duration=866444.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.5 | service=load-generator | operation=GET | duration=555429.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.5 | service=load-generator | operation=POST | duration=564208.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.5 | service=frontend-proxy | operation=router frontend egress | duration=381843.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.5 | service=load-generator | operation=GET | duration=491239.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.5 | service=frontend | operation=GET /api/products/[productId]/index | duration=114892.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.5 | service=frontend-proxy | operation=router frontend egress | duration=250576.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span,explicit_response
+- score=22.0 | service=load-generator | operation=POST | duration=1061645.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,parent_of_anomalous_span,explicit_response
+- score=22.0 | service=load-generator | operation=GET | duration=544995.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,parent_of_anomalous_span,explicit_response
+- score=22.0 | service=load-generator | operation=GET | duration=869908.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,parent_of_anomalous_span,explicit_response
+- score=22.0 | service=frontend | operation=oteldemo.CartService/AddItem | duration=51173.0 | response=Unknown | reasons=explicit_error,operation_latency_anomaly,child_of_anomalous_span
+- score=22.0 | service=frontend | operation=executing api route (pages) /api/cart | duration=78907.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,parent_of_anomalous_span,explicit_response
+- score=22.0 | service=frontend-proxy | operation=GET | duration=250777.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,parent_of_anomalous_span,explicit_response
+- score=21.5 | service=frontend-web | operation=GET | duration=1821000.0 | response=Unknown | reasons=explicit_error,operation_latency_anomaly,parent_of_anomalous_span
+- score=21.5 | service=frontend | operation=GET /api/products/[productId]/index | duration=115948.0 | response=Unknown | reasons=explicit_error,operation_latency_anomaly,parent_of_anomalous_span
+- score=20.5 | service=load-generator | operation=GET | duration=644805.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,explicit_response
+- score=20.5 | service=frontend-proxy | operation=POST | duration=108767.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,explicit_response
+- score=20.5 | service=load-generator | operation=GET | duration=520947.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,explicit_response
+- score=20.5 | service=load-generator | operation=POST | duration=575577.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,explicit_response
+- score=20.5 | service=load-generator | operation=GET | duration=407641.0 | response=503 | reasons=explicit_error,operation_latency_anomaly,explicit_response
+- score=20.5 | service=frontend-proxy | operation=POST | duration=95441.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,explicit_response
+- score=20.5 | service=frontend-proxy | operation=POST | duration=96111.0 | response=500 | reasons=explicit_error,operation_latency_anomaly,explicit_response
+- score=20.0 | service=frontend | operation=oteldemo.CartService/GetCart | duration=12859.0 | response=Unknown | reasons=explicit_error,operation_latency_anomaly
+- score=20.0 | service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | duration=10815.0 | response=Unknown | reasons=explicit_error,operation_latency_anomaly
+- score=20.0 | service=frontend | operation=oteldemo.CartService/GetCart | duration=6018.0 | response=Unknown | reasons=explicit_error,operation_latency_anomaly
+- score=20.0 | service=frontend | operation=oteldemo.CartService/GetCart | duration=6799.0 | response=Unknown | reasons=explicit_error,operation_latency_anomaly
+
+IMPORTANT: Evidence ranking identifies potentially useful telemetry only. It does not identify the root cause.
+IMPORTANT: 'Unknown' response values are not treated as errors.
+
+GRAPH-AUGMENTED DISTRIBUTED SYSTEM RCA CONTEXT
+
+This file augments the baseline telemetry context with observed
+service dependencies and service-level evidence.
+Observed dependencies do not, by themselves, prove root cause.
+
+OBSERVED SERVICE DEPENDENCY GRAPH
+- frontend-proxy -> frontend | observed_relationships=138
+- load-generator -> frontend-proxy | observed_relationships=115
+- frontend-web -> frontend-proxy | observed_relationships=53
+- frontend-proxy -> image-provider | observed_relationships=18
+- frontend -> ad | observed_relationships=6
+- frontend -> recommendation | observed_relationships=6
+- load-generator -> agent | observed_relationships=5
+- frontend -> product-catalog | observed_relationships=4
+- frontend -> currency | observed_relationships=4
+- ad -> flagd | observed_relationships=3
+- frontend-proxy -> flagd | observed_relationships=3
+- cart -> flagd | observed_relationships=1
+- recommendation -> flagd | observed_relationships=1
+- load-generator -> flagd | observed_relationships=1
+- agent -> frontend | observed_relationships=1
+- frontend -> checkout | observed_relationships=1
+
+SERVICE-LEVEL DIAGNOSTIC EVIDENCE
+- service=chatbot | spans=2 | explicit_errors=0 | median_duration=382695.0 | p95_duration=581530.2
+- service=ad | spans=55 | explicit_errors=11 | median_duration=270442.0 | p95_duration=1513626.8
+- service=frontend-proxy | spans=569 | explicit_errors=204 | median_duration=11442.0 | p95_duration=166699.40000000002
+- service=frontend | spans=437 | explicit_errors=288 | median_duration=8068.0 | p95_duration=535466.0
+- service=load-generator | spans=227 | explicit_errors=111 | median_duration=36246.0 | p95_duration=3565841.1
+- service=frontend-web | spans=168 | explicit_errors=27 | median_duration=249600.0 | p95_duration=702600.0
+- service=flagd | spans=71 | explicit_errors=0 | median_duration=110.0 | p95_duration=11436.0
+- service=cart | spans=2 | explicit_errors=0 | median_duration=16681.0 | p95_duration=19873.3
+- service=payment | spans=1 | explicit_errors=0 | median_duration=1412.0 | p95_duration=1412.0
+- service=product-catalog | spans=30 | explicit_errors=0 | median_duration=2501.5 | p95_duration=23248.899999999994
+- service=recommendation | spans=21 | explicit_errors=14 | median_duration=15596.0 | p95_duration=555365.0
+- service=image-provider | spans=38 | explicit_errors=0 | median_duration=0.0 | p95_duration=449.99999999999574
+- service=currency | spans=5 | explicit_errors=0 | median_duration=37.0 | p95_duration=720.1999999999998
+- service=agent | spans=70 | explicit_errors=4 | median_duration=206371.0 | p95_duration=2139397.75
+- service=checkout | spans=3 | explicit_errors=2 | median_duration=32426.0 | p95_duration=45079.1
+- service=accounting | spans=2 | explicit_errors=1 | median_duration=1292000.0 | p95_duration=2140873.7
+- service=mcp | spans=1 | explicit_errors=0 | median_duration=371840.0 | p95_duration=371840.0
+
+LATENCY ANOMALIES
+- service=frontend-proxy | operation=router flagservice egress | duration=16076353.0 | trace=1ac8a3eac78a388a647b65088253149a | span=88c7d098e32bc1a1
+- service=frontend-proxy | operation=POST | duration=16075624.0 | trace=1ac8a3eac78a388a647b65088253149a | span=cd669e1534cbf68b
+- service=frontend-proxy | operation=POST | duration=3094800.0 | trace=b41838943a49d98320d54c3cbe3ad031 | span=e869df3030d04a45
+- service=load-generator | operation=POST | duration=11043856.0 | trace=a988481a2642265fe437eb8f8bf5654c | span=ac60f32aefeb060c
+- service=frontend | operation=tcp.connect | duration=43794.0 | trace=c7e1c96e9037154378340c4af29a968c | span=3a719b07982049dc
+- service=flagd | operation=resolveBoolean | duration=10137.0 | trace=8c606d1f4666ed5e3ea741c0591c724e | span=3ac1bf9cdaf061b5
+- service=flagd | operation=resolveBoolean | duration=10061.0 | trace=8c606d1f4666ed5e3ea741c0591c724e | span=fb8bbc340458c8ad
+- service=frontend-proxy | operation=GET | duration=3552833.0 | trace=9e1cdc9df69e22c66a30ee80fe0f1561 | span=dfeec3c1d01f58a2
+- service=frontend-proxy | operation=router frontend egress | duration=3552657.0 | trace=9e1cdc9df69e22c66a30ee80fe0f1561 | span=13660ef71c3ff5b5
+- service=frontend-proxy | operation=router frontend egress | duration=3094599.0 | trace=b41838943a49d98320d54c3cbe3ad031 | span=f5eb39d81f21322f
+
+STATUS AND ERROR EVIDENCE
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=8c606d1f4666ed5e3ea741c0591c724e | span=81fb92aefb9fa629
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=8c606d1f4666ed5e3ea741c0591c724e | span=634ea23a95295d8b
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=689becc0e97a87b2293d84ffcdd16b8d | span=dde2dfc488d04433
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=689becc0e97a87b2293d84ffcdd16b8d | span=297c8999a0e6d041
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=689becc0e97a87b2293d84ffcdd16b8d | span=3c8542f24fc0a94b
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=bd4c587e548cc06ca0cca12181d80b39 | span=9e960383a95a2702
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=bd4c587e548cc06ca0cca12181d80b39 | span=da40dd951f6f362c
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=bd4c587e548cc06ca0cca12181d80b39 | span=b79b51eefc4b8ae0
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=9e1cdc9df69e22c66a30ee80fe0f1561 | span=92d03ca22690dbed
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=9e1cdc9df69e22c66a30ee80fe0f1561 | span=0b8f7fbdb9710fd7
+- service=ad | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=9e1cdc9df69e22c66a30ee80fe0f1561 | span=6a44512f5416c17e
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=42b58e11f0bee5407e82cc2b981ec931 | span=42f45fbad03937f5
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=42b58e11f0bee5407e82cc2b981ec931 | span=ad530876220b8b63
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=42b58e11f0bee5407e82cc2b981ec931 | span=8c05ba85f783d07b
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=d611e2328837303f0ae44df063c71c65 | span=123b356d20f3b560
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=d611e2328837303f0ae44df063c71c65 | span=bf0ee98977e53d26
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=d611e2328837303f0ae44df063c71c65 | span=6d5644579f9de052
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=d611e2328837303f0ae44df063c71c65 | span=9d7a1e73db809194
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=d611e2328837303f0ae44df063c71c65 | span=283e5ac98c892542
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=d611e2328837303f0ae44df063c71c65 | span=49597e1705c040a7
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=d611e2328837303f0ae44df063c71c65 | span=76252a0d5bfc3cc3
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=ee160325c09c4b25
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=3f17bb9c877d6e18
+- service=recommendation | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=d5873904ff2d1a38
+- service=recommendation | operation=get_product_list | has_error=True | response=Unknown | status_field=None | status_value= | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=f0acafe583b12bd8
+- service=frontend | operation=oteldemo.RecommendationService/ListRecommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=e028cdd81e767a03
+- service=frontend | operation=executing api route (pages) /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=f38daeadffa7e57c
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=177c1546b2383919
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=9dc91f47299f102b
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=2e42a1471dd987fb4ba4589a6722aa8c | span=0d675462df5653fa
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=b81bd39be88085e3955e5f92e668b4fc | span=1df7d98e37e5efd6
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=b81bd39be88085e3955e5f92e668b4fc | span=beb1069a257cff28
+- service=recommendation | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=b81bd39be88085e3955e5f92e668b4fc | span=2ac7ccc17d1f8aa0
+- service=recommendation | operation=get_product_list | has_error=True | response=Unknown | status_field=None | status_value= | trace=b81bd39be88085e3955e5f92e668b4fc | span=dc0665249d80935a
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=b81bd39be88085e3955e5f92e668b4fc | span=e37087077065383d
+- service=frontend | operation=oteldemo.RecommendationService/ListRecommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=b81bd39be88085e3955e5f92e668b4fc | span=3e2341cb595ed7a5
+- service=frontend | operation=executing api route (pages) /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=b81bd39be88085e3955e5f92e668b4fc | span=6e149ffcb5856da2
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=b81bd39be88085e3955e5f92e668b4fc | span=9a9d4adc0abba528
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=b81bd39be88085e3955e5f92e668b4fc | span=f0b225df0464484a
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=40d7f4e1a68d90cd9006bfaf8860cf08 | span=0791a63ba1998201
+- service=frontend-web | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=40d7f4e1a68d90cd9006bfaf8860cf08 | span=7439ec72778b62d4
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=40d7f4e1a68d90cd9006bfaf8860cf08 | span=4d2e495882ba3c24
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=40d7f4e1a68d90cd9006bfaf8860cf08 | span=2c6396bb58466b5c
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=40d7f4e1a68d90cd9006bfaf8860cf08 | span=ab998e3cda6c1486
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=40d7f4e1a68d90cd9006bfaf8860cf08 | span=872a691532874e23
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=40d7f4e1a68d90cd9006bfaf8860cf08 | span=a9c6386ea407420d
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=35f112f04a0898f89ef14181d8444178 | span=03955fffc01ffdef
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=35f112f04a0898f89ef14181d8444178 | span=bda42657ca5ee277
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=35f112f04a0898f89ef14181d8444178 | span=bd8f0c309975d154
+- service=recommendation | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=35f112f04a0898f89ef14181d8444178 | span=91bddae8e3696007
+- service=recommendation | operation=get_product_list | has_error=True | response=Unknown | status_field=None | status_value= | trace=35f112f04a0898f89ef14181d8444178 | span=4621f0dcf6d63ca7
+- service=frontend | operation=oteldemo.RecommendationService/ListRecommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=35f112f04a0898f89ef14181d8444178 | span=0038c4c96524f0ca
+- service=frontend | operation=executing api route (pages) /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=35f112f04a0898f89ef14181d8444178 | span=64e32b8b0061d352
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=35f112f04a0898f89ef14181d8444178 | span=6cb1855dcd93f039
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=35f112f04a0898f89ef14181d8444178 | span=7f92b84bbdf3ee74
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=223aecbadebf7ab412055f200a6ad57b | span=13c53854a8149a82
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=223aecbadebf7ab412055f200a6ad57b | span=df8f644f33097d2c
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=223aecbadebf7ab412055f200a6ad57b | span=8dac30a10a1cd9fa
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=223aecbadebf7ab412055f200a6ad57b | span=8899395d62cd4cd6
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=223aecbadebf7ab412055f200a6ad57b | span=a76b47b7810e7278
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=223aecbadebf7ab412055f200a6ad57b | span=66c8b41e1a0fa3ce
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=223aecbadebf7ab412055f200a6ad57b | span=f241deac9bc39f97
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=cc59ba304166400b7bc640fe9af96e7f | span=4b1984fd2333165c
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=cc59ba304166400b7bc640fe9af96e7f | span=bcd8116834237f7c
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=cc59ba304166400b7bc640fe9af96e7f | span=3e19d1e736bedd51
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=cc59ba304166400b7bc640fe9af96e7f | span=6dfd0c85a07e6731
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=cc59ba304166400b7bc640fe9af96e7f | span=7a3dabc4555c0f7e
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=cc59ba304166400b7bc640fe9af96e7f | span=3d1181953e7ebba7
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=cc59ba304166400b7bc640fe9af96e7f | span=43484ef4078b8c7f
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=06bf0ff91d7b20a8f1834ea7dd4a657a | span=1de5ac39ba97f8b8
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=06bf0ff91d7b20a8f1834ea7dd4a657a | span=5456713bcfef49ae
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=06bf0ff91d7b20a8f1834ea7dd4a657a | span=850769584ccf8c11
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=06bf0ff91d7b20a8f1834ea7dd4a657a | span=e803943fc14f5dc4
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=06bf0ff91d7b20a8f1834ea7dd4a657a | span=3cb27368cb1a7d87
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=06bf0ff91d7b20a8f1834ea7dd4a657a | span=cc3dfd5354761bc4
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=06bf0ff91d7b20a8f1834ea7dd4a657a | span=d60ed0d9f9ed84c9
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=a09c3eb2c6286bdc48fc410efffb5d86 | span=815dc293eb5f88aa
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=a09c3eb2c6286bdc48fc410efffb5d86 | span=98faf498724e2adf
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=a09c3eb2c6286bdc48fc410efffb5d86 | span=8498f96c6889e1a2
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=a09c3eb2c6286bdc48fc410efffb5d86 | span=7855f74b2e28c8bc
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=a09c3eb2c6286bdc48fc410efffb5d86 | span=d5ab907e08090868
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=a09c3eb2c6286bdc48fc410efffb5d86 | span=033cf2ebe99f3209
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=a09c3eb2c6286bdc48fc410efffb5d86 | span=98c6de3aee3a83ac
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=0972e6aa720e96780b94a2a36dc5b1b9 | span=850ebb640f5c3721
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=0972e6aa720e96780b94a2a36dc5b1b9 | span=415966e6ea708066
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=0972e6aa720e96780b94a2a36dc5b1b9 | span=2c5ca58dc1fb58d8
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=0972e6aa720e96780b94a2a36dc5b1b9 | span=f8db66f7018a659e
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=0972e6aa720e96780b94a2a36dc5b1b9 | span=b5194fa236341ab2
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=0972e6aa720e96780b94a2a36dc5b1b9 | span=be078cd4da294182
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=0972e6aa720e96780b94a2a36dc5b1b9 | span=ec82b375a53d9fa6
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=0c1136cf43d7d16b81a354b90cff260e | span=120ae77511351f10
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=0c1136cf43d7d16b81a354b90cff260e | span=8944a0ec09d49eb1
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=0c1136cf43d7d16b81a354b90cff260e | span=d757fdf1d4d54fff
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=0c1136cf43d7d16b81a354b90cff260e | span=3f4624e6f79c8dd2
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=0c1136cf43d7d16b81a354b90cff260e | span=6d86877c21b3645a
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=0c1136cf43d7d16b81a354b90cff260e | span=b2fe4bb9612c7055
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=0c1136cf43d7d16b81a354b90cff260e | span=9774be9df96c1749
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=7e0cce3bdad79eb0337a3b707dae0345 | span=362d79d5ea661ea3
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=7e0cce3bdad79eb0337a3b707dae0345 | span=3d821cc5c8b6b194
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=7e0cce3bdad79eb0337a3b707dae0345 | span=9a5ee42526c3ea3c
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=7e0cce3bdad79eb0337a3b707dae0345 | span=13023b61ca9cd73c
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=7e0cce3bdad79eb0337a3b707dae0345 | span=e443604547cee3ca
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=7e0cce3bdad79eb0337a3b707dae0345 | span=8051b2a24680eb18
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=7e0cce3bdad79eb0337a3b707dae0345 | span=9bb151e84abbf2ed
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=59ca7428ed2ab2dc623736cd30bacdd5 | span=48fd84cfc6a11bad
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=59ca7428ed2ab2dc623736cd30bacdd5 | span=57a018b014a37e19
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=59ca7428ed2ab2dc623736cd30bacdd5 | span=81392de7f64d3ca3
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=59ca7428ed2ab2dc623736cd30bacdd5 | span=e9098d98ac6c01fc
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=59ca7428ed2ab2dc623736cd30bacdd5 | span=9e7a449cbb44bcf4
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=59ca7428ed2ab2dc623736cd30bacdd5 | span=8f5e32ed5f714bbb
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=59ca7428ed2ab2dc623736cd30bacdd5 | span=f4305f240d80d745
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=8ee4b550d0841dec5f38ddce0597c085 | span=74508c5ad2835b0b
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=8ee4b550d0841dec5f38ddce0597c085 | span=d9208686411b0ad3
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=8ee4b550d0841dec5f38ddce0597c085 | span=70578912bb4901fb
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=8ee4b550d0841dec5f38ddce0597c085 | span=a7eac1bfe35cffd4
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=8ee4b550d0841dec5f38ddce0597c085 | span=f32cf219ea897a18
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=8ee4b550d0841dec5f38ddce0597c085 | span=ea794a3415cd05e2
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=8ee4b550d0841dec5f38ddce0597c085 | span=fe80ef770ef332b8
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=7bc7bfad5bbadcdd54c73f90624c620f | span=dbdc8d66c4a86915
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=940461b269692d2e4304206ca12bb4bb | span=96a50cfcf4aacbff
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=940461b269692d2e4304206ca12bb4bb | span=0ba6c3501ef9b031
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=940461b269692d2e4304206ca12bb4bb | span=10f7f69becb833c1
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=940461b269692d2e4304206ca12bb4bb | span=4fabb2009903a37a
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=940461b269692d2e4304206ca12bb4bb | span=2425d8eb6bb7c220
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=940461b269692d2e4304206ca12bb4bb | span=0e18a6575f85906c
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=940461b269692d2e4304206ca12bb4bb | span=42103ae767ef9f00
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=b1db6c1a4d77bdd9f018a6fa6190fada | span=a0fb9e859f465a95
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=b1db6c1a4d77bdd9f018a6fa6190fada | span=7817e26b34669ec5
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=b1db6c1a4d77bdd9f018a6fa6190fada | span=2a3b00759bebaf99
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=b1db6c1a4d77bdd9f018a6fa6190fada | span=7332cb82a9dcb009
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=b1db6c1a4d77bdd9f018a6fa6190fada | span=6c494b12de6ba457
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=b1db6c1a4d77bdd9f018a6fa6190fada | span=7cf43da099bca10a
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=b1db6c1a4d77bdd9f018a6fa6190fada | span=cc8e42346046946b
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=ffcab2863dc1c7b513129352f19cd516 | span=d8361dc7f4d1d2b3
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=ffcab2863dc1c7b513129352f19cd516 | span=d94fdac95a448a22
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=ffcab2863dc1c7b513129352f19cd516 | span=fb816cdfed0b4e7e
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=ffcab2863dc1c7b513129352f19cd516 | span=603719e1add194d4
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=ffcab2863dc1c7b513129352f19cd516 | span=0364e0cb93c39eaf
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=ffcab2863dc1c7b513129352f19cd516 | span=a1a25730c71a28c3
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=ffcab2863dc1c7b513129352f19cd516 | span=3ee1e9830760e58f
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=da7bda90acd44ee426bfbd3383cffa26 | span=d7efb2e34892a51b
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=b4d8ca20fb048b05ac1050f53b6cbebc | span=8fd9b17e3eaf9b07
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=d2f487fffbedd1efbb41a1cb4f9ca938 | span=2a0346358b16f66b
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=d2f487fffbedd1efbb41a1cb4f9ca938 | span=93a69a0ebe45da93
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=d2f487fffbedd1efbb41a1cb4f9ca938 | span=f3b830f8a820ab51
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=d2f487fffbedd1efbb41a1cb4f9ca938 | span=01725267fe7855ca
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=d2f487fffbedd1efbb41a1cb4f9ca938 | span=28849fcc1a32dd90
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=d2f487fffbedd1efbb41a1cb4f9ca938 | span=34574143faa02a1d
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=d2f487fffbedd1efbb41a1cb4f9ca938 | span=55ad4a84c06d625e
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=d8267ba2dc70aa5ca19adef30870fca2 | span=e905b0d1c21dad5b
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=d8267ba2dc70aa5ca19adef30870fca2 | span=071f27ea86be0dc9
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=d8267ba2dc70aa5ca19adef30870fca2 | span=9764eafd6507af73
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=d8267ba2dc70aa5ca19adef30870fca2 | span=a21d32e04bec051c
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=d8267ba2dc70aa5ca19adef30870fca2 | span=75a88765df7ff9b6
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=d8267ba2dc70aa5ca19adef30870fca2 | span=488a41185b837da6
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=d8267ba2dc70aa5ca19adef30870fca2 | span=79f60fee7f22d48d
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=e30501ae8e8ccf2b0f21d805fa5a8a81 | span=306f6045c6373abb
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=e30501ae8e8ccf2b0f21d805fa5a8a81 | span=65db0925c53bf840
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=e30501ae8e8ccf2b0f21d805fa5a8a81 | span=b5a9620b67b4ef49
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=e30501ae8e8ccf2b0f21d805fa5a8a81 | span=c68388ec76f3b303
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=e30501ae8e8ccf2b0f21d805fa5a8a81 | span=817d95c431dfd006
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=e30501ae8e8ccf2b0f21d805fa5a8a81 | span=d08a7076b3b875e9
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=e30501ae8e8ccf2b0f21d805fa5a8a81 | span=9c058acfef147e42
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=39e64d90d8b539c2c98c445348744e03 | span=ee471bccdc1a9f23
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=39e64d90d8b539c2c98c445348744e03 | span=e9b0e57bcfc6b85a
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=39e64d90d8b539c2c98c445348744e03 | span=af04cfb14bfcc8f5
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=39e64d90d8b539c2c98c445348744e03 | span=f5f223812b88e511
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=39e64d90d8b539c2c98c445348744e03 | span=638139ea56f7c023
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=39e64d90d8b539c2c98c445348744e03 | span=b20049d824cdce9b
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=39e64d90d8b539c2c98c445348744e03 | span=8519d207db5f461a
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=6b08bcc8f8f1a0425c434bd4b17ef591 | span=52deb41c97ae8281
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=6b08bcc8f8f1a0425c434bd4b17ef591 | span=00ee4e1096639ad3
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=6b08bcc8f8f1a0425c434bd4b17ef591 | span=19925cda4758da25
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=6b08bcc8f8f1a0425c434bd4b17ef591 | span=d58f367d5322e146
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=6b08bcc8f8f1a0425c434bd4b17ef591 | span=cedca8fa25e01226
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=6b08bcc8f8f1a0425c434bd4b17ef591 | span=4bddb900f8469513
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=6b08bcc8f8f1a0425c434bd4b17ef591 | span=f1ce3f903a0e8d9c
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=7a5fdb59e8f8b89e0a1c8178999feca4 | span=483f4e2277d2b748
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=7a5fdb59e8f8b89e0a1c8178999feca4 | span=9554d38f47bb4552
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=7a5fdb59e8f8b89e0a1c8178999feca4 | span=7fa3618c6845948d
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=7a5fdb59e8f8b89e0a1c8178999feca4 | span=0b8cdfac10dac332
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=7a5fdb59e8f8b89e0a1c8178999feca4 | span=5ffbfb6a822e168b
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=7a5fdb59e8f8b89e0a1c8178999feca4 | span=729e1494980d3a90
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=7a5fdb59e8f8b89e0a1c8178999feca4 | span=9a6d5355a29b2870
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=e2797ae9807319755064111f382c028f | span=7af32c395fa290ed
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=e2797ae9807319755064111f382c028f | span=7aef5536d5adcd21
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=e2797ae9807319755064111f382c028f | span=6e8693c39a5d2565
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=e2797ae9807319755064111f382c028f | span=306f362400c097e3
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=e2797ae9807319755064111f382c028f | span=e358a24ac13409c4
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=e2797ae9807319755064111f382c028f | span=062654eac0245089
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=e2797ae9807319755064111f382c028f | span=f1b170ee82c2eca4
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=ac42e95974d7063a77bff0b5456ce9d5 | span=dfe65fcfcca9ea7d
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=5832bda4eae35298505377c79f61c428 | span=5fa0892d2aba2d7b
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=9d5167901d7907a2ee8909d9d67611bc | span=d1497a370cbe13a0
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=9d5167901d7907a2ee8909d9d67611bc | span=9dfb696bc5f37e4f
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=9d5167901d7907a2ee8909d9d67611bc | span=12b0af040cd29d3e
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=9d5167901d7907a2ee8909d9d67611bc | span=5cfcf2f4c9d8043b
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=9d5167901d7907a2ee8909d9d67611bc | span=ae144b7d88c62ae1
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=9d5167901d7907a2ee8909d9d67611bc | span=46e0ae0b561bb203
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=9d5167901d7907a2ee8909d9d67611bc | span=52354935110cdab3
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=a3146e16375ea4415898d7ba3fa1b922 | span=7e42470ac99dafd5
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=a3146e16375ea4415898d7ba3fa1b922 | span=f16f2b177cb5ea46
+- service=frontend-web | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=a3146e16375ea4415898d7ba3fa1b922 | span=3c705d16b6183442
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=a3146e16375ea4415898d7ba3fa1b922 | span=d2755a581aef8495
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=a3146e16375ea4415898d7ba3fa1b922 | span=7c0df11482416958
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=a3146e16375ea4415898d7ba3fa1b922 | span=a42947f4527fcd29
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=a3146e16375ea4415898d7ba3fa1b922 | span=3c87c09962ac13f4
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=246decc92ba118cae031ca10c57f18c2 | span=7bee916889b9861e
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=11a31e26ac8f384c8570d861fe295a88 | span=10b0e1c369577c29
+- service=recommendation | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=11a31e26ac8f384c8570d861fe295a88 | span=03ad67f9b1e058b2
+- service=recommendation | operation=get_product_list | has_error=True | response=Unknown | status_field=None | status_value= | trace=11a31e26ac8f384c8570d861fe295a88 | span=1586c607278edfde
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=11a31e26ac8f384c8570d861fe295a88 | span=54326ac42b7df62a
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=11a31e26ac8f384c8570d861fe295a88 | span=6f59b2d300fb7b7d
+- service=frontend | operation=oteldemo.RecommendationService/ListRecommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=11a31e26ac8f384c8570d861fe295a88 | span=5dc03fa11f7193e7
+- service=frontend | operation=executing api route (pages) /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=11a31e26ac8f384c8570d861fe295a88 | span=3c1b2430b110bd0d
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=11a31e26ac8f384c8570d861fe295a88 | span=2f81667b0bec36e8
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=11a31e26ac8f384c8570d861fe295a88 | span=422b099d507ad245
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=ead2c64f2ca9f0f40789e86facad7524 | span=eb6acdbc53a56f16
+- service=recommendation | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=ead2c64f2ca9f0f40789e86facad7524 | span=66d6c403d1d85690
+- service=recommendation | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=ead2c64f2ca9f0f40789e86facad7524 | span=674ba913e21021e3
+- service=recommendation | operation=get_product_list | has_error=True | response=Unknown | status_field=None | status_value= | trace=ead2c64f2ca9f0f40789e86facad7524 | span=47903c8b75f84569
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=ead2c64f2ca9f0f40789e86facad7524 | span=e1c3fe114cc0be0e
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=ead2c64f2ca9f0f40789e86facad7524 | span=d3900a39934adaec
+- service=frontend | operation=oteldemo.RecommendationService/ListRecommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=ead2c64f2ca9f0f40789e86facad7524 | span=86016c5ec2bac44c
+- service=frontend | operation=executing api route (pages) /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=ead2c64f2ca9f0f40789e86facad7524 | span=cbac72d762faa526
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=ead2c64f2ca9f0f40789e86facad7524 | span=9a4e26f63a521bfd
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=ead2c64f2ca9f0f40789e86facad7524 | span=bfa197495efc03e3
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=c5915833cc3e957a4af090da86c085c5 | span=98acb70626e5b0cf
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=c5915833cc3e957a4af090da86c085c5 | span=11787c1e697ebc2a
+- service=recommendation | operation=flagd.evaluation.v2.Service/ResolveBoolean | has_error=True | response=Unknown | status_field=None | status_value= | trace=c5915833cc3e957a4af090da86c085c5 | span=8911607e2dbab49c
+- service=recommendation | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=c5915833cc3e957a4af090da86c085c5 | span=99a23fa38aa87752
+- service=recommendation | operation=get_product_list | has_error=True | response=Unknown | status_field=None | status_value= | trace=c5915833cc3e957a4af090da86c085c5 | span=2ed861d48f7e9f38
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=c5915833cc3e957a4af090da86c085c5 | span=de66ab2aade29983
+- service=frontend | operation=executing api route (pages) /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=c5915833cc3e957a4af090da86c085c5 | span=8a880d7445fd4354
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=500 | status_field=None | status_value= | trace=c5915833cc3e957a4af090da86c085c5 | span=559d0d8e6525e3f0
+- service=frontend | operation=GET /api/recommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=c5915833cc3e957a4af090da86c085c5 | span=5a5a6df6c8a35c3f
+- service=frontend | operation=oteldemo.RecommendationService/ListRecommendations | has_error=True | response=Unknown | status_field=None | status_value= | trace=c5915833cc3e957a4af090da86c085c5 | span=ef4ac240dff8e0ea
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=fbe292c51e8913526ced79236669d50b | span=ae7d4caaa5520e94
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=fbe292c51e8913526ced79236669d50b | span=fd02445e9fd076ac
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=fbe292c51e8913526ced79236669d50b | span=669629bf695e1829
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=fbe292c51e8913526ced79236669d50b | span=a251b44f1b0f8eb1
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=fbe292c51e8913526ced79236669d50b | span=643c864ce1cf66c2
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=fbe292c51e8913526ced79236669d50b | span=a6deeeabe4862708
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=54178de22fe5ee8d2e5969af618996bc | span=c437fe27923fb387
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=54178de22fe5ee8d2e5969af618996bc | span=2c685e47e914ebba
+- service=frontend | operation=oteldemo.ProductCatalogService/ListProducts | has_error=True | response=Unknown | status_field=None | status_value= | trace=54178de22fe5ee8d2e5969af618996bc | span=3558e972c60f4015
+- service=frontend | operation=executing api route (pages) /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=54178de22fe5ee8d2e5969af618996bc | span=75960943f991ea83
+- service=frontend | operation=GET /api/products/index | has_error=True | response=500 | status_field=None | status_value= | trace=54178de22fe5ee8d2e5969af618996bc | span=19a9121ccd82adef
+- service=frontend | operation=GET /api/products/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=54178de22fe5ee8d2e5969af618996bc | span=3465477d23efc3aa
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=c7d7c6467fc9661e0fbf891b6c7e50c0 | span=a5a14b384fb5f1f1
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=c7d7c6467fc9661e0fbf891b6c7e50c0 | span=e23c28db8918a9cb
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=c7d7c6467fc9661e0fbf891b6c7e50c0 | span=e35ff97ac676f28c
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7d7c6467fc9661e0fbf891b6c7e50c0 | span=bd3c19da0c771feb
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=c7d7c6467fc9661e0fbf891b6c7e50c0 | span=1494e5e944c1acd5
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=c7d7c6467fc9661e0fbf891b6c7e50c0 | span=da8307533ae28454
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7d7c6467fc9661e0fbf891b6c7e50c0 | span=b936fdaaca3ebb86
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=398288df978e3a88
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=a5bc4cb47edd428e
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=2b822c2eae1e227f
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=cbfa94cb5ee43dff
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=392e3a126a2f55a4
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=5abf7302a913b633
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=244ca94a2a7d6578
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=14ae76242ab81539
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=0658a56acd810750
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=f6c2f8636686c881
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=2d661f748e5627c4
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=3473698946b52a1f
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=d469b44bc3839e15
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=827dfcc17b611c42
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=477b9104838b2fc7
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=e266885f271177d9
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=7a288d55843c4b92
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=e7edb5f83734d0f3
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=d6a6a9b4aeee554d
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=d218617ddeb09875
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=37a69154e08353f9
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=b620b4c72bd03709
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=664c5941794bd31c
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=57a82729911cd667
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=36aa924e14404ba4
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=e176f7d9f0994606
+- service=frontend | operation=executing api route (pages) /api/checkout | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=3cca705bea5fc90e
+- service=frontend | operation=POST /api/checkout | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=40c1955151ede915
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=e40ddb1929b0a333
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=b2e87affa91beecc
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=5a9cc33d365a1794
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=cca75ff71960fb5f
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=36213b2bf532a201
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=1f067fa9128cdafe
+- service=frontend | operation=POST /api/checkout | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=73bb389a9b968922
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=98af2ab831f45055
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=62987b39a6a7c680
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=4d440d1f7a13b9b7
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=6004a56ec3bba686
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=b945e34c72a3f365
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=47dc30ca794c7c55
+- service=frontend | operation=oteldemo.CheckoutService/PlaceOrder | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=dc594015b02a450c
+- service=checkout | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=9df02468bc01ac4c
+- service=checkout | operation=oteldemo.CheckoutService/PlaceOrder | has_error=True | response=Unknown | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=dece41443c4a84ed
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=8bfccd29ba3767e1
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=01e768b967053b7c
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=4e2d3ee4f01c02e3
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=ea516e0d2c521c66
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=21c218665b924e91
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=332f64dc4a542526
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=23234ed939dbdbfc311a81b80a92f67a | span=7dc6837219f9c3d5
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=f04d032662456c04
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=104372063b752fe4
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=2d36c4b5dc2709e5
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=a881f17e89a1fad9
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=884a4c4c24a8a07c
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=3caf1cfe92af2f24
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=c983a123ea026218
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=77ac61c72fdb9909
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=7faabc543c2792f1
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=48b3bfe3dcef8880
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=fb7e9aaf6d036965
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=3cbef23e5424f105
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=f561fd745ea7c798
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=bfcd4f70618ae7981a80887adc4ba7b1 | span=368deea845c47b2b
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=f2259969a08f5689f7210eaefaf3c0d8 | span=c4d9adbd5080ec29
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=f2259969a08f5689f7210eaefaf3c0d8 | span=da2dfdf432a0fb7f
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=f2259969a08f5689f7210eaefaf3c0d8 | span=d4c3c142312bd80f
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=f2259969a08f5689f7210eaefaf3c0d8 | span=9786fc63e21fa187
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=f2259969a08f5689f7210eaefaf3c0d8 | span=1079f42cb618174b
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=f2259969a08f5689f7210eaefaf3c0d8 | span=05f08dd803b613eb
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=f2259969a08f5689f7210eaefaf3c0d8 | span=9d8a44a506243859
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=30c29383bc746688edc1a810debe1cd7 | span=ee2b36836ad31262
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=30c29383bc746688edc1a810debe1cd7 | span=0d4dbef167e4b193
+- service=frontend | operation=oteldemo.CartService/GetCart | has_error=True | response=Unknown | status_field=None | status_value= | trace=30c29383bc746688edc1a810debe1cd7 | span=0759cfc93b0dfffc
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=30c29383bc746688edc1a810debe1cd7 | span=ff9179d1382dcef0
+- service=frontend | operation=GET /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=30c29383bc746688edc1a810debe1cd7 | span=a880e0ddbffd65f7
+- service=frontend | operation=GET /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=30c29383bc746688edc1a810debe1cd7 | span=2ad191c2ece90679
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=30c29383bc746688edc1a810debe1cd7 | span=0cfe09494e1ae52d
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=d609d158dd72ece3
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=ab88a5c57f627a87
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=0d7e79da977b8a60
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=a3aa041dfe8caebd
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=a1d6cf30d035d0f7
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=8a5f598a64cfaa1e
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=70b5bf75a7b4f9e8
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=5b11453ccdf7c817
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=e91946ac235f840a
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=706083b8cf36706b
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=5824cf5b9d3c94df
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=5f627233aa8c344f
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=26b7ad328af617d4
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=7e2e4987ee9954d0f0b667effbff13e1 | span=94d38c87d21ca9c2
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=4dde720f9737c0e21d7fc274e4e6ebec | span=f8b3bbb174228ce6
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=4dde720f9737c0e21d7fc274e4e6ebec | span=7c67064f97b247c7
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=4dde720f9737c0e21d7fc274e4e6ebec | span=53c98d2408331624
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=4dde720f9737c0e21d7fc274e4e6ebec | span=8846567e49867c60
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=4dde720f9737c0e21d7fc274e4e6ebec | span=46e7a84bf1c9d707
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=4dde720f9737c0e21d7fc274e4e6ebec | span=308846062de9467f
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=4dde720f9737c0e21d7fc274e4e6ebec | span=b1c6299752e44140
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=bcaef6a231b69dba36b29da8fbae73a4 | span=4b8054db8d5f993d
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=bcaef6a231b69dba36b29da8fbae73a4 | span=da19ac02573a7b2f
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=bcaef6a231b69dba36b29da8fbae73a4 | span=4a7243ff1b6975bd
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=bcaef6a231b69dba36b29da8fbae73a4 | span=ab4f09e725340107
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=bcaef6a231b69dba36b29da8fbae73a4 | span=551ab9250d9546fd
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=bcaef6a231b69dba36b29da8fbae73a4 | span=e1fe89212652370d
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=bcaef6a231b69dba36b29da8fbae73a4 | span=3026813a41364ab7
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=fe4acdadcdd5d187e2c0ffa9d51f9ce3 | span=5459668223cec66e
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=fe4acdadcdd5d187e2c0ffa9d51f9ce3 | span=ff2699192504ba8c
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=fe4acdadcdd5d187e2c0ffa9d51f9ce3 | span=495a6198592dd99f
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=fe4acdadcdd5d187e2c0ffa9d51f9ce3 | span=87dd27562af5bbb7
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=fe4acdadcdd5d187e2c0ffa9d51f9ce3 | span=5a3bf69a768bf864
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=fe4acdadcdd5d187e2c0ffa9d51f9ce3 | span=09f8bfa71ebf85ba
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=fe4acdadcdd5d187e2c0ffa9d51f9ce3 | span=105f90b0ca675637
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=ce3031fcf4518af997233097718f93bd | span=67b8ad888a9c608e
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=ce3031fcf4518af997233097718f93bd | span=5b56e6c05f3172a5
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=ce3031fcf4518af997233097718f93bd | span=331a3c40e4977d18
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=ce3031fcf4518af997233097718f93bd | span=89d14e64c1d77723
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=ce3031fcf4518af997233097718f93bd | span=62427ccad991a300
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=ce3031fcf4518af997233097718f93bd | span=3cc4f1073bb83d66
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=ce3031fcf4518af997233097718f93bd | span=0b15266fb456e88f
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=3f969591f9d9356eb20238c6c8b09b75 | span=fed82bd03dd10371
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=3f969591f9d9356eb20238c6c8b09b75 | span=c43a8a01f0ac0a98
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=3f969591f9d9356eb20238c6c8b09b75 | span=e756167d3069636e
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=3f969591f9d9356eb20238c6c8b09b75 | span=129bfe7bddf63862
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=3f969591f9d9356eb20238c6c8b09b75 | span=d116857cfe6ea8c8
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=3f969591f9d9356eb20238c6c8b09b75 | span=243f4ee64b4eb0e7
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=3f969591f9d9356eb20238c6c8b09b75 | span=4be2b7171c8a8eb1
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=44a93453cd06098d97b36d0791d93008 | span=d8d1cc3a075854b7
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=44a93453cd06098d97b36d0791d93008 | span=c15ee5a24569a8c4
+- service=agent | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=a14112719fdf27902ee64800985157b9 | span=355a6a5e7162cbcb
+- service=agent | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=525c749b6c6bc27d348021e2f9665e87 | span=a0fccbd6afe27c11
+- service=agent | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=d1dbd46e83856d12bfdee4ae821faa5e | span=64128909c797423d
+- service=agent | operation=GET | has_error=True | response=Unknown | status_field=None | status_value= | trace=a988481a2642265fe437eb8f8bf5654c | span=de897a2cb82bf88c
+- service=accounting | operation=receive orders | has_error=True | response=Unknown | status_field=None | status_value= | trace=095e282cf8601f4357ac702c4dda1b9a | span=89dbdbcd1bbc8438
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=e0d9740b83a8dc4d2ce58a17a91ea54f | span=13c1dd85172e5b8a
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=919196cd46bf5a1f
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=4d22fbdb38b1e8f5
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=b7739c000be83636
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=2b4bbdc52c252cae
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=aa5a123377a2353f
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=2b4f9a8e2651b446
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=ae12d96da7da5182
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=26ca030e05ca7f07
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=d078bfb5c892cd2d
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=84f9ee9e8e5e5d4a
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=1351b07e2594e37d
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=a4442ec988363e7e
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=6407c6b8afa14e79
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=cd59178300e823167ef8bfccdbae8705 | span=d3fe9fb41371c6ce
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=270cc3775da241fced6feaeab18677af | span=57179fd2c8bae234
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=270cc3775da241fced6feaeab18677af | span=d46a1c3982ffc15e
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=270cc3775da241fced6feaeab18677af | span=c1d36a9db7ec45fc
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=270cc3775da241fced6feaeab18677af | span=7714d2abcfbac4fb
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=270cc3775da241fced6feaeab18677af | span=e7fe5077c5542d58
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=270cc3775da241fced6feaeab18677af | span=52b25e448eb43c86
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=270cc3775da241fced6feaeab18677af | span=efab01999f3e3cea
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=54a8eff41a15ed6ba5d4c094453d2ea9 | span=6f6fc4253d4558aa
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=f2c4732421b62286
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=067300a942cabc02
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=726d09d7316f8009
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=b6b026e76f06ec0f
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=fdfcf0f1f418c237
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=9f1a791450f95af6
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=66fa250db96fe682
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=ceaaa80a0999aa2a
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=d60a650d2b3dd02d
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=41d459df5f163a4c
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=442a4d92bfd2fd79
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=2db47830573402f2
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=d667988c638bdcea
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=2ac11a0067c2312e
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=aabb53375efbec35
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=2daca4cfd242346c
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=c4daaf9c074cf52e
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=55de159922b6c88f
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=85c6bbcf274faeb1
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=66c2c0c9c164f4c4
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=a67957edce477d70
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=6ec4c064ba3867d0
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=6551d99d59a22d3b
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=4899fe8a26c9575c
+- service=frontend | operation=oteldemo.CheckoutService/PlaceOrder | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=506fed42951eee91
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=cb03aa43fa0652b0
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=18550430f2ef7d3c
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=c7a4e5c1c5e8dfb4
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=ff597b11d832d055
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=809652f0d01e3b17
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=239d1e54db782a2a
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=60283adf3cb1f093
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=1a84144c1531c70c
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=0aa66b8da179da3b
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=7a57f8bbb6254f59
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=cdad70d1c0298731
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=304e4207954dbd23
+- service=frontend | operation=executing api route (pages) /api/checkout | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=7cda2eaf8da213eb
+- service=frontend | operation=POST /api/checkout | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=2fcbe67f04d43c4e
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=74bf199c748bad2b
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=7a5ea4240db6eddc
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=e472d8faed8f6ebe
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=b561e1ba89e1d5e5
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=471f7fce608e88e7
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=07132c7734b204d4
+- service=frontend | operation=POST /api/checkout | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=1c4b6ce40c01ec6d
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=0914a4d6ddf0f967
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=76b866dcaa86a83d
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=2a7af7fd0c11c035
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=9be010990719cb48
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=0c202de486996cba
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=802be8ba45530da3
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=cf19bfc1f7078daa
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=3c4decaa05a59153
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=87e52c2d2cd5ec020f857a87dfca9234 | span=c45ea95ff8ce5a6e
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=63d0407de2503043e52f8d36653d9b5d | span=bae528c16eea1c22
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=63d0407de2503043e52f8d36653d9b5d | span=0f8c451dfe82541c
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=63d0407de2503043e52f8d36653d9b5d | span=36fcdda5956782bd
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=63d0407de2503043e52f8d36653d9b5d | span=1cb527b8e61b331c
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=63d0407de2503043e52f8d36653d9b5d | span=b44cb0c274ecaa8a
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=63d0407de2503043e52f8d36653d9b5d | span=509a917b85e977aa
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=63d0407de2503043e52f8d36653d9b5d | span=ed202956004db4df
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=fa7c923283261afad0dd027b5ac0e034 | span=95db8a498a57acf4
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=fa7c923283261afad0dd027b5ac0e034 | span=121c11727e9b29a5
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=fa7c923283261afad0dd027b5ac0e034 | span=2858be30e8c32900
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=fa7c923283261afad0dd027b5ac0e034 | span=aa15cb80ddfc0bda
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=fa7c923283261afad0dd027b5ac0e034 | span=f0eff1499a826bd9
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=fa7c923283261afad0dd027b5ac0e034 | span=d28f739486ac0115
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=fa7c923283261afad0dd027b5ac0e034 | span=c67f0edcdea293bb
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=9f195ab02d480ddd89a636eb3004fd7c | span=782e1206d3862203
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=9f195ab02d480ddd89a636eb3004fd7c | span=51cc5aac29273678
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=9f195ab02d480ddd89a636eb3004fd7c | span=ce505debe5a6fdbb
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=9f195ab02d480ddd89a636eb3004fd7c | span=7bce23d9d962490d
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=9f195ab02d480ddd89a636eb3004fd7c | span=b30a23d4243bb468
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=9f195ab02d480ddd89a636eb3004fd7c | span=fa1b12f5a37d402e
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=9f195ab02d480ddd89a636eb3004fd7c | span=cec7ffd94e42b5db
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=dcf456abb55f6036
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=6aa12625a7761b75
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=9b2d497601431a1a
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=ca99477f9d0ce158
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=8ede6fc4fbea3c48
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=3df80608517e5715
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=c1440936d1b244e6
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=afe9ccdaac6a4d67
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=3ea6f57c6d8f0ff2
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=bad1cfda4ab654da
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=70ae9c9a263968ac
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=83a779104639c413
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=3a719b07982049dc
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=d4190678a439ecf9
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=c7e1c96e9037154378340c4af29a968c | span=1a64b35cf39f82da
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=a25c873d14a9a9c2
+- service=frontend-proxy | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=68062737ef2cb469
+- service=frontend-proxy | operation=router frontend egress | has_error=True | response=500 | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=074b4383826add01
+- service=frontend-proxy | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=89da4890c12cbc9d
+- service=load-generator | operation=GET | has_error=True | response=500 | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=8958e85c44f59d7d
+- service=load-generator | operation=POST | has_error=True | response=500 | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=4e1e531a2d29d166
+- service=frontend | operation=executing api route (pages) /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=105e42a2768c0cf5
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=500 | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=5d007ffa1c1eec5d
+- service=frontend | operation=executing api route (pages) /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=068cd47e71a78578
+- service=frontend | operation=POST /api/cart | has_error=True | response=500 | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=e283979346de2932
+- service=frontend | operation=GET /api/products/[productId]/index | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=cfa782cf6fd721f8
+- service=frontend | operation=POST /api/cart | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=1647b7e73d3164af
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=f596b44869706f7b
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=c31f0d31b3c21efb
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=efc40681cf6aea53
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=831d71fd8e4d86f1
+- service=frontend | operation=oteldemo.ProductCatalogService/GetProduct | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=995ca1ff7c814726
+- service=frontend | operation=oteldemo.CartService/AddItem | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=ade0bbb5fbc47a4f
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=4f302fe96d00932b
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=c4fda31482804e9d
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=a7ffdfdc210eaa50
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=6ce14cd6e4fdf538
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=34108fea30eb7e95
+- service=frontend | operation=tcp.connect | has_error=True | response=Unknown | status_field=None | status_value= | trace=5c018f4ae5c437778b46d302dca9ad0e | span=1640cf1111c8ed6e
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=e1d996da9aa6fb95f9807b0556e7b8e8 | span=04c5cef079bdbef8
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=e1d996da9aa6fb95f9807b0556e7b8e8 | span=8bb03f783c565ecf
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=0938735ba652433f5828fb01bf12efea | span=dc15f5df9bc159ac
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=0938735ba652433f5828fb01bf12efea | span=2d59b0e436cf1c1d
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=436ceb91c4c17854f5890b19c3f4626b | span=ba281459647a1e74
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=e6eeabc5d475e0059275b41c0919d574 | span=c91fc0d4b2d9b22f
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=91a40075117d3588
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=48a59db1b54a1272
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=9df6dfba07809e6c
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=7ca3291a242a1df4
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=98eeaab17908e921
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=08518ec923994269
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=db1bde1c87b3799b
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=32f41ab4e2b6baa6
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=842643e7e1cabe36
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=3e3b8f746fb63675
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=a2e168ce8442edb6
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=ed858e58afdd7153
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=91e7f8ee07e6d6f8
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=f550396f4798fcf486ccea43df2bbd65 | span=c0315bf4c459c442
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=637d9a7e9875afd9b6fdc31f58c7c76c | span=79f40122243aab77
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=0ed3bf692784eec972bc8c415bda2a13 | span=fd6b04a858a4b899
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=0ed3bf692784eec972bc8c415bda2a13 | span=457a826131d9c777
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=c48517ed6a8b717dcfbc74fed0963b9f | span=10be5281f438c770
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=c48517ed6a8b717dcfbc74fed0963b9f | span=d2e49751ee9548ba
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=6e07894ed5523a2d027e262854e007ea | span=3696ed1589913496
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=6e07894ed5523a2d027e262854e007ea | span=db1f482e3655e54d
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=62eed331d2cb52d5607e23e9d21f9a16 | span=d761a450542dfd27
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=62eed331d2cb52d5607e23e9d21f9a16 | span=ffb70544fb306e44
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=0da70f09df2f3627491dde415ebe58d1 | span=a945b0e7131fa014
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=0da70f09df2f3627491dde415ebe58d1 | span=2d7b8a0f47701be7
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=0e2391de554d03741c00637e010e424c | span=c43ebea9b1eeb3b9
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=cda872dfe8d3fd1bd89f3b4489c9d3ad | span=764c1bf3280e6f2f
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=cda872dfe8d3fd1bd89f3b4489c9d3ad | span=60577458a4d87252
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=39a2f4fbb04e7dad9ea51838cafd5e02 | span=914500ef8e646cfb
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=6c17518eb3f7d8943f76e51621d25a67 | span=7b06527c4caec11d
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=6c17518eb3f7d8943f76e51621d25a67 | span=4774dfc9b5ba8c4f
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=6ca70b58179394343a949abc6e91ce0b | span=4b214aeaf9509305
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=d4080fdb04819e6422a8835310b4ac09 | span=43f38881b2b7a3ee
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=d4080fdb04819e6422a8835310b4ac09 | span=4cf6b9f970668547
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=d4080fdb04819e6422a8835310b4ac09 | span=ad718c80b5fa928e
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=d4080fdb04819e6422a8835310b4ac09 | span=aabd51aaae61bafe
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=24353d431ebff3431a5a5d0e55743de1 | span=4a9a30509aff31d3
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=24353d431ebff3431a5a5d0e55743de1 | span=84a5de0ebe80244b
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=10f099a03e05eab893692de2e674b6cc | span=520af562d68ea077
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=10f099a03e05eab893692de2e674b6cc | span=fcf652821f1b82fe
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=10f099a03e05eab893692de2e674b6cc | span=af45b456a342cb0a
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=10f099a03e05eab893692de2e674b6cc | span=314020c9e741b49d
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=10f099a03e05eab893692de2e674b6cc | span=8ee02a361e287386
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=10f099a03e05eab893692de2e674b6cc | span=3c02775922e60944
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=10f099a03e05eab893692de2e674b6cc | span=41ca1ce6de555160
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=10f099a03e05eab893692de2e674b6cc | span=d3ca3fd7d2db7dbe
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=10f099a03e05eab893692de2e674b6cc | span=b5fec1bf36997f38
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=10f099a03e05eab893692de2e674b6cc | span=c5c452b2096bc2dd
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=62bf00d3cf5f914a0989e3598c5df8c7 | span=41a165fed43c739e
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=62bf00d3cf5f914a0989e3598c5df8c7 | span=af08ca3d65912949
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=950672b4822b3cc3feb10b6ee3b36881 | span=05bb4db30e59d5c1
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=950672b4822b3cc3feb10b6ee3b36881 | span=c98b6c08fbf74a4e
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=045e09031a426689acc66830b131d9c9 | span=7cf7f8eda5d3bc3c
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=045e09031a426689acc66830b131d9c9 | span=4178864cc5f23aa1
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=08b48837db093f265c6a45ce26c277cb | span=92f87daa85a9eb26
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=08b48837db093f265c6a45ce26c277cb | span=f0c634d2fa1046a2
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=853931d6a7d14e84e7a1717fb322f2c7 | span=b6d8e6474a82eb99
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=853931d6a7d14e84e7a1717fb322f2c7 | span=97037080c62bf02d
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=ab9f4b49f592016593f1222587e6b144 | span=58898ad66e1d9d2f
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=ab9f4b49f592016593f1222587e6b144 | span=750a989438457edb
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=ab9f4b49f592016593f1222587e6b144 | span=f7277c554435e58d
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=ab9f4b49f592016593f1222587e6b144 | span=f582e0e2a15a1c44
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=e2c414ab215cf4171ce5e9b80a96c5a0 | span=34f0b0f177913a58
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=e2c414ab215cf4171ce5e9b80a96c5a0 | span=ca7374fa0d35d031
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=c471a9a9f14ea90347f8f15612feb437 | span=eb218f61258956dc
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=c471a9a9f14ea90347f8f15612feb437 | span=43c307bd28430d4b
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=cc79e40986f5969917e782a717156fb0 | span=70f80e4f8208e6ce
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=cc79e40986f5969917e782a717156fb0 | span=b013f05347863460
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=7352a1c2f726dd47e094ef455fd5b8c5 | span=9e3c0656bc424406
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=624af1ed8f3a5ef36882c1dd1c60906a | span=cd0c90548c1f74e3
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=624af1ed8f3a5ef36882c1dd1c60906a | span=9c436ec5f5c8957b
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=596a66e79fa512d9662f6591d9a85f00 | span=05ea4352442b334c
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=596a66e79fa512d9662f6591d9a85f00 | span=2c997fe571f0b0b7
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=4cdd8f0c7a0b091163b351f5c37d5afe | span=2b72e76837b88ed0
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=4cdd8f0c7a0b091163b351f5c37d5afe | span=a5fdb5586959f5c7
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=8467f7c2216b762c7826f64f0dc97e83 | span=d9bed8636f09cc6d
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=c8dc49c9176dc53b0e2fafd1e1556f8b | span=882a87a7e3b80032
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=c8dc49c9176dc53b0e2fafd1e1556f8b | span=96926cd15bae6e70
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=9227993fd8e934c16d73385d734bdfc7 | span=e8cc288b9dbfbc48
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=9227993fd8e934c16d73385d734bdfc7 | span=b9123bc0e01c6bef
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=1ff126e824a7c850a0af991d34f9b201 | span=8d7fc5f3e63a95bd
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=1ff126e824a7c850a0af991d34f9b201 | span=a46aabb261352729
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=e16cd4bc58ebf56b2fe7e1b8538dfcd5 | span=39dca663cedab27d
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=e16cd4bc58ebf56b2fe7e1b8538dfcd5 | span=3e5f127e14db4a64
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=cf756239228ccc78d53544deae5833f0 | span=22a7968b28079fca
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=cf756239228ccc78d53544deae5833f0 | span=1191b2018700de0f
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=7932998a267b1feaeed2d15d82527620 | span=e87edd0754a38409
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=7932998a267b1feaeed2d15d82527620 | span=5a3479e2a1803fee
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=1a764c0b2bf6d5b6c69ee5f6b400dfbb | span=e58ad774fc3ef89e
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=1a764c0b2bf6d5b6c69ee5f6b400dfbb | span=861d3c92f42e5bab
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=1a764c0b2bf6d5b6c69ee5f6b400dfbb | span=e2f997769cda646d
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=1a764c0b2bf6d5b6c69ee5f6b400dfbb | span=ac02d69c3f73a5fb
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=ac027ce540c8dfd28226285db460305d | span=516c88ed9ca3924e
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=ac027ce540c8dfd28226285db460305d | span=6a0a4d02eff9ddb8
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=25b86c1d8bfedb2ebf921e2bd1d26af8 | span=7c021a90b788a4cf
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=25b86c1d8bfedb2ebf921e2bd1d26af8 | span=b8fc300c10860714
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=94aa4819089322ba69c7d7571145532e | span=b81ce2808c9d7470
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=94aa4819089322ba69c7d7571145532e | span=b1118604eb0ecef7
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=94aa4819089322ba69c7d7571145532e | span=179b083918ea6c21
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=94aa4819089322ba69c7d7571145532e | span=2fca4a3036da0942
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=ab0efe16f864cc605b3178e7d68e6b77 | span=5d6d3b7eed583bde
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=ab0efe16f864cc605b3178e7d68e6b77 | span=703d8d13ef7f305d
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=32a56a7a3f048598fb39ec7ae48cc345 | span=f43d117e967e9743
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=32a56a7a3f048598fb39ec7ae48cc345 | span=3e58dfb02f421c34
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=a42cf847b1afe3dfca743d945a006e11 | span=f7bc8a767756a7dd
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=a42cf847b1afe3dfca743d945a006e11 | span=fdc829b21ac14786
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=f70acf712bf0864a9c8d03c4b87588cd | span=3bbea2d9271b1c7c
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=f70acf712bf0864a9c8d03c4b87588cd | span=32fb3e0863a2cd7d
+- service=load-generator | operation=POST | has_error=True | response=Unknown | status_field=None | status_value= | trace=6183edff14e2f1e266e484e5a044d17b | span=6f7cc1ebab8c01a7
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=36b675a66c3a5f54276fdbf5320aa244 | span=4fab22eb452d3570
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=36b675a66c3a5f54276fdbf5320aa244 | span=61ef8f8ca7c9b9cf
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=ddc7a4723f8967504bc23deea3849d33 | span=e88e62840cc3fd8d
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=ddc7a4723f8967504bc23deea3849d33 | span=019037055fb32c76
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=b749f796f9dc05d27b9a9c4c61d200bf | span=f87fe91d415efb6b
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=b749f796f9dc05d27b9a9c4c61d200bf | span=e182c13fcb6a61f1
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=299ec5feb53ed7e7ffae226af075c100 | span=a8037938944145af
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=299ec5feb53ed7e7ffae226af075c100 | span=70690be889c5efad
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=b41838943a49d98320d54c3cbe3ad031 | span=391a08f64ea0b8b7
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=b41838943a49d98320d54c3cbe3ad031 | span=6ad239ccd9da6a4c
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=b41838943a49d98320d54c3cbe3ad031 | span=7aa80b561430438b
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=b41838943a49d98320d54c3cbe3ad031 | span=e869df3030d04a45
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=b41838943a49d98320d54c3cbe3ad031 | span=1007cfe5592999f8
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=b41838943a49d98320d54c3cbe3ad031 | span=6853b6c4aab3d8c5
+- service=frontend-proxy | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=e06869a00a52ae92df93e60a4426f7ec | span=28b92aa627fad70c
+- service=load-generator | operation=GET | has_error=True | response=503 | status_field=None | status_value= | trace=e06869a00a52ae92df93e60a4426f7ec | span=519e6093b14b35a5
+- service=load-generator | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=e06869a00a52ae92df93e60a4426f7ec | span=dcdb8e0662f6e8da
+- service=frontend-proxy | operation=POST | has_error=True | response=503 | status_field=None | status_value= | trace=e06869a00a52ae92df93e60a4426f7ec | span=1fd2a64084fec92e
+
+INTERPRETATION SAFEGUARDS
+- A dependency edge indicates observed communication, not causality.
+- Latency anomalies are clues, not proof of root cause.
+- Missing explicit error flags do not prove that no failure occurred.
+- Diagnose using the evidence provided; do not assume a root cause.

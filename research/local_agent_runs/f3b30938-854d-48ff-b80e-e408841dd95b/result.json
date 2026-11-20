@@ -1,0 +1,45 @@
+{
+  "problem_id": "container_kill-localization",
+  "condition": "graph",
+  "result": {
+    "history": [
+      "role='assistant' content='```\\nsubmit([\"profile\"])\\n```'",
+      "role='env' content='1'"
+    ],
+    "final_state": "SubmissionStatus.VALID_SUBMISSION",
+    "results": {
+      "Localization Accuracy": 0.0,
+      "TTL": 12.980295658111572,
+      "steps": 1,
+      "in_tokens": 1,
+      "out_tokens": 7,
+      "success": false,
+      "is_subset": false
+    },
+    "framework_overhead": 133.18834328651428
+  },
+  "model_metrics": {
+    "calls": [
+      {
+        "model": "nemotron-3-nano:4b",
+        "prompt_tokens": 6776,
+        "completion_tokens": 358,
+        "total_duration_ns": 12794347500,
+        "load_duration_ns": 22524700,
+        "prompt_eval_duration_ns": 3761511000,
+        "eval_duration_ns": 8716932000,
+        "prompt_chars": 16383,
+        "prompt_messages": 2
+      }
+    ],
+    "call_count": 1,
+    "preload_enabled": true,
+    "preload_decision_calls": 1,
+    "invalid_model_actions": 0,
+    "decision_contract_passed": true
+  },
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1795133425.csv",
+    "research/test_evaluations/20261120_001019_graph_container_kill-localization/context/slm_context_compact.txt"
+  ]
+}

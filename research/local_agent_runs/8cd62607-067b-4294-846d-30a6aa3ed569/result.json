@@ -1,0 +1,45 @@
+{
+  "problem_id": "scale_pod_zero_social_net-localization-1",
+  "condition": "graph",
+  "result": {
+    "history": [
+      "role='assistant' content='```\\nsubmit([\"user-service\"])\\n```'",
+      "role='env' content='1'"
+    ],
+    "final_state": "SubmissionStatus.VALID_SUBMISSION",
+    "results": {
+      "Localization Accuracy": 100.0,
+      "TTL": 7.370726108551025,
+      "steps": 1,
+      "in_tokens": 1,
+      "out_tokens": 8,
+      "success": true,
+      "is_subset": true
+    },
+    "framework_overhead": 181.35705995559692
+  },
+  "model_metrics": {
+    "calls": [
+      {
+        "model": "nemotron-3-nano:4b",
+        "prompt_tokens": 5655,
+        "completion_tokens": 244,
+        "total_duration_ns": 7186010500,
+        "load_duration_ns": 22657800,
+        "prompt_eval_duration_ns": 2620430000,
+        "eval_duration_ns": 4191919000,
+        "prompt_chars": 15231,
+        "prompt_messages": 2
+      }
+    ],
+    "call_count": 1,
+    "preload_enabled": true,
+    "preload_decision_calls": 1,
+    "invalid_model_actions": 0,
+    "decision_contract_passed": true
+  },
+  "context_paths": [
+    "/home/codespace/AIOpsLab/trace_output/traces_1795136129.csv",
+    "research/test_evaluations/20261120_005523_graph_scale_pod_zero_social_net-localization-1/context/slm_context_compact.txt"
+  ]
+}
