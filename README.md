@@ -76,11 +76,19 @@ We compared the local model on the exact same 28 incidents under two conditions:
 
 ## 📁 Repository Structure
 
-- `aiopslab_local_agent/`: Universal SLM runner, prompt contracts, and system evidence collector.
-- `research/trace_parser/`: The causal graph parser that turns raw traces into dependency trees.
-- `Evaluations/`:
-  - [`final_evaluation_table.csv`](Evaluations/final_evaluation_table.csv): Full 28-incident head-to-head comparison table.
-  - [`Evaluation_results.md`](Evaluations/Evaluation_results.md): Detailed metric breakdown report.
+### Core Pipeline (`aiopslab_local_agent/`)
+- **`slm_agent.py`**: The agent brain. Formats prompts, interfaces with the local model, enforces output formatting rules, and parses model decisions into valid submissions.
+- **`run_case.py`**: The test runner. Orchestrates single incident evaluations, gathers telemetry, executes Baseline vs. Graph runs, and saves timestamped artifacts.
+- **`system_evidence_collector.py`**: Universal cluster inspector. Checks pod health, container restarts, port misconfigurations, and extracts bounded error logs without polluting the terminal.
+- **`evidence_compactor.py`**: Context summarizer. Condenses repetitive trace logs and formats the causal graph evidence to safely fit within small model context limits.
+- **`ollama_client.py`**: Local model connector. Sends HTTP requests to the Ollama server and tracks prompt/completion token usage and latency.
+
+### Causal Graph Engine (`research/trace_parser/`)
+- **`trace_graph_parser.py`**: The graph builder. Converts raw OpenTelemetry/Jaeger trace dumps into structured parent-child call trees, isolates span self-time, and pinpoints terminal failure leaves.
+
+### Evaluation Artifacts (`Evaluations/`)
+- **[`final_evaluation_table.csv`](Evaluations/final_evaluation_table.csv)**: Canonical 28-incident head-to-head comparison table between Baseline and Causal Graph runs.
+- **[`Evaluation_results.md`](Evaluations/Evaluation_results.md)**: Detailed report calculating all 6 thesis evaluation metrics, architecture breakdowns, and failure analysis.
 
 ---
 
