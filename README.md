@@ -93,31 +93,53 @@ We compared the local model on the exact same 28 incidents under two conditions:
 
 ---
 
-## 🚀 Getting Started & Execution
+## 🚀 Getting Started & Reproduction Guide
 
-### Prerequisites
-- Python 3.10+
-- Running Kubernetes cluster (Minikube / Kind / K3s) with AIOpsLab deployed
-- Locally running [Ollama](https://ollama.ai/) instance with `nemotron-3-nano:4b` pulled
+This repository contains the autonomous SLM agent, causal graph parser, and evaluation pipeline. It integrates with the upstream **[Microsoft AIOpsLab](https://github.com/microsoft/AIOpsLab)** cloud benchmark harness.
 
-### Run Incident Under Graph Mode (Proposed Method)
+### 1. Prerequisites
+- **Python:** 3.10+
+- **Local SLM:** [Ollama](https://ollama.ai/) installed and running locally (`ollama serve`) with your model pulled:
+  ```bash
+  ollama pull nemotron-3-nano:4b
+  ```
+- **Kubernetes:** A running cluster (Minikube / Kind / K3s) with the target microservice application deployed.
+
+### 2. Environment Setup
+Clone this repository and install the Microsoft AIOpsLab benchmark framework:
+
 ```bash
-python3 -m aiopslab_local_agent.run_case \
-    --problem-id container_kill-localization \
+# Clone this research repository
+git clone https://github.com/ajayanithaganesan/aiops-slm-for-cloud-rca-evaluation.git
+cd aiops-slm-for-cloud-rca-evaluation
+
+# Install Microsoft AIOpsLab framework
+git clone https://github.com/microsoft/AIOpsLab.git
+pip install -e AIOpsLab
+```
+
+### 3. Reproducing an Evaluation Case
+
+Run any benchmark incident using `run_case.py`.
+
+**Run under Causal Graph Mode (Our Proposed Method):**
+```bash
+python -m aiopslab_local_agent.run_case astronomy_shop_ad_service_failure-localization-1 \
     --condition graph \
     --preload-evidence \
     --model nemotron-3-nano:4b \
-    --ollama-host http://127.0.0.1:11434 \
+    --ollama-url http://localhost:11434 \
     --max-steps 1
 ```
 
-### Run Incident Under Baseline Mode (Raw Spans Control)
+**Run under Baseline Mode (Raw Spans Control):**
 ```bash
-python3 -m aiopslab_local_agent.run_case \
-    --problem-id container_kill-localization \
+python -m aiopslab_local_agent.run_case astronomy_shop_ad_service_failure-localization-1 \
     --condition baseline \
     --preload-evidence \
     --model nemotron-3-nano:4b \
-    --ollama-host http://127.0.0.1:11434 \
+    --ollama-url http://localhost:11434 \
     --max-steps 1
 ```
+
+Evaluation metrics, tokens, and decisions are automatically appended to `evaluation_results.csv` and detailed reports are saved in `research/test_evaluations/`.
