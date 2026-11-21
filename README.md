@@ -1,4 +1,4 @@
-# Local SLM for Cloud Incident Root-Cause Analysis (RCA)
+# Graph Augmented Root Cause Analysis using Local Small Language Models for Cloud incidents
 
 An empirical research evaluation testing whether a local 4B Small Language Model (`nemotron-3-nano:4b` running via Ollama) can accurately find the root cause of cloud incidents across microservices without relying on cloud-hosted LLMs.
 
